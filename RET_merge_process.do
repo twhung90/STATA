@@ -1,6 +1,6 @@
 * Title: The retirement and the wellbing (new samplings in 1999 and 2000 only)
 * Editot: Tamao
-* Date: 2020.10.16
+* Date: 2020.04.10
 
 clear
 set more off
@@ -464,9 +464,9 @@ recode a03a (0=990 "不適用")(1/3=1 "有")(4/6=0 "沒有"), gen(work)
 recode a16a (0=990 "不適用")(1/3=1 "有")(4/6=0 "沒有"), gen(Swork)
 
 gen cwork = 0
-replace cwork =1 if (a03a >= 2 & a03a <= 4) | (a03b==2) 
+replace cwork =1 if (a03a >= 2 & a03a <= 4)
 gen Scwork = 0
-replace Scwork =1 if (a16a >= 2 & a16a <= 4) | (a16b==2) 
+replace Scwork =1 if (a16a >= 2 & a16a <= 4)
 
 recode a05b (0=990 "990 Not available")(96 98/99=.), gen(workfor)
 replace workfor = -999 if a03b==1
@@ -623,9 +623,9 @@ recode c01a (0=990 "不適用")(1/3=1 "有")(4/6=0 "沒有")(97/99=.), gen(work)
 recode c26a (0=990 "不適用")(1/3=1 "有")(4/6=0 "沒有")(97/99=.), gen(Swork)
 
 gen cwork = 0
-replace cwork =1 if (c01a >= 2 & c01a <= 4) | (c01b==2) 
+replace cwork =1 if (c01a >= 2 & c01a <= 4)
 gen Scwork = 0
-replace Scwork =1 if (c26a >= 2 & c26a <= 4) | (c26b==2)
+replace Scwork =1 if (c26a >= 2 & c26a <= 4)
 
 recode c03a01 (0 = 990 "990 Not available ")(1/3 = 1 "農、林、漁、牧、狩獵與採礦業 ") ///
 (11/18 = 1 " 農、林、漁、牧、狩獵與採礦業 ")(20/39 = 2 " 製造業 ")(40/49 = 3 " 水電燃氣業 ") ///
@@ -768,9 +768,9 @@ recode a03a (0=990 "不適用")(1/3=1 "有")(4/6=0 "沒有")(97/99=.), gen(work)
 recode a19a (0=990 "不適用")(1/3=1 "有")(4/6=0 "沒有")(97/99=.), gen(Swork)
 
 gen cwork = 0
-replace cwork =1 if (a03a >= 2 & a03a <= 4) | (a03b04==2)
+replace cwork =1 if (a03a >= 2 & a03a <= 4)
 gen Scwork = 0
-replace Scwork =1 if (a19a >= 2 & a19a <= 4) | (a19b04==2)
+replace Scwork =1 if (a19a >= 2 & a19a <= 4)
 
 gen retire = 0
 replace retire = 1 if (a04b==3 | a04c==3)
@@ -782,7 +782,7 @@ recode  a05a01 (0 = 990 "990 Not available")(1/3 = 1 "農、林、漁、牧、�
 (50/59 = 4 " 營造業 ")(60/69 = 5 " 商業 ")(70/79 = 6 " 運輸、倉儲、及通信業 ") ///
 (80/89 = 7 " 金融、保險、不動產、及工商服務業 ")(90/99 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (100 = 97 "其他")(996/999 =.), gen (indust)
-replace indust = -999 if a03a == 1 & a03b04 == 1    //使用前期資料
+replace indust = -999 if a03a == 1    //使用前期資料
 replace indust = 990 if a03a>=4 & a03a<=6    //無工作/失業者編碼為990
 
 recode a05a02 (0 9996/9999=.), gen(PSFDcode)
@@ -796,7 +796,7 @@ label define isco 1"民意代表、主管及經理人員" 2"專業人員 " 3"技
 8"機械設備操作及組裝人員" 9"基層技術工及勞力工" 10"軍人" 990"Not available"
 label value occu isco
 replace occu = 990 if (a05a02==0) | (a03a>=4 & a03a<=6)
-replace occu = -999 if a03a == 1 & a03b04 == 1      //using the datum in the last year
+replace occu = -999 if a03a == 1      //using the datum in the last year
 drop isco*
 
 recode a21a01 (0 = 990 "990 Not available")(1/3 = 1 "農、林、漁、牧、狩獵與採礦業 ") ///
@@ -804,7 +804,7 @@ recode a21a01 (0 = 990 "990 Not available")(1/3 = 1 "農、林、漁、牧、狩
 (50/59 = 4 " 營造業 ")(60/69 = 5 " 商業 ")(70/79 = 6 " 運輸、倉儲、及通信業 ") ///
 (80/89 = 7 " 金融、保險、不動產、及工商服務業 ")(90/99 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (100 = 97 "其他")(996/999 =.), gen (Sindust)
-replace Sindust = -999 if a19a == 1 & a19b04 == 1    //using the datum in the last year
+replace Sindust = -999 if a19a == 1    //using the datum in the last year
 replace Sindust = 990 if a19a>=4 & a19a<=6    //無工作/失業者編碼為990
 
 recode a21a02 (0 9996/9999=.), gen(PSFDcode)
@@ -815,7 +815,7 @@ gen Soccu =int(isco88/1000)
 recode Soccu (0 = 10)
 label value Soccu isco
 replace Soccu = 990 if (a21a02==0) | (a19a>=4 & a19a<=6)
-replace Soccu = -999 if (a19a == 1 & a19b04 == 1)      //using the datum in the last year
+replace Soccu = -999 if a19a == 1      //using the datum in the last year
 drop isco*
 
 recode a06a02 (0=990)(993/999=.), gen(workplace)
@@ -825,11 +825,11 @@ recode a22a02 (0=990)(993/999=.), gen(Sworkplace)
 replace Sworkplace = -999 if a19b04==1
 
 recode a05b (0=990)(96 98/99=.), gen(workfor)
-replace workfor = -999 if a03b04== 1    //using the datum in the last year
+replace workfor = -999 if a03a == 1    //using the datum in the last year
 replace workfor = 990 if a03a>=4 & a03a<=6
 
 recode a21b (0=990)(96 98/99=.), gen(Sworkfor)
-replace Sworkfor = -999 if a19b04==1    //using the datum in the last year
+replace Sworkfor = -999 if a19a==1    //using the datum in the last year
 replace Sworkfor = 990 if a19a>=4 & a19a<=6
 
 recode a08b (9999991/9999999=.), gen(wage)
@@ -841,11 +841,11 @@ recode a09 (0 991/999=.), gen(whour)
 recode a25 (0 991/999=.), gen(hwhour)
 
 gen seniority = .
-replace seniority = -999 if a03b04 == 1     //使用前期資料
+replace seniority = -999 if a03a == 1     //使用前期資料
 replace seniority = 0 if a03a == 2 | a03a == 3    //若去年與今年工作不一致，年資為0 
 replace seniority = . if a03a >= 4 & a03a <= 6    //失業或沒工作者為.
 gen Sseniority = .
-replace Sseniority = -999 if a19b04 == 1     //使用前期資料
+replace Sseniority = -999 if a19a == 1     //使用前期資料
 replace Sseniority = 0 if a19a == 2 | a19a == 3    //若去年與今年工作不一致，年資為0 
 replace Sseniority = . if a19a >= 4 & a19a <= 6    //失業或沒工作者為.
 
@@ -1011,7 +1011,7 @@ recode a09 (0 991/999=.), gen(workhr)
 recode a35 (0 991/999=.), gen(Sworkhr)
 
 gen seniority = .
-replace seniority = -999 if a14==1   //沒有工作轉變，需帶入前一波資訊(-999)
+replace seniority = -999 if a14==1    //沒有工作轉變，需帶入前一波資訊(-999)
 replace seniority = 0 if a03==1 & a14==2    //若去年與今年工作不一致，年資為0
 replace seniority = . if a03 !=1
 
@@ -1139,9 +1139,9 @@ recode a11a (0=990 "不適用")(1/3=1 "有")(4/6=0 "沒有")(6/99=.), gen(work)
 recode a27a (0=990 "不適用")(1/3=1 "有")(4/6=0 "沒有")(6/99=.), gen(Swork)
 
 gen cwork = 0
-replace cwork =1 if (a11a >= 2 & a11a <= 4) | (a11b04==2)
+replace cwork =1 if (a11a >= 2 & a11a <= 4)
 gen Scwork = 0
-replace Scwork =1 if (a27a >= 2 & a27a <= 4) | (a27b04==2)
+replace Scwork =1 if (a27a >= 2 & a27a <= 4)
 
 gen retire = 0
 replace retire = 1 if (a12b==3 | a12c==3) | (a20==7)
@@ -1156,7 +1156,7 @@ recode a13a01 (0 = 990 "990 Not available")(1/3 = 1 "農、林、漁、牧、狩
 (50/59 = 4 " 營造業 ")(60/69 = 5 " 商業 ")(70/79 = 6 " 運輸、倉儲、及通信業 ") ///
 (80/89 = 7 " 金融、保險、不動產、及工商服務業 ")(90/99 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (100 = 97 "其他")(996/999 =.), gen (indust)
-replace indust = -999 if a11a == 1 & a11b04 == 1   //使用前期資料
+replace indust = -999 if a11a == 1   //使用前期資料
 replace indust = 990 if  a11a >= 4 & a11a <= 6    //無工作/失業者編碼為990
 
 recode a13a02 (0 9996/9999=.), gen(PSFDcode)     //失業或沒工作者編碼為.
@@ -1170,7 +1170,7 @@ label define isco 1"民意代表、主管及經理人員" 2"專業人員 " 3"技
 8"機械設備操作及組裝人員" 9"基層技術工及勞力工" 10"軍人" 990"Not available"
 label value occu isco
 replace occu = 990 if a13a02==0 | (a11a>= 4 & a11a <=6)
-replace occu = -999 if a11a==1 & a11b04==1   //使用前期資料
+replace occu = -999 if a11a==1   //使用前期資料
 drop isco*
 
 recode a29a01 (0 = 990 "990 Not available")(1/3 = 1 "農、林、漁、牧、狩獵與採礦業 ") ///
@@ -1178,7 +1178,7 @@ recode a29a01 (0 = 990 "990 Not available")(1/3 = 1 "農、林、漁、牧、狩
 (50/59 = 4 " 營造業 ")(60/69 = 5 " 商業 ")(70/79 = 6 " 運輸、倉儲、及通信業 ") ///
 (80/89 = 7 " 金融、保險、不動產、及工商服務業 ")(90/99 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (100 = 97 "其他")(996/999 =.), gen (Sindust)
-replace Sindust = -999 if a27a == 1 & a27b04 == 1   //使用前期資料
+replace Sindust = -999 if a27a == 1    //使用前期資料
 replace Sindust = 990 if  a27a >= 4 & a27a <= 6    //無工作/失業者編碼為990
 
 recode a29a02 (0 9996/9999=.), gen(job)     //失業或沒工作者編碼為.
@@ -1189,15 +1189,15 @@ drop _merge PSFDcode
 gen Soccu = int(isco88/1000)
 recode Soccu (0 = 10)
 label value Soccu isco
-replace Soccu = -999 if a27a==1 & a27b04==1   //使用前期資料
+replace Soccu = -999 if a27a==1    //使用前期資料
 replace Soccu = 990 if a29a02==0 | (a27a>= 4 & a27a <=6)
 drop isco*
 
 recode a13b (0=990)(96 98/99=.), gen(workfor)
-replace workfor = -999 if a11b04 == 1   //使用前期資料
+replace workfor = -999 if a11a == 1   //使用前期資料
 
 recode a29b (0=990)(96 98/99=.), gen(Sworkfor)
-replace Sworkfor = -999 if a27b04 == 1
+replace Sworkfor = -999 if a27a == 1
 
 recode a16b (9999991/9999999=.), gen(wage)
 replace wage = . if a11a >= 4 & a11a <= 6
@@ -1322,8 +1322,8 @@ replace cwork = 1 if (a08a01 == 1)
 gen Scwork = 0
 replace Scwork = 1 if (a27b01 == 1)
 
-gen seniority = a08a02 if (a08a01==2 & a08a02 < 96)
-gen Sseniority = a27b02 if (a27b01==2 & a27b02 < 96)
+gen seniority = a08a02 if (a08a01 >= 0 & a08a02 < 96)
+gen Sseniority = a27b02 if (a27b01 >= 0 & a27b02 < 96)
 
 recode a11a01 (0 = 990 "990 Not available")(1/3 = 1 "農、林、漁、牧、狩獵與採礦業 ") ///
 (11/18 = 1 " 農、林、漁、牧、狩獵與採礦業 ")(20/39 = 2 " 製造業 ")(40/49 = 3 " 水電燃氣業 ") ///
@@ -1539,7 +1539,7 @@ recode a09a01 (0 = 990 "990 Not available")(1/3 = 1 "農、林、漁、牧、狩
 (50/59 = 4 " 營造業 ")(60/69 = 5 " 商業 ")(70/79 = 6 " 運輸、倉儲、及通信業 ") ///
 (80/89 = 7 " 金融、保險、不動產、及工商服務業 ")(90/99 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (100 = 97 "其他")(996/999 =.), gen (indust)
-replace indust = -999 if a06z05==1 | a06z06==1
+replace indust = -999 if (a06z05==1 | a06z06==1) & (a06z01==2 & a06z02==2 & a06z03==2 & a06z04==2)
 
 recode a09a02 (0 9996/9999=.), gen(PSFDcode)     //失業或沒工作者為.
 merge m:1 PSFDcode using "1999-2008_ISCO", keepus(isco*)    //與ISCO編碼進行合併
@@ -1552,7 +1552,7 @@ label define isco 1"民意代表、主管及經理人員" 2"專業人員 " 3"技
 8"機械設備操作及組裝人員" 9"基層技術工及勞力工" 10"軍人" 990"Not available"
 label value occu isco
 replace occu = 990 if a09a02==0
-replace occu = -999 if a06z05==1 | a06z06==1
+replace occu = -999 if (a06z05==1 | a06z06==1) & (a06z01==2 & a06z02==2 & a06z03==2 & a06z04==2)
 drop isco*
 
 recode a24a01 (0 = 990 "990 Not available")(1/3 = 1 "農、林、漁、牧、狩獵與採礦業 ") ///
@@ -1560,7 +1560,7 @@ recode a24a01 (0 = 990 "990 Not available")(1/3 = 1 "農、林、漁、牧、狩
 (50/59 = 4 " 營造業 ")(60/69 = 5 " 商業 ")(70/79 = 6 " 運輸、倉儲、及通信業 ") ///
 (80/89 = 7 " 金融、保險、不動產、及工商服務業 ")(90/99 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (100 = 97 "其他")(996/999 =.), gen (Sindust)
-replace Sindust = -999 if a21b05==1 | a21b06==1
+replace Sindust = -999 if (a21b05==1 | a21b06==1) & (a21b01==2 & a21b02==2 & a21b03==2 & a21b04==2)
 
 recode a24a02 (0 9996/9999=.), gen(PSFDcode)     //失業或沒工作者為.
 merge m:1 PSFDcode using "1999-2008_ISCO", keepus(isco*)    //與ISCO編碼進行合併
@@ -1570,7 +1570,7 @@ gen Soccu = int(isco88/1000)
 recode Soccu (0 = 10)
 label value Soccu isco
 replace Soccu = 990 if a24a02==0
-replace Soccu = -999 if a21b05==1 | a21b06==1
+replace Soccu = -999 if (a21b05==1 | a21b06==1) & (a21b01==2 & a21b02==2 & a21b03==2 & a21b04==2)
 drop isco*
 
 recode a16 (1=1)(2/5=2)(6/7=3)(8=4)(96/99=.), gen(mar4)
@@ -1687,16 +1687,16 @@ gen Sretire = 0
 replace Sretire = 1 if (a22b==3 | a22c==3) | (a27==7) | (c04b01==1 | c04b01==2)
 
 gen cwork = 0
-replace cwork = 1 if a06z01==1 | a06z02==1 | a06z03==1 | a06z04==1 | a06z05==1 | a06z07==1
+replace cwork = 1 if (a06z01==1 | a06z02==1 | a06z03==1 | a06z04==1 | a06z05==1 | a06z07==1)
 gen Scwork = 0
-replace Scwork = 1 if a21b01==1 | a21b02==1 | a21b03==1 | a21b04==1 | a21b05==1 | a21b07==1
+replace Scwork = 1 if (a21b01==1 | a21b02==1 | a21b03==1 | a21b04==1 | a21b05==1 | a21b07==1)
 
 recode a09a01 (0 = 990 "990 Not available")(1/3 = 1 "農、林、漁、牧、狩獵與採礦業 ") ///
 (11/18 = 1 " 農、林、漁、牧、狩獵與採礦業 ")(20/39 = 2 " 製造業 ")(40/49 = 3 " 水電燃氣業 ") ///
 (50/59 = 4 " 營造業 ")(60/69 = 5 " 商業 ")(70/79 = 6 " 運輸、倉儲、及通信業 ") ///
 (80/89 = 7 " 金融、保險、不動產、及工商服務業 ")(90/99 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (100 = 97 "其他")(996/999 =.), gen (indust)
-replace indust = -999 if a06z05==1 | a06z06 == 1    //使用前期資料(-999)
+replace indust = -999 if (a06z05==1 | a06z06==1) & (a06z01==2 & a06z02==2 & a06z03==2 & a06z04==2)    //使用前期資料(-999)
 replace indust = 97 if a05==2     //無酬勞動者(其他類)
 
 recode a09a02 (0 9996/9999=.), gen(PSFDcode)
@@ -1710,7 +1710,7 @@ label define isco 1"民意代表、主管及經理人員" 2"專業人員 " 3"技
 8"機械設備操作及組裝人員" 9"基層技術工及勞力工" 10"軍人" 990"Not available"
 label value occu isco
 replace occu = 990 if a09a02==0
-replace occu = -999 if a06z05==1 | a06z06 == 1   //使用前期資料(-999)
+replace occu = -999 if (a06z05==1 | a06z06==1) & (a06z01==2 & a06z02==2 & a06z03==2 & a06z04==2)   //使用前期資料(-999)
 drop isco*
 
 recode a24a01 (0 = 990 "990 Not available")(1/3 = 1 "農、林、漁、牧、狩獵與採礦業 ") ///
@@ -1718,7 +1718,7 @@ recode a24a01 (0 = 990 "990 Not available")(1/3 = 1 "農、林、漁、牧、狩
 (50/59 = 4 " 營造業 ")(60/69 = 5 " 商業 ")(70/79 = 6 " 運輸、倉儲、及通信業 ") ///
 (80/89 = 7 " 金融、保險、不動產、及工商服務業 ")(90/99 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (100 = 97 "其他")(996/999 =.), gen (Sindust)
-replace Sindust = -999 if a21b05==1 | a21b06 == 1    //使用前期資料(-999)
+replace Sindust = -999 if (a21b05==1 | a21b06==1) & (a21b01==2 & a21b02==2 & a21b03==2 & a21b04==2)    //使用前期資料(-999)
 replace Sindust = 97 if a05==2     //無酬勞動者(其他類)
 
 recode a24a02 (0 9996/9999=.), gen(PSFDcode)
@@ -1729,7 +1729,7 @@ gen Soccu = int(isco88/1000)
 recode Soccu (0 = 10)
 label value Soccu isco
 replace Soccu = 990 if a24a02==0
-replace Soccu = -999 if a21b05==1 | a21b06 == 1    //使用前期資料(-999)
+replace Soccu = -999 if (a21b05==1 | a21b06==1) & (a21b01==2 & a21b02==2 & a21b03==2 & a21b04==2)    //使用前期資料(-999)
 drop isco*
 
 recode a08b (0=990)(96 98/99=.), gen(workfor)
@@ -1898,7 +1898,7 @@ recode a09a01 (0 = 990 "990 Not available")(1/3 = 1 "農、林、漁、牧、狩
 (55/56 = 5 " 商業 ")(58/63 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (64/82 = 7 " 金融、保險、不動產、及工商服務業 ")(83/96 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (996/999 =.), gen (indust)
-replace indust = -999 if (a06z05==1 | a06z06==1)
+replace indust = -999 if (a06z05==1 | a06z06==1) & (a06z01==2 & a06z02==2 & a06z03==2 & a06z04==2)
 
 recode a09a02 (0 9996/9999=.), gen(ver5)     //失業或沒有工作為.
 merge m:1 ver5 using "2009-2010_ISCO" ,keepus(isco*) 
@@ -1911,16 +1911,16 @@ lab def isco 1"民意代表、主管及經理人員" 2"專業人員 " 3"技術�
 8"機械設備操作及組裝人員" 9"基層技術工及勞力工" 10"軍人" 990"Not available"
 lab val occu isco
 replace occu = 990 if a09a02==0
-replace occu = -999 if a06z05==1 | a06z06==1
+replace occu = -999 if (a06z05==1 | a06z06==1) & (a06z01==2 & a06z02==2 & a06z03==2 & a06z04==2)
 drop isco*
 
 recode a24a01 (0 = 990 "990 Not available")(1/3 = 1 "農、林、漁、牧、狩獵與採礦業 ") ///
 (5/7 = 1 " 農、林、漁、牧、狩獵與採礦業 ")(8/34 = 2 " 製造業 ")(35/39 = 3 " 水電燃氣業 ") ///
 (41/43 = 4 " 營造業 ")(45/48 = 5 " 商業 ")(49/54 = 6 " 運輸、倉儲、及通信業 ") ///
-(55/56 = 5 " 商業 ")(58/63 = 8 " 公共行政、社會服務及個人服務業 ") ///
+(55/56 = 5 " 商業 ")(58/63 = 8 " 公共行政、社(a06z05==1 | a06z06==1) & (a06z01==2 & a06z02==2 & a06z03==2 & a06z04==2)會服務及個人服務業 ") ///
 (64/82 = 7 " 金融、保險、不動產、及工商服務業 ")(83/96 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (996/999 =.), gen (Sindust)
-replace Sindust = -999 if (a21z05==1 | a21z06==1)
+replace Sindust = -999 if (a21z05==1 | a21z06==1) & (a21z01==2 & a21z02==2 & a21z03==2 & a21z04==2)
 
 recode a24a02 (0 9996/9999=.), gen(ver5)     //失業或沒有工作為.
 merge m:1 ver5 using "2009-2010_ISCO" ,keepus(isco*) 
@@ -1930,7 +1930,7 @@ gen Soccu = int(isco88/1000)
 recode Soccu (0 = 10)
 lab val Soccu isco
 replace Soccu = 990 if a24a02==0
-replace Soccu = -999 if a21z05==1 | a21z06==1
+replace Soccu = -999 if (a21z05==1 | a21z06==1) & (a21z01==2 & a21z02==2 & a21z03==2 & a21z04==2)
 drop isco*
 
 recode a09f02 (0=990 "不適用")(1/99=99 "國外地區（含中國及港澳地區）")(993/999=.), gen(workplace)
@@ -2094,7 +2094,7 @@ recode a09a01 (0 = 990 "990 Not available")(1/3 = 1 "農、林、漁、牧、狩
 (55/56 = 5 " 商業 ")(58/63 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (64/82 = 7 " 金融、保險、不動產、及工商服務業 ")(83/96 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (996/999 =.), gen (indust)
-replace indust = -999 if a06z05==1 | a06z06==1
+replace indust = -999 if (a06z05==1 | a06z06==1) & (a06z01==2 & a06z02==2 & a06z03==2 & a06z04==2)
 
 recode a09a02 (0 9996/9999=.), gen(ver5)
 merge m:1 ver5 using "2009-2010_ISCO", keepus(isco*) 
@@ -2107,7 +2107,7 @@ lab def isco 1"民意代表、主管及經理人員" 2"專業人員 " 3"技術�
 8"機械設備操作及組裝人員" 9"基層技術工及勞力工" 10"軍人" 990"Not available"
 lab val occu isco
 replace occu = 990 if a09a02==0
-replace occu = -999 if a06z05==1 | a06z06==1    //失業為990
+replace occu = -999 if (a06z05==1 | a06z06==1) & (a06z01==2 & a06z02==2 & a06z03==2 & a06z04==2)    //失業為990
 drop isco*
 
 recode a24a01 (0 = 990 "990 Not available")(1/3 = 1 "農、林、漁、牧、狩獵與採礦業 ") ///
@@ -2116,7 +2116,7 @@ recode a24a01 (0 = 990 "990 Not available")(1/3 = 1 "農、林、漁、牧、狩
 (55/56 = 5 " 商業 ")(58/63 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (64/82 = 7 " 金融、保險、不動產、及工商服務業 ")(83/96 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (996/999 =.), gen (Sindust)
-replace Sindust = -999 if a21z05==1 | a21z06==1
+replace Sindust = -999 if (a21z05==1 | a21z06==1) & (a21z01==2 & a21z02==2 & a21z03==2 & a21z04==2)
 
 recode a24a02 (0 9996/9999=.), gen(ver5)
 merge m:1 ver5 using "2009-2010_ISCO", keepus(isco*) 
@@ -2126,7 +2126,7 @@ gen Soccu = int(isco88/1000)
 recode Soccu (0 = 10)
 lab val Soccu isco
 replace Soccu = 990 if a24a02==0
-replace Soccu = -999 if a21z05==1 | a21z06==1    //失業為990
+replace Soccu = -999 if (a21z05==1 | a21z06==1) & (a21z01==2 & a21z02==2 & a21z03==2 & a21z04==2)    //失業為990
 drop isco*
 
 recode a09b02 (0=990 "不適用")(1/99=99 "國外地區（含中國及港澳地區）")(993/999=.), gen(workplace)
@@ -2295,9 +2295,9 @@ recode a09a01 (0 = 990 "990 Not available")(1/3 = 1 "農、林、漁、牧、狩
 (55/56 = 5 " 商業 ")(58/63 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (64/82 = 7 " 金融、保險、不動產、及工商服務業 ")(83/96 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (996/999 =.), gen (indust)
-replace indust = -999 if a06z05==1 | a06z06==1
+replace indust = -999 if (a06z05==1 | a06z06==1) & (a06z01==2 & a06z02==2 & a06z03==2 & a06z04==2)
 
-recode a09a02 (0 9996/9999=.), gen(ver6)    //失搾或沒工作者為.
+recode a09a02 (0 9996/9999=.), gen(ver6)    //失業或沒工作者為.
 merge m:1 ver6 using "2011_ISCO" ,keepus(isco*) 
 drop if _merge==2
 drop _merge ver6
@@ -2308,7 +2308,7 @@ lab def isco 1"民意代表、主管及經理人員" 2"專業人員 " 3"技術�
 8"機械設備操作及組裝人員" 9"基層技術工及勞力工" 10"軍人" 990"Not available"
 lab val occu isco
 replace occu = 990 if a09a02==0
-replace occu = -999 if a06z05==1 | a06z06==1
+replace occu = -999 if (a06z05==1 | a06z06==1) & (a06z01==2 & a06z02==2 & a06z03==2 & a06z04==2)
 drop isco*
 
 recode a24a01 (0 = 990 "990 不適用/跳答 ")(1/3 = 1 "農、林、漁、牧、狩獵與採礦業 ") ///
@@ -2317,9 +2317,9 @@ recode a24a01 (0 = 990 "990 不適用/跳答 ")(1/3 = 1 "農、林、漁、牧�
 (55/56 = 5 " 商業 ")(58/63 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (64/82 = 7 " 金融、保險、不動產、及工商服務業 ")(83/96 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (996/999 =.), gen (Sindust)
-replace Sindust = -999 if a21z05==1 | a21z06==1
+replace Sindust = -999 if (a21z05==1 | a21z06==1) & (a21z01==2 & a21z02==2 & a21z03==2 & a21z04==2)
 
-recode a24a02 (0 9996/9999=.), gen(ver6)    //失搾或沒工作者為.
+recode a24a02 (0 9996/9999=.), gen(ver6)    //失業或沒工作者為.
 merge m:1 ver6 using "2011_ISCO" ,keepus(isco*) 
 drop if _merge==2
 drop _merge ver6
@@ -2327,7 +2327,7 @@ gen Soccu = int(isco88/1000)
 recode Soccu (0 = 10)
 lab val Soccu isco
 replace Soccu = 990 if a24a02==0
-replace Soccu = -999 if a21z05==1 | a21z06==1
+replace Soccu = -999 if (a21z05==1 | a21z06==1) & (a21z01==2 & a21z02==2 & a21z03==2 & a21z04==2)
 drop isco*
 
 recode a09b02 (0=990 "不適用")(1/99=99 "國外地區（含中國及港澳地區）")(993/999=.), gen(workplace)
@@ -2501,7 +2501,7 @@ recode a09a01 (0 = 990 "990 Not available")(1/3 = 1 "農、林、漁、牧、狩
 (55/56 = 5 " 商業 ")(58/63 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (64/82 = 7 " 金融、保險、不動產、及工商服務業 ")(83/96 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (996/999 =.), gen (indust)
-replace indust = -999 if a06z05==1 | a06z06==1
+replace indust = -999 if (a06z05==1 | a06z06==1) & (a06z01==2 & a06z02==2 & a06z03==2 & a06z04==2)
 
 recode a09a02 (0 9996/9999=.), gen(ver6)         //失業或沒工作者為.
 merge m:1 ver6 using "2011_ISCO" ,keepus(isco*) 
@@ -2514,7 +2514,7 @@ lab def isco 1"民意代表、主管及經理人員" 2"專業人員 " 3"技術�
 8"機械設備操作及組裝人員" 9"基層技術工及勞力工" 10"軍人" 990"Not available"
 lab val occu isco
 replace occu = 990 if a09a02==0
-replace occu = -999 if a06z05==1 | a06z06==1
+replace occu = -999 if (a06z05==1 | a06z06==1) & (a06z01==2 & a06z02==2 & a06z03==2 & a06z04==2)
 drop isco*
 
 recode a24a01 (0 = 990 "990 不適用/跳答 ")(1/3 = 1 "農、林、漁、牧、狩獵與採礦業 ") ///
@@ -2523,7 +2523,7 @@ recode a24a01 (0 = 990 "990 不適用/跳答 ")(1/3 = 1 "農、林、漁、牧�
 (55/56 = 5 " 商業 ")(58/63 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (64/82 = 7 " 金融、保險、不動產、及工商服務業 ")(83/96 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (996/999 =.), gen (Sindust)
-replace Sindust = -999 if a21z05==1 | a21z06==1
+replace Sindust = -999 if (a21z05==1 | a21z06==1) & (a21z01==2 & a21z02==2 & a21z03==2 & a21z04==2)
 
 recode a24a02 (0 9996/9999=.), gen(ver6)         //失業或沒工作者為.
 merge m:1 ver6 using "2011_ISCO" ,keepus(isco*) 
@@ -2533,7 +2533,7 @@ gen Soccu = int(isco88/1000)
 recode Soccu (0 = 10)
 lab val Soccu isco
 replace Soccu = 990 if a24a02==0
-replace Soccu = -999 if a21z05==1 | a21z06==1
+replace Soccu = -999 if (a21z05==1 | a21z06==1) & (a21z01==2 & a21z02==2 & a21z03==2 & a21z04==2)
 drop isco*
 
 recode a09b02 (0=990 "不適用")(1/99=99 "國外地區（含中國及港澳地區）")(993/999=.), gen(workplace)
@@ -3055,7 +3055,7 @@ recode a03a (1/2=0 "0 無/自修")(3=1 "1 小學")(4=2 "2 國中/初職")(5/8=3 
 recode a27 (0=990 "990 不適用")(1/2=0 "0 無/自修")(3=1 "1 小學")(4=2 "2 國中/初職")(5/8=3 "3 高中職") ///
 (9/12=4 "4 專科或技術學院") (13=5 "5 大學或獨立學院") (14/15=6 "6 研究所(或)以上") ///
 (97=97 "97 其它")(96 98/99=.), gen(Sedu)
-replace Sedu = -999 if (a17a==2 & a17b==2)
+replace Sedu = -999 if Sedu==990 & (a17a==2 & a17b==2)
 
 recode a04a (0 6/9=.), gen(health)
 replace health = (6-health)    //inversed coding
@@ -3131,7 +3131,7 @@ gen cwork = 0
 replace cwork = 1 if a11z06==2
 
 gen seniority = (2018-1911)-a12a01 if (a12a01 > 0 & a12a01 < 996)
-replace seniority = -999 if seniority==. & a11z02==1 | a11z03==1 | a11z04==1 | a11z05==1 | a11z06==1 | a11z08==1
+replace seniority = -999 if (seniority==. & a11z02==1 | a11z03==1 | a11z04==1 | a11z05==1 | a11z06==1 | a11z08==1)
 replace seniority = 1 if a11z07==1
 gen Sseniority = (2018-1911)-a34c01 if (a34c01 > 0 & a34c01 < 996)
 
@@ -3404,11 +3404,11 @@ by x01: replace Sindust = Sindust[_n-`a'] if Sindust==-999 & Sindust[_n-`a'] !=.
 
 by x01: replace Soccu = Soccu[_n-`a'] if Soccu==-999 & Soccu[_n-`a'] !=. & Soccu[_n-`a'] !=-999
 
-by x01: replace seniority = seniority[_n-`a']+`a' if seniority==-999 & seniority[_n-`a'] !=. & seniority[_n-`a'] !=-999 & period<=2012
-by x01: replace seniority = seniority[_n-`a']+(`a'*2) if seniority==-999 & seniority[_n-`a'] !=. & seniority[_n-`a'] !=-999 & period[_n-`a']>2012
+by x01: replace seniority = seniority[_n-`a']+`a' if seniority==-999 & cwork[_n-`a'+1]==0 & seniority[_n-`a'] !=. & seniority[_n-`a'] !=-999 & period<=2012
+by x01: replace seniority = seniority[_n-`a']+(`a'*2) if seniority==-999 &  cwork[_n-`a'+1]==0 & seniority[_n-`a'] !=. & seniority[_n-`a'] !=-999 & period[_n-`a']>=2012
 
-by x01: replace Sseniority = Sseniority[_n-`a']+`a' if Sseniority==-999 & Sseniority[_n-`a'] !=. & Sseniority[_n-`a'] !=-999 & period<=2012
-by x01: replace Sseniority = Sseniority[_n-`a']+(`a'*2) if Sseniority==-999 & Sseniority[_n-`a'] !=. & Sseniority[_n-`a'] !=-999 & period[_n-`a']>2012
+by x01: replace Sseniority = Sseniority[_n-`a']+`a' if Sseniority==-999 & Scwork[_n-`a'+1]==0 & Sseniority[_n-`a'] !=. & Sseniority[_n-`a'] !=-999 & period<=2012
+by x01: replace Sseniority = Sseniority[_n-`a']+(`a'*2) if Sseniority==-999 & Scwork[_n-`a'+1]==0 & Sseniority[_n-`a'] !=. & Sseniority[_n-`a'] !=-999 & period[_n-`a']>=2012
 
 by x01: replace ohouse = ohouse[_n-`a'] if ohouse==-999 & ohouse[_n-`a'] !=. & ohouse[_n-`a'] !=-999
 
