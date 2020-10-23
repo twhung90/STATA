@@ -3384,25 +3384,25 @@ by x01: replace Sbirth_y = Sbirth_y[_n-`a'] if Sbirth_y==-999 & Sbirth_y[_n-`a']
 
 by x01: replace edu = edu[_n-`a'] if edu==-999 & edu[_n-`a'] !=. & edu[_n-`a'] !=-999
 
-by x01: replace Sedu = Sedu[_n-`a'] if Sedu==-999 & Sedu[_n-`a'] !=. & Sedu[_n-`a'] !=-999
+by x01: replace Sedu = Sedu[_n-`a'] if Sedu==-999 & Sedu[_n-`a'] !=. & Sedu[_n-`a'] !=-999 & Sedu[_n-`a'] !=990
 
 by x01: replace mar4 = mar4[_n-`a'] if mar4==-999 & mar4[_n-`a'] !=. & mar4[_n-`a'] !=-999
 
-by x01: replace workfor = workfor[_n-`a'] if workfor==-999 & workfor[_n-`a'] !=. & workfor[_n-`a'] !=-999
+by x01: replace workfor = workfor[_n-`a'] if workfor==-999 & workfor[_n-`a'] !=. & workfor[_n-`a'] !=-999 & workfor[_n-`a'] !=990
 
-by x01: replace Sworkfor = Sworkfor[_n-`a'] if Sworkfor==-999 & Sworkfor[_n-`a'] !=. & Sworkfor[_n-`a'] !=-999
+by x01: replace Sworkfor = Sworkfor[_n-`a'] if Sworkfor==-999 & Sworkfor[_n-`a'] !=. & Sworkfor[_n-`a'] !=-999 & Sworkfor[_n-`a'] !=990
 
-by x01: replace workplace = workplace[_n-`a'] if workplace==-999 & workplace[_n-`a'] !=. & workplace[_n-`a'] !=-999
+by x01: replace workplace = workplace[_n-`a'] if workplace==-999 & workplace[_n-`a'] !=. & workplace[_n-`a'] !=-999 & workplace[_n-`a'] !=990
 
-by x01: replace Sworkplace = Sworkplace[_n-`a'] if Sworkplace==-999 & Sworkplace[_n-`a'] !=. & Sworkplace[_n-`a'] !=-999
+by x01: replace Sworkplace = Sworkplace[_n-`a'] if Sworkplace==-999 & Sworkplace[_n-`a'] !=. & Sworkplace[_n-`a'] !=-999 & Sworkplace[_n-`a'] !=990
 
-by x01: replace indust = indust[_n-`a'] if indust==-999 & indust[_n-`a'] !=. & indust[_n-`a'] !=-999
+by x01: replace indust = indust[_n-`a'] if indust==-999 & indust[_n-`a'] !=. & indust[_n-`a'] !=-999 & indust[_n-`a'] !=990
 
-by x01: replace occu = occu[_n-`a'] if occu==-999 & occu[_n-`a'] !=. & occu[_n-`a'] !=-999
+by x01: replace occu = occu[_n-`a'] if occu==-999 & occu[_n-`a'] !=. & occu[_n-`a'] !=-999 & occu[_n-`a'] !=990
 
-by x01: replace Sindust = Sindust[_n-`a'] if Sindust==-999 & Sindust[_n-`a'] !=. & Sindust[_n-`a'] !=-999
+by x01: replace Sindust = Sindust[_n-`a'] if Sindust==-999 & Sindust[_n-`a'] !=. & Sindust[_n-`a'] !=-999 & Sindust[_n-`a'] !=990
 
-by x01: replace Soccu = Soccu[_n-`a'] if Soccu==-999 & Soccu[_n-`a'] !=. & Soccu[_n-`a'] !=-999
+by x01: replace Soccu = Soccu[_n-`a'] if Soccu==-999 & Soccu[_n-`a'] !=. & Soccu[_n-`a'] !=-999 & Soccu[_n-`a'] !=990
 
 by x01: replace seniority = seniority[_n-`a']+`a' if seniority==-999 & cwork[_n-`a'+1]==0 & seniority[_n-`a'] !=. & seniority[_n-`a'] !=-999 & period<=2012
 by x01: replace seniority = seniority[_n-`a']+(`a'*2) if seniority==-999 &  cwork[_n-`a'+1]==0 & seniority[_n-`a'] !=. & seniority[_n-`a'] !=-999 & period[_n-`a']>=2012
