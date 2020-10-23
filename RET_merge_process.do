@@ -3378,6 +3378,8 @@ forvalue a = 1/18 {
 
 by x01: replace male = male[_n-`a'] if male==-999 & male[_n-`a'] !=. & male[_n-`a'] !=-999
 
+by x01: replace mar4 = mar4[_n-`a'] if mar4==-999 & mar4[_n-`a'] !=. & mar4[_n-`a'] !=-999
+
 by x01: replace birth_y = birth_y[_n-`a'] if birth_y==-999 & birth_y[_n-`a'] !=. & birth_y[_n-`a'] !=-999
 
 by x01: replace Sbirth_y = Sbirth_y[_n-`a'] if Sbirth_y==-999 & Sbirth_y[_n-`a'] !=. & Sbirth_y[_n-`a'] !=-999  & mar4[_n-`a']==2
@@ -3385,8 +3387,6 @@ by x01: replace Sbirth_y = Sbirth_y[_n-`a'] if Sbirth_y==-999 & Sbirth_y[_n-`a']
 by x01: replace edu = edu[_n-`a'] if edu==-999 & edu[_n-`a'] !=. & edu[_n-`a'] !=-999
 
 by x01: replace Sedu = Sedu[_n-`a'] if Sedu==-999 & Sedu[_n-`a'] !=. & Sedu[_n-`a'] !=-999 & Sedu[_n-`a'] !=990  & mar4[_n-`a']==2
-
-by x01: replace mar4 = mar4[_n-`a'] if mar4==-999 & mar4[_n-`a'] !=. & mar4[_n-`a'] !=-999
 
 by x01: replace workfor = workfor[_n-`a'] if workfor==-999 & workfor[_n-`a'] !=. & workfor[_n-`a'] !=-999 & workfor[_n-`a'] !=990
 
