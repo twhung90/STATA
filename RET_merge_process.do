@@ -1,6 +1,6 @@
 * Title: The retirement and the wellbing (new samplings in 1999 and 2000 only)
 * Editot: Tamao
-* Date: 2020.04.10
+* Date: 2020.10.22
 
 clear
 set more off
