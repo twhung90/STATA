@@ -102,10 +102,11 @@ recode d01z01 (2/3=2)(4/5=3)(6=4)(97/99=.), gen(mar4)    //婚姻四分類
 lab define mar4 1"未婚" 2"已婚/同居" 3"分居/離婚" 4"喪偶"
 lab value mar4 mar4
 
-gen ohouse = (g03a==1)
+gen ohouse = (g03a==1)    //自有房屋
 
 recode g03e (0=990 "不適用")(1=1 "有")(2=0 "沒有")(6/9=.), gen(loan_house)
 
+recode h06z01 (9999991/9999999=.), gen(exp_hmortage)
 recode h05a02p1 (0 9999991/9999999=.), gen(exp_parent)
 recode h05a02p2 (0 9999991/9999999=.), gen(exp_Sparent)
 
@@ -223,7 +224,7 @@ gen Sseniority=.
 
 recode f01 (96/99=.), gen(offspring)
 
-gen loan_house = (e02a > 0 & e02a < 9999996)    //若有填答房貸金額者，則視為有房貸
+recode e02a (9999991/9999999=.), gen(exp_hmortage)    //家庭每月支出的房貸金額
 
 egen family = rowtotal(d04z*)    //the number of people living together
 
@@ -385,6 +386,8 @@ gen live_sparent = (f06f2==1 | f06m2==1)
 gen ohouse = (g03a==1)
 
 recode g03e (0=990 "不適用")(1=1 "有")(2=0 "沒有")(6/9=.), gen(loan_house)
+
+recode h06a (9999991/9999999=.), gen(exp_hmortage)    //
 
 recode i01 (96/99=.), gen(offspring)
 
@@ -554,6 +557,8 @@ replace ohouse = -999 if (b05==2)
 recode b07e (0=990 "不適用")(1=1 "有")(2=0 "沒有")(6/9=.), gen(loan_house)
 replace loan_house = -999 if (b05==2)
 
+recode c02a (9999991/9999999=.), gen(exp_hmortage)    //家庭平均每月支出的房屋貸款
+
 forvalue a = 1/4 {
 recode b12ac`a' (0 96/99=.), gen(child`a'_order)
 
@@ -705,6 +710,7 @@ replace loan_house = -999 if (d05==2)
 
 recode d12b02 (0 9999991/9999999=.), gen(exp_parent)
 recode d13b02 (0 9999991/9999999=.), gen(exp_Sparent)
+recode e02a (9999991/9999999=.), gen(exp_hmortage)
 
 egen family = rowtotal(d04z*)    //the number of people living together
 
@@ -869,6 +875,8 @@ replace ohouse = -999 if (c05==2)
 recode c08e (0=990 "不適用")(1=1 "有")(2=0 "沒有")(6/9=.), gen(loan_house)
 replace loan_house = -999 if (c05==2)
 
+recode d08a (9999991/9999999=.), gen(exp_hmortage)
+
 gen invest = 0    //包含不適用、拒答或不知道，編碼為0
 replace invest = (d02z02 * -1) if (d02z02 < 99999991 & d02z01==2)
 replace invest = (d02z02 * 1) if (d02z02 < 99999991 & d02z01==1)
@@ -925,9 +933,9 @@ replace health = (6-health)    //inversed coding
 recode a02z* (96/99=.)
 egen family = rowtotal(a02z*)    //the number of people living together
 
-gen loan_house = (d12z01==1)
+gen hmortage = (d12z01==1)    //您或配偶現在還有尚未繳清的房屋貸款(Yes=1; Others=0)
 
-keep x01 period district - loan_house
+keep x01 period district - hmortage
 save R_2003, replace
 
 
@@ -1043,6 +1051,9 @@ replace ohouse = -999 if c06a==2
 
 recode c08e (0=990 "不適用")(1=1 "有")(2=0 "沒有")(6/9=.), gen(loan_house)
 replace loan_house = -999 if (c06a==2)
+/*replace loan_house = 1 if d08a01==2    //擁有個人房屋貸款者*/
+
+recode d08a02 (9999991/9999999=.), gen(exp_hmortage)    //家中房屋貸款每月平均支出
 
 recode c04z?? (96/99=.)
 egen family = rowtotal(c04z*)    //the number of people living together
@@ -1241,6 +1252,9 @@ replace ohouse = -999 if b06==2
 
 recode b08e (0=990 "不適用")(1=1 "有")(2=0 "沒有")(6/9=.), gen(loan_house)
 replace loan_house = -999 if (b06==2)
+/*replace loan_house = 1 if c08a01==1    //擁有個人的房屋貸款者*/
+
+recode c08a02 (9999991/9999999=.), gen(exp_hmortage)    //家中房屋貸款每月平均支出
 
 recode b12e (96/99=.), gen(offspring)
 
@@ -1396,6 +1410,9 @@ replace ohouse = -999 if b06==2
 
 recode b08e (0=990 "不適用")(1=1 "有")(2=0 "沒有")(6/9=.), gen(loan_house)
 replace loan_house = -999 if (b06==2)
+/*replace loan_house = 1 if c08a01==1*/
+
+recode c08a02 (9999991/9999999=.), gen(exp_hmortage)    //家中房屋貸款每月平均支出
 
 gen family = b04a if (b04a < 96)    //the number of people living together
 
@@ -1593,6 +1610,8 @@ replace ohouse = -999 if b06==2
 recode b08e (0=990 "不適用")(1=1 "有")(2=0 "沒有")(6/9=.), gen(loan_house)
 replace loan_house = -999 if (b06==2)
 
+recode d08a (9999991/9999999=.), gen(exp_hmortage)
+
 recode b12 (96/99=.), gen(offspring)
 
 forvalue a = 1/6 {
@@ -1787,6 +1806,8 @@ replace ohouse = -999 if b06==2
 
 recode b08e (0=990 "不適用")(1=1 "有")(2=0 "沒有")(6/9=.), gen(loan_house)
 replace loan_house = -999 if (b06==2)
+
+recode c08a (9999991/9999999=.), gen(exp_hmortage)
 
 recode b12 (96/99=.), gen(offspring)
 
@@ -1989,6 +2010,8 @@ replace ohouse = -999 if (b06==2)
 recode b08e (0=990 "不適用")(1=1 "有")(2=0 "沒有")(6/9=.), gen(loan_house)
 replace loan_house = -999 if (b06==2)
 
+recode c08a (9999991/9999999=.), gen(exp_hmortage)
+
 recode b12 (96/99=.), gen(offspring)
 
 forvalue a = 1/6 {
@@ -2189,6 +2212,8 @@ replace ohouse = -999 if (b06==2)
 
 recode b08e (0=990 "不適用")(1=1 "有")(2=0 "沒有")(6/9=.), gen(loan_house)
 replace loan_house = -999 if (b06==2)
+
+recode c08a (9999991/9999999=.), gen(exp_hmortage)
 
 recode b12 (96/99=.), gen(offspring)
 
@@ -2394,6 +2419,8 @@ replace ohouse = -999 if (b06==2)
 
 recode b08e (0=990 "不適用")(1=1 "有")(2=0 "沒有")(6/9=.), gen(loan_house)
 replace loan_house = -999 if (b06==2)
+
+recode c08a (9999991/9999999=.), gen(exp_hmortage)
 
 recode b12 (96/99=.), gen(offspring)
 
@@ -2603,6 +2630,8 @@ replace ohouse = -999 if (b06==2)
 recode b08c (0=990 "不適用")(1=1 "有")(2=0 "沒有")(6/9=.), gen(loan_house)
 replace loan_house = -999 if (b06==2)
 
+recode d08a (9999991/9999999=.), gen(exp_hmortage)
+
 recode b12 (96/99=.), gen(offspring)
 
 forvalue a = 1/6 {
@@ -2779,6 +2808,8 @@ replace ohouse = -999 if (b04a>=2)
 
 recode b06c (0=990 "不適用")(1=1 "有")(2=0 "沒有")(6/9=.), gen(loan_house)
 replace loan_house = -999 if (b04a>=2)
+
+recode c08a (9999991/9999999=.), gen(exp_hmortage)
 
 gen family = b11a if (b11a < 96)    //the number of people living together
 
@@ -2958,6 +2989,8 @@ replace ohouse = -999 if (b04a==2)
 
 recode b06c (0=990 "不適用")(1=1 "有")(2=0 "沒有")(6/9=.), gen(loan_house)
 replace loan_house = -999 if (b04a==2)
+
+recode c09a (9999991/9999999=.), gen(exp_hmortage)
 
 gen family = b11a if (b11a < 96)    //the number of people living together
 replace family = 90 if b11a==95    //超過90人以90作為計算
@@ -3149,6 +3182,8 @@ replace ohouse = -999 if (b01a==2)
 recode b03c (0=990 "不適用")(1=1 "有")(2=0 "沒有")(6/9=.), gen(loan_house)
 replace loan_house = -999 if (b01a==2)
 
+recode c16a (9999991/9999999=.), gen(exp_hmortage)
+
 gen family = b07a if (b07a < 96)    //the number of people living together
 replace family = 90 if b07a==95    //超過90人以90作為計算
 
@@ -3180,6 +3215,7 @@ recode child`a'_cores (8=1)(0=990)(96 98/99=.)(*=0)
 foreach x of varlist b12n01z02c? {
 	recode `x' (0 9999991/9999999=.), gen(`x'n)
 }
+
 egen callowance = rowtotal(b12n01z02c?n)    //至多6位子女之金額加總
 drop b12n01z02c?n
 
@@ -3303,7 +3339,7 @@ use A_panel_append, clear
 }
 save A_panel_append, replace
 
-foreach A of numlist 2014 2016 2018 {
+foreach A of numlist 2014(2)2018 {
 use A_panel_append, clear
 	append using R_`A'
 	save, replace
@@ -3330,11 +3366,17 @@ use B_panel_append, clear
 }
 save B_panel_append, replace
 
-foreach B of numlist 2014 2016 2018 {
+foreach B of numlist 2014(2)2018 {
 use B_panel_append, clear
 	append using R_`B'
 	save, replace
 }
+
+sort x01 period
+by x01 : replace x01b = x01b[_n+1] if x01b==. & x01b[_n+1] !=.
+by x01 : replace x01b = x01b[_n-1] if x01b==. & x01b[_n-1] !=.
+
+save B_panel_append, replace
 
 * Choosing the main samples (1999 & 2000)
 local i=1
@@ -3345,7 +3387,7 @@ use `v'_panel_append, clear
 	gen select = substr(x01,-1,1)
 	destring select, replace
 	
-	keep if (x01b==`i' & select==0) & (x01b <= 2)     // keep the 1999 and 2000 main samples
+	keep if (x01b==`i' & select==0) & (x01b <= 2 & x01b !=.)     // keep the 1999 and 2000 main samples
 	
 	drop select
 	
@@ -3372,7 +3414,7 @@ use RET_TOTAL_ONE, clear
 sort x01 period
 order S*, after(exp_medical)
 
-replace loan_house = 990 if ohouse==0     //如果沒有擁有房子，則不適用房貸題項
+/*replace loan_house = 990 if ohouse==0     //如果沒有擁有房子，則不適用房貸題項*/
 
 forvalue a = 1/18 { 
 
@@ -3380,6 +3422,22 @@ by x01: replace male = male[_n-`a'] if male==-999 & male[_n-`a'] !=. & male[_n-`
 
 by x01: replace mar4 = mar4[_n-`a'] if mar4==-999 & mar4[_n-`a'] !=. & mar4[_n-`a'] !=-999
 
+}
+
+//處理離婚或喪偶者，混充「單身未婚」者
+gen mar_4 = mar4
+label value mar_4 mar4
+label variable mar_4 "婚姻狀態 4 分類" 
+
+forvalue a = 1/18 {
+
+by x01: replace mar_4 = mar4[_n-`a'] if (mar4[_n-`a']==mar4[_n+`a']) & mar4[_n-`a'] !=. & mar4[_n-`a'] !=-999
+by x01: replace mar_4 = mar4[_n-`a'] if mar4==1 & mar4[_n-`a']==3
+by x01: replace mar_4 = mar4[_n-`a'] if mar4==1 & mar4[_n-`a']==4
+
+}
+
+forvalue a = 1/18 { 
 by x01: replace birth_y = birth_y[_n-`a'] if birth_y==-999 & birth_y[_n-`a'] !=. & birth_y[_n-`a'] !=-999
 
 by x01: replace Sbirth_y = Sbirth_y[_n-`a'] if Sbirth_y==-999 & Sbirth_y[_n-`a'] !=. & Sbirth_y[_n-`a'] !=-999  & mar4[_n-`a']==2
@@ -3410,9 +3468,9 @@ by x01: replace seniority = seniority[_n-`a']+(`a'*2) if seniority==-999 &  cwor
 by x01: replace Sseniority = Sseniority[_n-`a']+`a' if Sseniority==-999 & Scwork[_n-`a'+1]==0 & Sseniority[_n-`a'] !=. & Sseniority[_n-`a'] !=-999 & period<=2012  & mar4[_n-`a']==2
 by x01: replace Sseniority = Sseniority[_n-`a']+(`a'*2) if Sseniority==-999 & Scwork[_n-`a'+1]==0 & Sseniority[_n-`a'] !=. & Sseniority[_n-`a'] !=-999 & period[_n-`a']>=2012  & mar4[_n-`a']==2
 
-by x01: replace ohouse = ohouse[_n-`a'] if ohouse==-999 & ohouse[_n-`a'] !=. & ohouse[_n-`a'] !=-999
+by x01: replace ohouse = ohouse[_n-`a'] if ohouse==-999 & ohouse[_n-`a'] !=. & ohouse[_n-`a'] !=-999 
 
-by x01: replace loan_house = loan_house[_n-`a'] if loan_house==-999 & loan_house[_n-`a'] !=. & loan_house[_n-`a'] !=-999
+by x01: replace loan_house = loan_house[_n-`a'] if loan_house==-999 & loan_house[_n-`a'] !=. & loan_house[_n-`a'] !=-999 /*& loan_house[_n-`a'] != 990*/
 
 }
 
