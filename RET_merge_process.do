@@ -463,8 +463,8 @@ replace health = (6-health)    //inversed coding
 recode a15 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
 
-recode a03a (0=990 "不適用")(1/3=1 "有")(4/6=0 "沒有"), gen(work)
-recode a16a (0=990 "不適用")(1/3=1 "有")(4/6=0 "沒有"), gen(Swork)
+recode a03a (0=990 "不適用")(1/3=1 "有")(4/6=0 "沒有")(96/99=.), gen(work)
+recode a16a (0=990 "不適用")(1/3=1 "有")(4/6=0 "沒有")(96/99=.), gen(Swork)
 
 gen cwork = 0
 replace cwork =1 if (a03a >= 2 & a03a <= 4)
@@ -843,8 +843,8 @@ replace wage = . if a03a>=4 & a03a<=6 | a03a==0
 recode a24 (9999991/9999999=.), gen(Swage)
 replace Swage = . if a19a>=4 & a19a<=6 | a19a==0
 
-recode a09 (0 991/999=.), gen(whour)
-recode a25 (0 991/999=.), gen(hwhour)
+recode a09 (0 991/999=.), gen(workhr)
+recode a25 (0 991/999=.), gen(Sworkhr)
 
 gen seniority = .
 replace seniority = -999 if a03a == 1     //使用前期資料
@@ -3510,7 +3510,10 @@ by x01: replace Sr_indust = Sr_indust[_n+`a'] if Sr_indust== . & Sr_indust[_n+`a
 by x01: replace Sr_occu = Sr_occu[_n+`a'] if Sr_occu== . & Sr_occu[_n+`a'] != . & period >= Sretire_y 
 
 replace retire = 1 if pensions==1    //如果曾經領取退休金，則視為退休
-by x01: replace retire = retire[_n-`a'] if retire[_n-`a']==1 & retire !=.    //曾經回報過退休者，往後則視為退休
+by x01: replace retire = retire[_n-`a'] if (retire[_n-`a']==1 & retire !=.)    //曾經回報過退休者，往後則視為退休
+
+replace Sretire = 1 if Spensions==1    //如果配偶曾經領取退休金，則視為退休
+by x01: replace Sretire = Sretire[_n-`a'] if (Sretire[_n-`a']==1 & Sretire !=.) & Sbirth_y==Sbirth_y[_n-`a']    //曾經回報過退休者，往後則視為退休
 
 } 
 
