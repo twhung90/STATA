@@ -1746,7 +1746,7 @@ replace emp= -999 if (a06z01==2 & a06z02==2) & (a06z03==1 | a06z04==1 | a06z05==
 
 recode a23c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
 (4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(97=97 "other")(96 98/99=.), gen(hemp)
-replace emp= -999 if (a21b01==2 & a06z02==2) & (a21b03==1 | a21b04==1 | a21b05==1 | a21b06==1) & hemp==990
+replace hemp= -999 if (a21b01==2 & a06z02==2) & (a21b03==1 | a21b04==1 | a21b05==1 | a21b06==1) & hemp==990
 
 gen place = a09b02
 recode place (0=990)(991/999=.)
@@ -1996,7 +1996,7 @@ replace emp= -999 if (a06z01==2 & a06z02==2) & (a06z03==1 | a06z04==1 | a06z05==
 
 recode a23c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
 (4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(97=97 "other")(96 98/99=.), gen(hemp)
-replace emp= -999 if (a21b01==2 & a06z02==2) & (a21b03==1 | a21b04==1 | a21b05==1 | a21b06==1) & hemp==990
+replace hemp= -999 if (a21b01==2 & a06z02==2) & (a21b03==1 | a21b04==1 | a21b05==1 | a21b06==1) & hemp==990
 
 gen place = a09b02
 recode place (0=990)(993/999=.)
@@ -2686,7 +2686,7 @@ recode a08c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29")
 replace emp = -999 if (a06z01==2 & a06z02==2) & (a06z03==1 | a06z04==1 | a06z05==1 | a06z06==1) & emp==990
 recode a23c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
 (4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(97=97 "other")(96 98/99=.), gen(hemp)
-replace emp = -999 if (a21z01==2 & a21z02==2) & (a21z03==1 | a21z04==1 | a21z05==1 | a21z06==1) & hemp==990
+replace hemp = -999 if (a21z01==2 & a21z02==2) & (a21z03==1 | a21z04==1 | a21z05==1 | a21z06==1) & hemp==990
 
 gen place = a09b02
 recode place (0=990)(993/999=.)
@@ -2950,7 +2950,7 @@ recode a08c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29")
 replace emp = -999 if (a06z01==2 & a06z02==2) & (a06z03==1 | a06z04==1 | a06z05==1 | a06z06==1) & emp==990
 recode a23c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
 (4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(97=97 "other")(96 98/99=.), gen(hemp)
-replace emp = -999 if (a21z01==2 & a21z02==2) & (a21z03==1 | a21z04==1 | a21z05==1 | a21z06==1) & hemp==990
+replace hemp = -999 if (a21z01==2 & a21z02==2) & (a21z03==1 | a21z04==1 | a21z05==1 | a21z06==1) & hemp==990
 
 gen place = a09b02
 recode place (0=990)(993/999=.)
@@ -3217,7 +3217,7 @@ recode a08c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29")
 replace emp = -999 if (a06z01==2 & a06z02==2) & (a06z03==1 | a06z04==1 | a06z05==1 | a06z06==1) & emp==990
 recode a23c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
 (4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(97=97 "other")(96 98/99=.), gen(hemp)
-replace emp = -999 if (a21z01==2 & a21z02==2) & (a21z03==1 | a21z04==1 | a21z05==1 | a21z06==1) & hemp==990
+replace hemp = -999 if (a21z01==2 & a21z02==2) & (a21z03==1 | a21z04==1 | a21z05==1 | a21z06==1) & hemp==990
 
 gen place = a09b02
 recode place (0 993/999=.)
