@@ -243,8 +243,9 @@ gen live_sinson = (d04z04 >= 1 & d04z04 < 96)
 gen live_sindau = (d04z05 >= 1 & d04z05 < 96)
 gen live_parent = (d04z08 >= 1 & d04z08 < 96)
 gen live_sparent = (d04z09 >= 1 & d04z09 < 96)
+gen live_grachild = (d04z06 >=1 & d04z06 < 96)    //與孫子女同住
 
-keep x01 period x01b district - live_sparent
+keep x01 period x01b district - live_grachild
 save A_2000, replace
 
 
@@ -474,6 +475,16 @@ replace health = (6-health)    //inversed coding
 recode a15 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
 
+recode b11a (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode b11b (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode b11c (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode b11d (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
+
 recode a03a (0=990 "不適用")(1/3=1 "有")(4/6=0 "沒有")(96/99=.), gen(work)
 recode a16a (0=990 "不適用")(1/3=1 "有")(4/6=0 "沒有")(96/99=.), gen(Swork)
 
@@ -592,8 +603,9 @@ gen live_sinson = (b04z04 >= 1 & b04z04 < 96)
 gen live_sindau = (b04z05 >= 1 & b04z05 < 96)
 gen live_parent = (b04z08 >= 1 & b04z08 < 96)
 gen live_sparent = (b04z09 >= 1 & b04z09 < 96)
+gen live_grachild = (b04z06 >=1 & b04z06 < 96)    //與孫子女同住
 
-keep x01 period x01b district - live_sindau
+keep x01 period x01b district - live_grachild
 save A_2001, replace
 
 
@@ -631,6 +643,16 @@ recode a04 (0 6/9=.), gen(health)
 replace health = (6-health)    //inversed coding
 recode c25 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
+
+recode d10a (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode d10b (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode d10c (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode d10d (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
 
 gen mar4=.
 replace mar4 = -999 if (c21a==1 | c21a==2)
@@ -741,6 +763,7 @@ gen live_sinson = (d04z04 >= 1 & d04z04 < 96)
 gen live_sindau = (d04z05 >= 1 & d04z05 < 96)
 gen live_parent = (d04z08 >= 1 & d04z08 < 96)
 gen live_sparent = (d04z09 >= 1 & d04z09 < 96)
+gen live_grachild = (d04z06 >= 1 & d04z06 < 96)    //與孫子女同住
 
 forvalue a =1/4 {
 recode d11ac`a' (0 96/99=.), gen(child`a'_order)
@@ -781,6 +804,16 @@ recode a02 (0 6/9=.), gen(health)
 replace health = (6-health)    //inversed coding
 recode a18 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
+
+recode c12a (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode c12b (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode c12c (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode c12d (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
 
 gen mar4 = .
 replace mar4 = -999 if a14 ==1    //帶入前期
@@ -896,6 +929,7 @@ gen live_sinson = (c04z04 >= 1 & c04z04 < 96)
 gen live_sindau = (c04z05 >= 1 & c04z05 < 96)
 gen live_parent = (c04z08 >= 1 & c04z08 < 96)
 gen live_sparent = (c04z09 >= 1 & c04z09 < 96)
+gen live_grachild = (c04z06 >= 1 & c04z06 < 96)    //與孫子女同住
 
 gen ohouse = (c08a==1)
 replace ohouse = -999 if (c05==2)
@@ -985,6 +1019,16 @@ recode a02 (0 6/99=.), gen(health)
 replace health = (6-health)    //inversed coding
 recode a28 (0 6/99=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
+
+recode c12a (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode c12b (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode c12c (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode c12d (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
 
 recode a03 (0=990 "不適用")(1=1 "有")(2=0 "沒有")(6/99=.), gen(work)
 recode a29 (0=990 "不適用")(1=1 "有")(2=0 "沒有")(6/99=.), gen(Swork)
@@ -1098,6 +1142,7 @@ gen live_sinson = (c04z08 >= 1 & c04z08 < 96)
 gen live_sindau = (c04z09 >= 1 & c04z09 < 96)
 gen live_parent = ((c04z01 >= 1 & c04z01 < 96) | (c04z02>=1 & c04z02 < 96))    // 與父親或母親同住
 gen live_sparent = ((c04z04 >= 1 & c04z04 < 96) | (c04z05>=1 & c04z05 < 96))    // 與配偶的父親或母親同住
+gen live_grachild = ((c04z30 >= 1 & c04z30 < 96) | (c04z31 >= 1 & c04z31 < 96))    //與(外)孫子女同住
 
 recode c14b02 (0 9999991/9999999=.), gen(exp_parent)
 recode c16b02 (0 9999991/9999999=.), gen(exp_Sparent)
@@ -1177,6 +1222,16 @@ replace health = (6-health)    //inversed coding
 recode a26 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
 
+recode b12a (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode b12b (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode b12c (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode b12d (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
+
 recode a02c (1=1 "Yes")(2=0 "No")(6/9=.), gen(handicap2)
 
 recode a11a (0=990 "不適用")(1/3=1 "有")(4/6=0 "沒有")(6/99=.), gen(work)
@@ -1189,8 +1244,10 @@ replace Scwork =1 if (a27a >= 2 & a27a <= 4)
 
 recode a13c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
 (4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(96/99=.), gen(emp)
+replace emp = -999 if a11a==1
 recode a29c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
 (4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(96/99=.), gen(Semp)
+replace Semp = -999 if a27a== 1
 
 gen retire = 0
 replace retire = 1 if (a12b==3 | a12c==3) | (a20==7)
@@ -1285,6 +1342,7 @@ gen live_sinson = (b04z08 >= 1 & b04z08 < 96)
 gen live_sindau = (b04z09 >= 1 & b04z09 < 96)
 gen live_parent = ((b04z01 >= 1 & b04z01 < 96) | (b04z02>=1 & b04z02 < 96))    // 與父親或母親同住
 gen live_sparent = ((b04z04 >= 1 & b04z04 < 96) | (b04z05>=1 & b04z05 < 96))    // 與配偶的父親或母親同住
+gen live_grachild = ((b04z30 >= 1 & b04z30 < 96) | (b04z31 >= 1 & b04z31 < 96))    //與(外)孫子女同住
 
 gen ohouse = (b08a==1)
 replace ohouse = -999 if b06==2
@@ -1364,6 +1422,16 @@ recode a04a (0 7/9=.), gen(health)
 replace health = (6-health)    //inversed coding
 recode a26 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
+
+recode b12a (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode b12b (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode b12c (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode b12d (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
 
 recode a04c (1=1 "Yes")(2=0 "No")(6/9=.), gen(handicap2)
 
@@ -1467,6 +1535,7 @@ gen live_sinson = (b04b08 >= 1 & b04b08 < 96)
 gen live_sindau = (b04b09 >= 1 & b04b09 < 96)
 gen live_parent = ((b04b01 >= 1 & b04b01 < 96) | (b04b02>=1 & b04b02 < 96))    // 與父親或母親同住
 gen live_sparent = ((b04b04 >= 1 & b04b04 < 96) | (b04b05>=1 & b04b05 < 96))    // 與配偶的父親或母親同住
+gen live_grachild = ((b04b30 >= 1 & b04b30 < 96) | (b04b31 >= 1 & b04b31 < 96))    //與(外)孫子女同住
 
 recode b12e (96/99=.), gen(offspring)
 
@@ -1536,6 +1605,16 @@ recode a04a (0 7/9=.), gen(health)
 replace health = (6-health)    //inversed coding
 recode a20 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
+
+recode b14a (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode b14b (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode b14d (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode b14e (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
 
 recode a04c (1=1 "Yes")(2=0 "No")(6/9=.), gen(handicap2)
 
@@ -1655,6 +1734,7 @@ gen live_sinson = (b04b08 >= 1 & b04b08 < 96)
 gen live_sindau = (b04b09 >= 1 & b04b09 < 96)
 gen live_parent = ((b04b01 >= 1 & b04b01 < 96) | (b04b02>=1 & b04b02 < 96))    // 與父親或母親同住
 gen live_sparent = ((b04b04 >= 1 & b04b04 < 96) | (b04b05>=1 & b04b05 < 96))    // 與配偶的父親或母親同住
+gen live_grachild = ((b04b30 >= 1 & b04b30 < 96) | (b04b31 >= 1 & b04b31 < 96))    //與(外)孫子女同住
 
 gen ohouse = (b08a==1)
 replace ohouse = -999 if b06==2
@@ -1746,6 +1826,16 @@ recode a04a (0 6/9=.), gen(health)
 replace health = (6-health)    //inversed coding
 recode a20 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
+
+recode b14a (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode b14b (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode b18b (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode b18c (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
 
 recode a04c (1=1 "Yes")(2=0 "No")(6/9=.), gen(handicap2)
 
@@ -1860,6 +1950,7 @@ gen live_sinson = (b04b08 >= 1 & b04b08 < 96)
 gen live_sindau = (b04b09 >= 1 & b04b09 < 96)
 gen live_parent = ((b04b01 >= 1 & b04b01 < 96) | (b04b02>=1 & b04b02 < 96))    // 與父親或母親同住
 gen live_sparent = ((b04b04 >= 1 & b04b04 < 96) | (b04b05>=1 & b04b05 < 96))    // 與配偶的父親或母親同住
+gen live_grachild = ((b04b30 >= 1 & b04b30 < 96) | (b04b31 >= 1 & b04b31 < 96))    //與(外)孫子女同住
 
 gen ohouse = (b08a==1)
 replace ohouse = -999 if b06==2
@@ -1952,6 +2043,16 @@ recode a04a (0 6/9=.), gen(health)
 replace health = (6-health)    //inversed coding
 recode a19 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
+
+recode b14a (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode b14b (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode b18d (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode b18e (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
 
 recode a04c (1=1 "Yes")(2=0 "No")(6/9=.), gen(handicap2)
 
@@ -2070,6 +2171,7 @@ gen live_sinson = (b04b08 >= 1 & b04b08 < 96)
 gen live_sindau = (b04b09 >= 1 & b04b09 < 96)
 gen live_parent = ((b04b01 >= 1 & b04b01 < 96) | (b04b02>=1 & b04b02 < 96))    // 與父親或母親同住
 gen live_sparent = ((b04b04 >= 1 & b04b04 < 96) | (b04b05>=1 & b04b05 < 96))    // 與配偶的父親或母親同住
+gen live_grachild = ((b04b30 >= 1 & b04b30 < 96) | (b04b31 >= 1 & b04b31 < 96))    //與(外)孫子女同住
 
 gen ohouse = (b08a==1)
 replace ohouse = -999 if (b06==2)
@@ -2162,6 +2264,16 @@ recode a04a (0 6/9=.), gen(health)
 replace health = (6-health)    //inversed coding
 recode a19 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
+
+recode b14a (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode b14b (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode b18d (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode b18e (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
 
 recode a04c (1=1 "Yes")(2=0 "No")(6/9=.), gen(handicap2)
 
@@ -2280,6 +2392,7 @@ gen live_sinson = (b04b08 >= 1 & b04b08 < 96)
 gen live_sindau = (b04b09 >= 1 & b04b09 < 96)
 gen live_parent = ((b04b01 >= 1 & b04b01 < 96) | (b04b02>=1 & b04b02 < 96))    // 與父親或母親同住
 gen live_sparent = ((b04b04 >= 1 & b04b04 < 96) | (b04b05>=1 & b04b05 < 96))    // 與配偶的父親或母親同住
+gen live_grachild = ((b04b30 >= 1 & b04b30 < 96) | (b04b31 >= 1 & b04b31 < 96))    //與(外)孫子女同住
 
 gen ohouse = (b08a==1)    //自己或配偶所有
 replace ohouse = -999 if (b06==2)
@@ -2372,6 +2485,16 @@ recode a04a (0 6/9=.), gen(health)
 replace health = (6-health)    //inversed coding
 recode a19 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
+
+recode b14a (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode b14b (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode b18d (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode b18e (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
 
 recode a04c (1=1 "Yes")(2=0 "No")(6/9=.), gen(handicap2)
 
@@ -2494,6 +2617,7 @@ gen live_sinson = (b04b08 >= 1 & b04b08 < 96)
 gen live_sindau = (b04b09 >= 1 & b04b09 < 96)
 gen live_parent = ((b04b01 >= 1 & b04b01 < 96) | (b04b02>=1 & b04b02 < 96))    // 與父親或母親同住
 gen live_sparent = ((b04b04 >= 1 & b04b04 < 96) | (b04b05>=1 & b04b05 < 96))    // 與配偶的父親或母親同住
+gen live_grachild = ((b04b30 >= 1 & b04b30 < 96) | (b04b31 >= 1 & b04b31 < 96))    //與(外)孫子女同住
 
 gen ohouse = (b08a==1)    //自己或配偶所有
 replace ohouse = -999 if (b06==2)
@@ -2586,6 +2710,16 @@ recode a04a (0 6/9=.), gen(health)
 replace health = (6-health)    //inversed coding
 recode a19 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
+
+recode b14a (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode b14b (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode b18d (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode b18e (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
 
 recode a04c (1=1 "Yes")(2=0 "No")(6/9=.), gen(handicap2)
 
@@ -2712,6 +2846,7 @@ gen live_sinson = (b04b08 >= 1 & b04b08 < 96)
 gen live_sindau = (b04b09 >= 1 & b04b09 < 96)
 gen live_parent = ((b04b01 >= 1 & b04b01 < 96) | (b04b02>=1 & b04b02 < 96))    // 與父親或母親同住
 gen live_sparent = ((b04b04 >= 1 & b04b04 < 96) | (b04b05>=1 & b04b05 < 96))    // 與配偶的父親或母親同住
+gen live_grachild = ((b04b30 >= 1 & b04b30 < 96) | (b04b31 >= 1 & b04b31 < 96))    //與(外)孫子女同住
 
 gen ohouse = (b08a==1)    //自己或配偶所有
 replace ohouse = -999 if (b06==2)
@@ -2806,6 +2941,16 @@ recode a04a (0 6/9=.), gen(health)
 replace health = (6-health)    //inversed coding
 recode a28 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
+
+recode b20af1 (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode b20am1 (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode b23bf2 (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode b23bm2 (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
 
 recode a04c (1=1 "Yes")(2=0 "No")(6/9=.), gen(handicap2)
 
@@ -2914,6 +3059,7 @@ gen live_sinson = (b11b08 >= 1 & b11b08 < 96)
 gen live_sindau = (b11b09 >= 1 & b11b09 < 96)
 gen live_parent = ((b11b01 >= 1 & b11b01 < 96) | (b11b02>=1 & b11b02 < 96))    // 與父親或母親同住
 gen live_sparent = ((b11b04 >= 1 & b11b04 < 96) | (b11b05>=1 & b11b05 < 96))    // 與配偶的父親或母親同住
+gen live_grachild = ((b11b30 >= 1 & b11b30 < 96) | (b11b31 >= 1 & b11b31 < 96))    //與(外)孫子女同住
 
 recode b13 (96/99=.), gen(offspring)
 
@@ -2997,6 +3143,16 @@ recode a04a (0 6/9=.), gen(health)
 replace health = (6-health)    //inversed coding
 recode a29 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
+
+recode b18af1 (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode b18am1 (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode b23af2 (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode b23am2 (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
 
 recode a04c (1=1 "Yes")(2=0 "No")(6/9=.), gen(handicap2)
 
@@ -3101,6 +3257,7 @@ gen live_sinson = (b11b08 >= 1 & b11b08 < 96)
 gen live_sindau = (b11b09 >= 1 & b11b09 < 96)
 gen live_parent = ((b11b01 >= 1 & b11b01 < 96) | (b11b02>=1 & b11b02 < 96))    // 與父親或母親同住
 gen live_sparent = ((b11b04 >= 1 & b11b04 < 96) | (b11b05>=1 & b11b05 < 96))    // 與配偶的父親或母親同住
+gen live_grachild = ((b11b30 >= 1 & b11b30 < 96) | (b11b31 >= 1 & b11b31 < 96))    //與(外)孫子女同住
 
 recode b15 (96/99=.), gen(offspring)
 
@@ -3193,6 +3350,16 @@ recode a04a (0 6/9=.), gen(health)
 replace health = (6-health)    //inversed coding
 recode a29 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
+
+recode b14af1 (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode b14am1 (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode b19af2 (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode b19am2 (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
 
 recode a04c (1=1 "Yes")(2=0 "No")(6/9=.), gen(handicap2)
 
@@ -3298,6 +3465,7 @@ gen live_sinson = (b07b08 >= 1 & b07b08 < 96)
 gen live_sindau = (b07b09 >= 1 & b07b09 < 96)
 gen live_parent = ((b07b01 >= 1 & b07b01 < 96) | (b07b02>=1 & b07b02 < 96))    // 與父親或母親同住
 gen live_sparent = ((b07b04 >= 1 & b07b04 < 96) | (b07b05>=1 & b07b05 < 96))    // 與配偶的父親或母親同住
+gen live_grachild = ((b07b30 >= 1 & b07b30 < 96) | (b07b31 >= 1 & b07b31 < 96))    //與(外)孫子女同住
 
 recode b11 (96/99=.), gen(offspring)
 
@@ -3580,6 +3748,11 @@ by x01: replace ohouse = ohouse[_n-`a'] if ohouse==-999 & ohouse[_n-`a'] !=. & o
 
 by x01: replace loan_house = loan_house[_n-`a'] if loan_house==-999 & loan_house[_n-`a'] !=. & loan_house[_n-`a'] !=-999 /*& loan_house[_n-`a'] != 990*/
 
+forvalue n = 1/6 {
+	by x01: replace child`n'_age = child`n'_age[_n-`a']+`a' if child`n'_age==. & child`n'_age[_n-`a'] !=. & period<=2012    //填補子女年齡資訊
+	by x01: replace child`n'_age = child`n'_age[_n-`a']+(`a'*2) if child`n'_age==. & child`n'_age[_n-`a'] !=. & period[_n-`a']>=2012
+	}
+
 }
 
 // 處理2000年新抽樣本之「畢業年分」不一致的問題，採用最早(2000年)的那一波次的資訊
@@ -3615,7 +3788,29 @@ by x01: replace r_occu = r_occu[_n+`a'] if r_occu== . & r_occu[_n+`a'] != . & pe
 
 by x01: replace Sr_indust = Sr_indust[_n+`a'] if Sr_indust== . & Sr_indust[_n+`a'] != . & period >= Sretire_y 
 
-by x01: replace Sr_occu = Sr_occu[_n+`a'] if Sr_occu== . & Sr_occu[_n+`a'] != . & period >= Sretire_y 
+by x01: replace Sr_occu = Sr_occu[_n+`a'] if Sr_occu== . & Sr_occu[_n+`a'] != . & period >= Sretire_y
+
+by x01: replace health = health[_n-`a'] if health==. & health[_n-`a'] !=.
+by x01: replace health = health[_n+`a'] if health==. & health[_n+`a'] !=.
+
+by x01: replace Shealth = Shealth[_n-`a'] if Shealth==. & Shealth[_n-`a'] !=. & mar4[_n-`a']==2
+by x01: replace Shealth = Shealth[_n+`a'] if Shealth==. & Shealth[_n+`a'] !=. & mar4[_n+`a']==2
+
+by x01: replace health_f = health_f[_n-`a'] if health_f==. & health_f[_n-`a'] !=. & health_f[_n-`a'] !=-44
+by x01: replace health_f = health_f[_n+`a'] if health_f==. & health_f[_n+`a'] !=. & health_f[_n+`a'] !=-44
+by x01: replace health_f = health_f[_n+1] if health_f==. & health_f[_n+1] ==-44
+
+by x01: replace health_m = health_m[_n-`a'] if health_m==. & health_m[_n-`a'] !=. & health_m[_n-`a'] !=-44
+by x01: replace health_m = health_m[_n+`a'] if health_m==. & health_m[_n+`a'] !=. & health_m[_n+`a'] !=-44
+by x01: replace health_m = health_m[_n+1] if health_m==. & health_m[_n+1] ==-44
+
+by x01: replace health_sf = health_sf[_n-`a'] if health_sf==. & health_sf[_n-`a'] !=. & health_sf[_n-`a'] !=-44 & mar4[_n-`a']==2
+by x01: replace health_sf = health_sf[_n+`a'] if health_sf==. & health_sf[_n+`a'] !=. & health_sf[_n+`a'] !=-44 & mar4[_n+`a']==2
+by x01: replace health_sf = health_sf[_n+1] if health_sf==. & health_sf[_n+1] ==-44 & mar4[_n+1]==2
+
+by x01: replace health_sm = health_sm[_n-`a'] if health_sm==. & health_sm[_n-`a'] !=. & health_sm[_n-`a'] !=-44 & mar4[_n-`a']==2
+by x01: replace health_sm = health_sm[_n+`a'] if health_sm==. & health_sm[_n+`a'] !=. & health_sm[_n+`a'] !=-44 & mar4[_n+`a']==2
+by x01: replace health_sm = health_sm[_n+1] if health_sm==. & health_sm[_n+1] ==-44 & mar4[_n+1]==2
 
 replace retire = 1 if pensions==1    //如果曾經領取退休金，則視為退休
 by x01: replace retire = retire[_n-`a'] if (retire[_n-`a']==1 & retire !=.)    //曾經回報過退休者，往後則視為退休
