@@ -50,7 +50,7 @@ args name touse
 			replace `name' = .m if `name'==9999 & `touse'
 		}
 		if inrange(r(max),100000,999999)  {
-			*replace `name' = .j if `name'==0 & `touse'
+			*replace `name' = .j if `name'==0 & `touse'    //通常此類數值為金額，0通常兼具跳答意涵，不予轉換
 			replace `name' = .b if `name'==999991 & `touse'
 			replace `name' = .o if `name'==999995 & `touse'
 			replace `name' = .d if (`name'==999992 | `name'==999996) & `touse'
@@ -58,7 +58,7 @@ args name touse
 			replace `name' = .m if `name'==999999 & `touse'
 		}
 		if inrange(r(max),1000000,9999999)  {
-			*replace `name' = .j if `name'==0 & `touse'
+			*replace `name' = .j if `name'==0 & `touse'    //通常此類數值為金額，0通常兼具跳答意涵，不予轉換
 			replace `name' = .b if `name'==9999991 & `touse'
 			replace `name' = .o if `name'==9999995 & `touse'
 			replace `name' = .d if (`name'==9999992 | `name'==9999996) & `touse'
@@ -66,7 +66,7 @@ args name touse
 			replace `name' = .m if `name'==9999999 & `touse'
 		}
 		if inrange(r(max),10000000,99999999)  {
-			*replace `name' = .j if `name'==0 & `touse'
+			*replace `name' = .j if `name'==0 & `touse'    //通常此類數值為金額，0通常兼具跳答意涵，不予轉換
 			replace `name' = .b if `name'==99999991 & `touse'
 			replace `name' = .o if `name'==99999995 & `touse'
 			replace `name' = .d if (`name'==99999992 | `name'==99999996) & `touse'
