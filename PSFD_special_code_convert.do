@@ -11,7 +11,7 @@ program define 改特殊碼
 syntax [varlist(min=1)]
 marksample touse, novarlist strok
 	foreach var of local varlist {
-		if !inlist(`var',.a,.b,.j,.d,.r,.m) {
+		if !inlist(`var',.u,.j,.d,.o,.r,.m) {
 			cap confirm string variable `var'
 			if _rc {
 				num_sp `var' `touse'
@@ -71,7 +71,7 @@ args name touse
 		}
 		if inrange(r(max),10000000,99999999)  {
 			*replace `name' = .j if `name'==0 & `touse'    //通常此類數值為金額，0通常兼具跳答意涵，不予轉換
-			replace `name' = .b if `name'==99999991 & `touse'
+			replace `name' = .u if `name'==99999991 & `touse'
 			replace `name' = .o if `name'==99999995 & `touse'
 			replace `name' = .d if (`name'==99999992 | `name'==99999996) & `touse'
 			replace `name' = .r if `name'==99999998 & `touse'
