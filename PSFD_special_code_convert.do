@@ -1,6 +1,6 @@
 * self-defined program
 
-cap which lookfor2    //install the package
+cap which lookfor2    //install the "lookfor2" package if not installed. 
 if _rc {
 	ssc install lookfor2
 }
