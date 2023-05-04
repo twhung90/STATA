@@ -1,6 +1,10 @@
 * self-defined program
 
-cap ssc install lookfor2
+cap which lookfor2    //install the package
+if _rc {
+	ssc install lookfor2
+}
+
 cap program drop _all
 
 program define 改特殊碼
