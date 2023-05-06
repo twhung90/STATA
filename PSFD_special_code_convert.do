@@ -32,7 +32,7 @@ local list_str "跳答 不適用"    //將「跳答」與「不適用」等不�
 quietly lookfor2 `list_str', nonote
 local skip r(varlist)
 
-	if `: list name in skip' {
+	if strmatch(`skip', "*`name'*") {    //又或者改成 if `: list skip in name' { 亦可嘗試
 	quietly sum `name' 
 		if inrange(r(max),0,9)  {
 			replace `name' = .j if `name'==0 & `touse'
