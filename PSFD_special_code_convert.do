@@ -30,10 +30,6 @@ program define num_sp
 args name touse
 quietly lookfor2 "跳答", nonote
 local skip r(varlist)
-quietly lookfor2 "不適用", nonote
-local notavai r(varlist)
-
-local combime: list skip & notavai
 
 	if strmatch(`skip', "*`name'*") {
 	quietly sum `name' 
