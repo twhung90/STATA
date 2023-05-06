@@ -28,11 +28,11 @@ end
 
 program define num_sp
 args name touse
-local list_str "跳答 不適用"    //將「跳答」與「不適用」等不同元素存在macro之中，將轉變成list形式
+local list_str "跳答 不適用"    //將「跳答」與「不適用」等不同元素存在macro型態之中，將轉變成list形式
 quietly lookfor2 `list_str', nonote
 local skip r(varlist)
 
-	if strmatch(`skip', "*`name'*") {    //又或者改成 if `: list skip in name' { 亦可嘗試
+	if `: list name in skip' {
 	quietly sum `name' 
 		if inrange(r(max),0,9)  {
 			replace `name' = .j if `name'==0 & `touse'
