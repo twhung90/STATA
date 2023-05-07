@@ -12,7 +12,11 @@ syntax [varlist(min=1)]
 marksample touse, novarlist strok
 	foreach var of local varlist {
 	quietly misstable sum `var'
-		if r(N_gt_dot)==. {
+		if `r(N_gt_dot)'==. | `r(N_gt_dot)'==0  {
+			if strmatch("`var'", "x0*") {
+				display "Warnning: `var'這變項為PSFD定義的「樣本特質描述」，將不進行轉換！"
+				continue
+			}
 			cap confirm string variable `var'
 			if _rc {
 				num_sp `var' `touse'
