@@ -17,9 +17,9 @@ recode a01 (2=0), gen(male)
 gen birth_y = (1911 + a02) if a02 < 96
 gen Sbirth_y = (1911 + d11) if d11 < 96
 
-recode a04a (0 6/9=.), gen(health)
+recode a04a (0 7/9=.), gen(health)
 replace health = (6-health)    //inversed coding
-recode d15a (0 6/9=.), gen(Shealth)
+recode d15a (0 7/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
 
 recode a04b (1=1 "Yes")(2=0 "No")(6/9=.), gen(handicap1)
@@ -36,6 +36,11 @@ gen gradu_yr = (b02z01 + 1911) if (b02z01 > 0 & b02z01 < 96)    //畢業年分
 
 recode c01 (0=990 "不適用")(6/9=.)(1=1 "有")(2=0 "無"), gen(work)
 recode d16 (0=990 "不適用")(6/9=.)(1=1 "有")(2=0 "無"), gen(Swork)
+
+recode c05 (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6=6 "100-499")(7=7 "500 or more")(96/99=.), gen(emp)
+recode d20 (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6=6 "100-499")(7=7 "500 or more")(96/99=.), gen(Semp)
 
 recode c04a01 (0 = 990 "990 不適用")(1/3 = 1 "農、林、漁、牧、狩獵與採礦業 ") ///
 (11/18 = 1 " 農、林、漁、牧、狩獵與採礦業 ")(20/39 = 2 " 製造業 ")(40/49 = 3 " 水電燃氣業 ") ///
@@ -110,6 +115,8 @@ recode h06z01 (9999991/9999999=.), gen(exp_hmortage)
 recode h05a02p1 (0 9999991/9999999=.), gen(exp_parent)
 recode h05a02p2 (0 9999991/9999999=.), gen(exp_Sparent)
 
+recode j01 (96/99=.), gen(offspring)
+
 forvalue a = 1/4 {
 recode j02z01c`a' (0=990 "990 Not available")(6/9=.), gen(child`a'_sex)    //1=male; 2=female
 
@@ -118,6 +125,8 @@ gen child`a'_age = (period-1911-j02z02c`a') if j02z02c`a'>0 & j02z02c`a'<96
 recode j02z03c`a' (0=990 "990 Not available")(1/2 16=0 "0 無/幼稚園")(3=1 "1 小學") ///
 (4=2 "2 國中/初職")(5/8=3 "3 高中職")(9/12=4 "4 專科或技術學院")(13/15=5 "5 大學(或)以上") ///
 (96 98/99=.), gen(child`a'_edu)
+
+recode j02z06c`a' (0=990 "990 Not available")(1=1 "1 是")(2=0 "0 否")(6/9=.), gen(child`a'_cores)
 }
 
 gen live_parent = (f06f1==1 | f06m1==1)
@@ -159,6 +168,9 @@ lab value mar4 mar4
 
 recode c01 (0=990 "不適用")(6/9=.)(1=1 "有")(2=0 "無"), gen(work)
 recode c19 (0=990 "不適用")(6/9=.)(1=1 "有")(2=0 "無"), gen(Swork)
+
+recode c04 (0=990 "990 Not available")(1=1 "3 and less")(2=2 "4-9")(3=3 "10-29")(4=4 "30-49") ///
+(5=5 "50-99")(6=6 "100-499")(7=7 "500 or more")(96/99=.), gen(emp)
 
 recode c03a01 (0 = 990 "990 不適用")(1/3 = 1 "農、林、漁、牧、狩獵與採礦業 ") ///
 (11/18 = 1 " 農、林、漁、牧、狩獵與採礦業 ")(20/39 = 2 " 製造業 ")(40/49 = 3 " 水電燃氣業 ") ///
@@ -235,8 +247,9 @@ gen live_sinson = (d04z04 >= 1 & d04z04 < 96)
 gen live_sindau = (d04z05 >= 1 & d04z05 < 96)
 gen live_parent = (d04z08 >= 1 & d04z08 < 96)
 gen live_sparent = (d04z09 >= 1 & d04z09 < 96)
+gen live_grachild = (d04z06 >=1 & d04z06 < 96)    //與孫子女同住
 
-keep x01 period x01b district - live_sparent
+keep x01 period x01b district - live_grachild
 save A_2000, replace
 
 
@@ -271,6 +284,9 @@ recode a04b (1=1 "Yes")(2=0 "No")(6/9=.), gen(handicap1)
 
 recode c01 (0=990 "不適用")(6/9=.)(1=1 "有")(2=0 "無"), gen(work)
 recode d16 (0=990 "不適用")(6/9=.)(1=1 "有")(2=0 "無"), gen(Swork)
+
+recode c05 (0=990 "990 Not available")(96/99=.), gen(emp)
+recode d20 (0=990 "990 Not available")(96/99=.), gen(Semp)
 
 recode c04a01 (0 = 990 "990 不適用/跳答 ")(1/3 = 1 "農、林、漁、牧、狩獵與採礦業 ") ///
 (11/18 = 1 " 農、林、漁、牧、狩獵與採礦業 ")(20/39 = 2 " 製造業 ")(40/49 = 3 " 水電燃氣業 ") ///
@@ -463,8 +479,22 @@ replace health = (6-health)    //inversed coding
 recode a15 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
 
-recode a03a (0=990 "不適用")(1/3=1 "有")(4/6=0 "沒有"), gen(work)
-recode a16a (0=990 "不適用")(1/3=1 "有")(4/6=0 "沒有"), gen(Swork)
+recode b11a (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode b11b (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode b11c (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode b11d (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
+
+recode a03a (0=990 "不適用")(1/3=1 "有")(4/6=0 "沒有")(96/99=.), gen(work)
+recode a16a (0=990 "不適用")(1/3=1 "有")(4/6=0 "沒有")(96/99=.), gen(Swork)
+
+gen emp=.
+replace emp= -999 if a03a==1    //the number of employees
+gen Semp=.
 
 gen cwork = 0
 replace cwork =1 if (a03a >= 2 & a03a <= 4)
@@ -481,8 +511,8 @@ recode a05a01 (0 = 990 "990 不適用/跳答 ")(1/3 = 1 "農、林、漁、牧�
 (50/59 = 4 " 營造業 ")(60/69 = 5 " 商業 ")(70/79 = 6 " 運輸、倉儲、及通信業 ") ///
 (80/89 = 7 " 金融、保險、不動產、及工商服務業 ")(90/99 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (100 = 97 "其他")(996/999 =.), gen (indust)
-replace indust = -999 if a03a==1 & a03b==1
 replace indust = 990 if (a03a >= 4 & a03a<=6 | a03a==0)    //無工作/失業者編碼為990
+replace indust = -999 if a03a==1 & a03b==1
 
 recode a05a02 (0 9996/9999=.), gen(PSFDcode)
 merge m:1 PSFDcode using "1999-2008_ISCO", keepus(isco*)    //與ISCO編碼進行合併
@@ -503,8 +533,8 @@ recode a18a01 (0 = 990 "990 不適用/跳答 ")(1/3 = 1 "農、林、漁、牧�
 (50/59 = 4 " 營造業 ")(60/69 = 5 " 商業 ")(70/79 = 6 " 運輸、倉儲、及通信業 ") ///
 (80/89 = 7 " 金融、保險、不動產、及工商服務業 ")(90/99 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (100 = 97 "其他")(996/999 =.), gen (Sindust)
-replace Sindust = -999 if a16a==1 & a16b==1
 replace Sindust = 990 if (a16a >= 4 & a16a <= 6 | a16a==0)    //無工作/失業者編碼為990
+replace Sindust = -999 if a16a==1 & a16b==1
 
 recode a18a02 (0 9996/9999=.), gen(PSFDcode)
 merge m:1 PSFDcode using "1999-2008_ISCO", keepus(isco*)    //與ISCO編碼進行合併
@@ -577,8 +607,9 @@ gen live_sinson = (b04z04 >= 1 & b04z04 < 96)
 gen live_sindau = (b04z05 >= 1 & b04z05 < 96)
 gen live_parent = (b04z08 >= 1 & b04z08 < 96)
 gen live_sparent = (b04z09 >= 1 & b04z09 < 96)
+gen live_grachild = (b04z06 >=1 & b04z06 < 96)    //與孫子女同住
 
-keep x01 period x01b district - live_sindau
+keep x01 period x01b district - live_grachild
 save A_2001, replace
 
 
@@ -617,6 +648,16 @@ replace health = (6-health)    //inversed coding
 recode c25 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
 
+recode d10a (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode d10b (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode d10c (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode d10d (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
+
 gen mar4=.
 replace mar4 = -999 if (c21a==1 | c21a==2)
 replace mar4 = 2 if c21b==1
@@ -632,13 +673,18 @@ replace cwork =1 if (c01a >= 2 & c01a <= 4)
 gen Scwork = 0
 replace Scwork =1 if (c26a >= 2 & c26a <= 4)
 
+recode c04 (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6=6 "100-499")(7=7 "500 or more")(96/99=.), gen(emp)
+replace emp=-999 if c01b==1
+gen Semp=.
+
 recode c03a01 (0 = 990 "990 Not available ")(1/3 = 1 "農、林、漁、牧、狩獵與採礦業 ") ///
 (11/18 = 1 " 農、林、漁、牧、狩獵與採礦業 ")(20/39 = 2 " 製造業 ")(40/49 = 3 " 水電燃氣業 ") ///
 (50/59 = 4 " 營造業 ")(60/69 = 5 " 商業 ")(70/79 = 6 " 運輸、倉儲、及通信業 ") ///
 (80/89 = 7 " 金融、保險、不動產、及工商服務業 ")(90/99 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (100 = 97 "其他")(996/999 =.), gen (indust)
-replace indust = -999 if c01a==1 & c01b==1
 replace indust = 990 if c01a>=4 & c01a<=6    //無工作/失業者編碼為990
+replace indust = -999 if c01a==1 & c01b==1
 
 recode c03a02 (0 9996/9999=.), gen(PSFDcode)
 replace PSFDcode = . if c01a>=4 & c01a<=6
@@ -660,8 +706,8 @@ recode c28a01 (0 = 990 "990 Not available ")(1/3 = 1 "農、林、漁、牧、�
 (50/59 = 4 " 營造業 ")(60/69 = 5 " 商業 ")(70/79 = 6 " 運輸、倉儲、及通信業 ") ///
 (80/89 = 7 " 金融、保險、不動產、及工商服務業 ")(90/99 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (100 = 97 "其他")(996/999 =.), gen (Sindust)
-replace Sindust = -999 if c26a==1 & c26b==1
 replace Sindust = 990 if c26a>=4 & c26a<=6    //無工作/失業者編碼為990
+replace Sindust = -999 if c26a==1 & c26b==1
 
 recode c28a02 (0 9996/9999=.), gen(PSFDcode)
 replace PSFDcode = . if c26a>=4 & c26a<=6
@@ -721,6 +767,7 @@ gen live_sinson = (d04z04 >= 1 & d04z04 < 96)
 gen live_sindau = (d04z05 >= 1 & d04z05 < 96)
 gen live_parent = (d04z08 >= 1 & d04z08 < 96)
 gen live_sparent = (d04z09 >= 1 & d04z09 < 96)
+gen live_grachild = (d04z06 >= 1 & d04z06 < 96)    //與孫子女同住
 
 forvalue a =1/4 {
 recode d11ac`a' (0 96/99=.), gen(child`a'_order)
@@ -762,6 +809,16 @@ replace health = (6-health)    //inversed coding
 recode a18 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
 
+recode c12a (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode c12b (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode c12c (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode c12d (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
+
 gen mar4 = .
 replace mar4 = -999 if a14 ==1    //帶入前期
 replace mar4 = 1 if a14 == 2      //單身
@@ -778,18 +835,26 @@ replace cwork =1 if (a03a >= 2 & a03a <= 4)
 gen Scwork = 0
 replace Scwork =1 if (a19a >= 2 & a19a <= 4)
 
+recode a05c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6=6 "100-499")(7=7 "500 or more")(96/99=.), gen(emp)
+replace emp = -999 if a03b04==1    //公司內的工作人數
+
+recode a21c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6=6 "100-499")(7=7 "500 or more")(96/99=.), gen(Semp)
+replace Semp = -999 if (a19b04==1)
+
 gen retire = 0
-replace retire = 1 if (a04b==3 | a04c==3)
+replace retire = 1 if (a04b==3 | a04c==3) | (a12==7)
 gen Sretire = 0
-replace Sretire = 1 if (a20b==3 | a20c==3)
+replace Sretire = 1 if (a20b==3 | a20c==3) | (a26==7)
 
 recode  a05a01 (0 = 990 "990 Not available")(1/3 = 1 "農、林、漁、牧、狩獵與採礦業 ") ///
 (11/18 = 1 " 農、林、漁、牧、狩獵與採礦業 ")(20/39 = 2 " 製造業 ")(40/49 = 3 " 水電燃氣業 ") ///
 (50/59 = 4 " 營造業 ")(60/69 = 5 " 商業 ")(70/79 = 6 " 運輸、倉儲、及通信業 ") ///
 (80/89 = 7 " 金融、保險、不動產、及工商服務業 ")(90/99 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (100 = 97 "其他")(996/999 =.), gen (indust)
-replace indust = -999 if a03a == 1    //使用前期資料
 replace indust = 990 if a03a>=4 & a03a<=6    //無工作/失業者編碼為990
+replace indust = -999 if a03a == 1    //使用前期資料
 
 recode a05a02 (0 9996/9999=.), gen(PSFDcode)
 merge m:1 PSFDcode using "1999-2008_ISCO", keepus(isco*)    //與ISCO編碼進行合併
@@ -810,8 +875,8 @@ recode a21a01 (0 = 990 "990 Not available")(1/3 = 1 "農、林、漁、牧、狩
 (50/59 = 4 " 營造業 ")(60/69 = 5 " 商業 ")(70/79 = 6 " 運輸、倉儲、及通信業 ") ///
 (80/89 = 7 " 金融、保險、不動產、及工商服務業 ")(90/99 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (100 = 97 "其他")(996/999 =.), gen (Sindust)
-replace Sindust = -999 if a19a == 1    //using the datum in the last year
 replace Sindust = 990 if a19a>=4 & a19a<=6    //無工作/失業者編碼為990
+replace Sindust = -999 if a19a == 1    //using the datum in the last year
 
 recode a21a02 (0 9996/9999=.), gen(PSFDcode)
 merge m:1 PSFDcode using "1999-2008_ISCO", keepus(isco*)    //與ISCO編碼進行合併
@@ -843,8 +908,8 @@ replace wage = . if a03a>=4 & a03a<=6 | a03a==0
 recode a24 (9999991/9999999=.), gen(Swage)
 replace Swage = . if a19a>=4 & a19a<=6 | a19a==0
 
-recode a09 (0 991/999=.), gen(whour)
-recode a25 (0 991/999=.), gen(hwhour)
+recode a09 (0 991/999=.), gen(workhr)
+recode a25 (0 991/999=.), gen(Sworkhr)
 
 gen seniority = .
 replace seniority = -999 if a03a == 1     //使用前期資料
@@ -868,6 +933,7 @@ gen live_sinson = (c04z04 >= 1 & c04z04 < 96)
 gen live_sindau = (c04z05 >= 1 & c04z05 < 96)
 gen live_parent = (c04z08 >= 1 & c04z08 < 96)
 gen live_sparent = (c04z09 >= 1 & c04z09 < 96)
+gen live_grachild = (c04z06 >= 1 & c04z06 < 96)    //與孫子女同住
 
 gen ohouse = (c08a==1)
 replace ohouse = -999 if (c05==2)
@@ -925,7 +991,8 @@ recode x05 (996/999=.), gen(district)
 
 recode a01 (2=0), gen(male)
 
-gen birth_y = (1911+b01) if (b01 < 96)
+gen birth_y = (1911 + b01) if (b01 < 96)
+*replace birth_y = (2003 - b02) if birth_y==. & b02 > 0 & b02 < 96
 
 recode a03 (0 6/9=.), gen(health)
 replace health = (6-health)    //inversed coding
@@ -958,11 +1025,26 @@ replace health = (6-health)    //inversed coding
 recode a28 (0 6/99=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
 
+recode c12a (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode c12b (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode c12c (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode c12d (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
+
 recode a03 (0=990 "不適用")(1=1 "有")(2=0 "沒有")(6/99=.), gen(work)
 recode a29 (0=990 "不適用")(1=1 "有")(2=0 "沒有")(6/99=.), gen(Swork)
 
 recode a14 (0=990 "不適用")(1=0 "沒有")(2=1 "有")(6/99=.), gen(cwork)
 recode a38 (0=990 "不適用")(1=0 "沒有")(2=1 "有")(6/99=.), gen(Scwork)
+
+recode a05c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(91/99=.), gen(emp)
+recode a31c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(91/99=.), gen(Semp)
 
 gen retire = 0 
 replace retire = 1 if (a04a==7) | (a15b==3 | a15c==3)
@@ -1065,6 +1147,7 @@ gen live_sinson = (c04z08 >= 1 & c04z08 < 96)
 gen live_sindau = (c04z09 >= 1 & c04z09 < 96)
 gen live_parent = ((c04z01 >= 1 & c04z01 < 96) | (c04z02>=1 & c04z02 < 96))    // 與父親或母親同住
 gen live_sparent = ((c04z04 >= 1 & c04z04 < 96) | (c04z05>=1 & c04z05 < 96))    // 與配偶的父親或母親同住
+gen live_grachild = ((c04z30 >= 1 & c04z30 < 96) | (c04z31 >= 1 & c04z31 < 96))    //與(外)孫子女同住
 
 recode c14b02 (0 9999991/9999999=.), gen(exp_parent)
 recode c16b02 (0 9999991/9999999=.), gen(exp_Sparent)
@@ -1144,6 +1227,16 @@ replace health = (6-health)    //inversed coding
 recode a26 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
 
+recode b12a (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode b12b (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode b12c (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode b12d (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
+
 recode a02c (1=1 "Yes")(2=0 "No")(6/9=.), gen(handicap2)
 
 recode a11a (0=990 "不適用")(1/3=1 "有")(4/6=0 "沒有")(6/99=.), gen(work)
@@ -1153,6 +1246,13 @@ gen cwork = 0
 replace cwork =1 if (a11a >= 2 & a11a <= 4)
 gen Scwork = 0
 replace Scwork =1 if (a27a >= 2 & a27a <= 4)
+
+recode a13c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(96/99=.), gen(emp)
+replace emp = -999 if a11a==1
+recode a29c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(96/99=.), gen(Semp)
+replace Semp = -999 if a27a== 1
 
 gen retire = 0
 replace retire = 1 if (a12b==3 | a12c==3) | (a20==7)
@@ -1167,8 +1267,9 @@ recode a13a01 (0 = 990 "990 Not available")(1/3 = 1 "農、林、漁、牧、狩
 (50/59 = 4 " 營造業 ")(60/69 = 5 " 商業 ")(70/79 = 6 " 運輸、倉儲、及通信業 ") ///
 (80/89 = 7 " 金融、保險、不動產、及工商服務業 ")(90/99 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (100 = 97 "其他")(996/999 =.), gen (indust)
-replace indust = -999 if a11a == 1   //使用前期資料
 replace indust = 990 if  a11a >= 4 & a11a <= 6    //無工作/失業者編碼為990
+replace indust = -999 if a11a == 1   //使用前期資料
+
 
 recode a13a02 (0 9996/9999=.), gen(PSFDcode)     //失業或沒工作者編碼為.
 merge m:1 PSFDcode using "1999-2008_ISCO", keepus(isco*)    //與ISCO編碼進行合併
@@ -1180,7 +1281,7 @@ label define isco 1"民意代表、主管及經理人員" 2"專業人員 " 3"技
 4"事務支援人員" 5" 服務及銷售工作人員" 6"農、林、漁、牧業生產人員" 7"技藝有關工作人員" ///
 8"機械設備操作及組裝人員" 9"基層技術工及勞力工" 10"軍人" 990"Not available"
 label value occu isco
-replace occu = 990 if a13a02==0 | (a11a>= 4 & a11a <=6)
+replace occu = 990 if a11a>= 4 & a11a <=6
 replace occu = -999 if a11a==1   //使用前期資料
 drop isco*
 
@@ -1189,8 +1290,8 @@ recode a29a01 (0 = 990 "990 Not available")(1/3 = 1 "農、林、漁、牧、狩
 (50/59 = 4 " 營造業 ")(60/69 = 5 " 商業 ")(70/79 = 6 " 運輸、倉儲、及通信業 ") ///
 (80/89 = 7 " 金融、保險、不動產、及工商服務業 ")(90/99 = 8 " 公共行政、社會服務及個人服務業 ") ///
 (100 = 97 "其他")(996/999 =.), gen (Sindust)
-replace Sindust = -999 if a27a == 1    //使用前期資料
 replace Sindust = 990 if  a27a >= 4 & a27a <= 6    //無工作/失業者編碼為990
+replace Sindust = -999 if a27a == 1    //使用前期資料
 
 recode a29a02 (0 9996/9999=.), gen(job)     //失業或沒工作者編碼為.
 rename job PSFDcode
@@ -1200,8 +1301,8 @@ drop _merge PSFDcode
 gen Soccu = int(isco88/1000)
 recode Soccu (0 = 10)
 label value Soccu isco
+replace Soccu = 990 if a27a>= 4 & a27a <=6
 replace Soccu = -999 if a27a==1    //使用前期資料
-replace Soccu = 990 if a29a02==0 | (a27a>= 4 & a27a <=6)
 drop isco*
 
 recode a13b (0=990)(96 98/99=.), gen(workfor)
@@ -1246,6 +1347,7 @@ gen live_sinson = (b04z08 >= 1 & b04z08 < 96)
 gen live_sindau = (b04z09 >= 1 & b04z09 < 96)
 gen live_parent = ((b04z01 >= 1 & b04z01 < 96) | (b04z02>=1 & b04z02 < 96))    // 與父親或母親同住
 gen live_sparent = ((b04z04 >= 1 & b04z04 < 96) | (b04z05>=1 & b04z05 < 96))    // 與配偶的父親或母親同住
+gen live_grachild = ((b04z30 >= 1 & b04z30 < 96) | (b04z31 >= 1 & b04z31 < 96))    //與(外)孫子女同住
 
 gen ohouse = (b08a==1)
 replace ohouse = -999 if b06==2
@@ -1326,6 +1428,16 @@ replace health = (6-health)    //inversed coding
 recode a26 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
 
+recode b12a (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode b12b (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode b12c (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode b12d (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
+
 recode a04c (1=1 "Yes")(2=0 "No")(6/9=.), gen(handicap2)
 
 recode a07 (0=990 "不適用")(1=1 "有")(2=0 "沒有")(6/99=.), gen(work)
@@ -1335,6 +1447,11 @@ gen cwork = 0
 replace cwork = 1 if (a08a01 == 1)
 gen Scwork = 0
 replace Scwork = 1 if (a27b01 == 1)
+
+recode a11c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(97=97 "other")(96 98/99=.), gen(emp)
+recode a29c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(97=97 "other")(96 98/99=.), gen(Semp)
 
 gen seniority = a08a02 if (a08a01 >= 0 & a08a02 < 96)
 gen Sseniority = a27b02 if (a27b01 >= 0 & a27b02 < 96)
@@ -1423,6 +1540,7 @@ gen live_sinson = (b04b08 >= 1 & b04b08 < 96)
 gen live_sindau = (b04b09 >= 1 & b04b09 < 96)
 gen live_parent = ((b04b01 >= 1 & b04b01 < 96) | (b04b02>=1 & b04b02 < 96))    // 與父親或母親同住
 gen live_sparent = ((b04b04 >= 1 & b04b04 < 96) | (b04b05>=1 & b04b05 < 96))    // 與配偶的父親或母親同住
+gen live_grachild = ((b04b30 >= 1 & b04b30 < 96) | (b04b31 >= 1 & b04b31 < 96))    //與(外)孫子女同住
 
 recode b12e (96/99=.), gen(offspring)
 
@@ -1488,17 +1606,20 @@ recode a01 (2=0), gen(male)
 gen birth_y = (1911+a02a) if a02a <96
 gen Sbirth_y = (1911+a17) if a17 > 0 & a17 < 96
 
-* SWB variables
-recode a03a (0 96/99=.), gen(happy)
-recode a03b (0 96/99=.), gen(wellbeing)
-recode a04a (0 6/9=.), gen(health)
+recode a04a (0 7/9=.), gen(health)
 replace health = (6-health)    //inversed coding
 recode a20 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
-recode d07d (0 6/9=.), gen(work_satis)
-replace work_satis = (5-work_satis)    //inversed coding
-recode d07e (0 6/9=.), gen(family_satis)
-replace family_satis = (5-family_satis)    //inversed coding
+
+recode b14a (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode b14b (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode b14d (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode b14e (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
 
 recode a04c (1=1 "Yes")(2=0 "No")(6/9=.), gen(handicap2)
 
@@ -1515,6 +1636,14 @@ gen cwork = 0
 replace cwork = 1 if a06z01==1 | a06z02==1 | a06z03==1 | a06z04==1 | a06z05==1 | a06z07==1
 gen Scwork = 0
 replace Scwork = 1 if a21b01==1 | a21b02==1 | a21b03==1 | a21b04==1 | a21b05==1 | a21b07==1
+
+recode a08c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(97=97 "other")(96 98/99=.), gen(emp)
+replace emp= -999 if (a06z01==2 & a06z02==2) & (a06z03==1 | a06z04==1 | a06z05==1 | a06z06==1) & emp==990
+
+recode a23c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(97=97 "other")(96 98/99=.), gen(Semp)
+replace Semp= -999 if (a21b01==2 & a06z02==2) & (a21b03==1 | a21b04==1 | a21b05==1 | a21b06==1) & Semp==990
 
 recode a08b (0=990)(96 98/99=.), gen(workfor)
 replace workfor = -999 if (a06z01==2 & a06z02==2) & (a06z03==1 | a06z04==1 | a06z05==1 | a06z06==1) & workfor==990
@@ -1610,6 +1739,7 @@ gen live_sinson = (b04b08 >= 1 & b04b08 < 96)
 gen live_sindau = (b04b09 >= 1 & b04b09 < 96)
 gen live_parent = ((b04b01 >= 1 & b04b01 < 96) | (b04b02>=1 & b04b02 < 96))    // 與父親或母親同住
 gen live_sparent = ((b04b04 >= 1 & b04b04 < 96) | (b04b05>=1 & b04b05 < 96))    // 與配偶的父親或母親同住
+gen live_grachild = ((b04b30 >= 1 & b04b30 < 96) | (b04b31 >= 1 & b04b31 < 96))    //與(外)孫子女同住
 
 gen ohouse = (b08a==1)
 replace ohouse = -999 if b06==2
@@ -1697,17 +1827,20 @@ recode a19 (0=990 "990 不適用")(1/2=0 "0 無/自修")(3=1 "1 小學")(4/5=2 "
 (6/8=3 "3 高中職")(9/12=4 "4 專科或技術學院")(13=5 "5 大學或獨立學院")(14/15=6 "6 研究所(或)以上") ///
 (97=97 "97 其它")(96 98/99=.), gen(Sedu)
 
-* SWB variables
-recode a03a (0 96/99=.), gen(happy)
-recode a03b (0 96/99=.), gen(wellbeing)
 recode a04a (0 6/9=.), gen(health)
 replace health = (6-health)    //inversed coding
 recode a20 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
-recode c07a (0 6/9=.), gen(work_satis)
-replace work_satis = (5-work_satis)    //inversed coding
-recode c07b (0 6/9=.), gen(family_satis)
-replace family_satis = (5-family_satis)    //inversed coding
+
+recode b14a (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode b14b (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode b18b (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode b18c (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
 
 recode a04c (1=1 "Yes")(2=0 "No")(6/9=.), gen(handicap2)
 
@@ -1723,6 +1856,14 @@ gen cwork = 0
 replace cwork = 1 if (a06z01==1 | a06z02==1 | a06z03==1 | a06z04==1 | a06z05==1 | a06z07==1)
 gen Scwork = 0
 replace Scwork = 1 if (a21b01==1 | a21b02==1 | a21b03==1 | a21b04==1 | a21b05==1 | a21b07==1)
+
+recode a08c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(97=97 "other")(96 98/99=.), gen(emp)
+replace emp= -999 if (a06z01==2 & a06z02==2) & (a06z03==1 | a06z04==1 | a06z05==1 | a06z06==1) & emp==990
+
+recode a23c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(97=97 "other")(96 98/99=.), gen(Semp)
+replace Semp= -999 if (a21b01==2 & a06z02==2) & (a21b03==1 | a21b04==1 | a21b05==1 | a21b06==1) & Semp==990
 
 recode a09a01 (0 = 990 "990 Not available")(1/3 = 1 "農、林、漁、牧、狩獵與採礦業 ") ///
 (11/18 = 1 " 農、林、漁、牧、狩獵與採礦業 ")(20/39 = 2 " 製造業 ")(40/49 = 3 " 水電燃氣業 ") ///
@@ -1814,6 +1955,7 @@ gen live_sinson = (b04b08 >= 1 & b04b08 < 96)
 gen live_sindau = (b04b09 >= 1 & b04b09 < 96)
 gen live_parent = ((b04b01 >= 1 & b04b01 < 96) | (b04b02>=1 & b04b02 < 96))    // 與父親或母親同住
 gen live_sparent = ((b04b04 >= 1 & b04b04 < 96) | (b04b05>=1 & b04b05 < 96))    // 與配偶的父親或母親同住
+gen live_grachild = ((b04b30 >= 1 & b04b30 < 96) | (b04b31 >= 1 & b04b31 < 96))    //與(外)孫子女同住
 
 gen ohouse = (b08a==1)
 replace ohouse = -999 if b06==2
@@ -1902,20 +2044,22 @@ recode a18 (0=990 "Not available")(1/2=0 "0 無/自修")(3=1 "1 小學")(4/5=2 "
 (6/8=3 "3 高中職")(9/12=4 "4 專科或技術學院")(13=5 "5 大學或獨立學院")(14/15=6 "6 研究所(或)以上") ///
 (97=97 "97 其它")(96 98/99=.), gen(Sedu)
 
-* SWB variables
-recode a03a (0 96/99=.), gen(happy)
-recode a03b (0 96/99=.), gen(wellbeing)
 recode a04a (0 6/9=.), gen(health)
 replace health = (6-health)    //inversed coding
 recode a19 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
-recode c07a (0 6/9=.), gen(work_satis)
-replace work_satis = (5-work_satis)    //inversed coding
-recode c07b (0 6/9=.), gen(family_satis)
-replace family_satis = (5-family_satis)    //inversed coding
+
+recode b14a (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode b14b (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode b18d (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode b18e (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
 
 recode a04c (1=1 "Yes")(2=0 "No")(6/9=.), gen(handicap2)
-
 
 recode a05 (0=990 "不適用")(1/2=1 "有")(3=0 "沒有")(6/99=.), gen(work)
 recode a20 (0=990 "不適用")(1/2=1 "有")(3=0 "沒有")(6/99=.), gen(Swork)
@@ -1924,6 +2068,13 @@ gen cwork = 0
 replace cwork = 1 if a06z01==1 | a06z02==1 | a06z03==1 | a06z04==1 | a06z05==1 | a06z07==1
 gen Scwork = 0
 replace Scwork = 1 if a21z01==1 | a21z02==1 | a21z03==1 | a21z04==1 | a21z05==1 | a21z07==1
+
+recode a08c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(97=97 "other")(96 98/99=.), gen(emp)
+replace emp= -999 if (a06z01==2 & a06z02==2) & (a06z03==1 | a06z04==1 | a06z05==1 | a06z06==1) & emp==990
+recode a23c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(97=97 "other")(96 98/99=.), gen(Semp)
+replace Semp= -999 if (a06z01==2 & a06z02==2) & (a06z03==1 | a06z04==1 | a06z05==1 | a06z06==1) & Semp==990
 
 gen retire = 0
 replace retire = 1 if (a07b==3 | a07c==3) | (a14==7) | (c04a01==1 | c04a01==2)
@@ -2025,6 +2176,7 @@ gen live_sinson = (b04b08 >= 1 & b04b08 < 96)
 gen live_sindau = (b04b09 >= 1 & b04b09 < 96)
 gen live_parent = ((b04b01 >= 1 & b04b01 < 96) | (b04b02>=1 & b04b02 < 96))    // 與父親或母親同住
 gen live_sparent = ((b04b04 >= 1 & b04b04 < 96) | (b04b05>=1 & b04b05 < 96))    // 與配偶的父親或母親同住
+gen live_grachild = ((b04b30 >= 1 & b04b30 < 96) | (b04b31 >= 1 & b04b31 < 96))    //與(外)孫子女同住
 
 gen ohouse = (b08a==1)
 replace ohouse = -999 if (b06==2)
@@ -2113,17 +2265,20 @@ recode a18 (0=990 "Not available")(1/2=0 "0 無/自修")(3=1 "1 小學")(4/5=2 "
 (6/8=3 "3 高中職")(9/12=4 "4 專科或技術學院")(13=5 "5 大學或獨立學院")(14/15=6 "6 研究所(或)以上") ///
 (97=97 "97 其它")(96 98/99=.), gen(Sedu)
 
-* SWB variables
-recode a03a (0 96/99=.), gen(happy)
-recode a03b (0 96/99=.), gen(wellbeing)
 recode a04a (0 6/9=.), gen(health)
 replace health = (6-health)    //inversed coding
 recode a19 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
-recode c07a (0 6/9=.), gen(work_satis)
-replace work_satis = (5-work_satis)    //inversed coding
-recode c07b (0 6/9=.), gen(family_satis)
-replace family_satis = (5-family_satis)    //inversed coding
+
+recode b14a (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode b14b (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode b18d (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode b18e (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
 
 recode a04c (1=1 "Yes")(2=0 "No")(6/9=.), gen(handicap2)
 
@@ -2134,6 +2289,13 @@ gen cwork = 0
 replace cwork = 1 if a06z01==1 | a06z02==1 | a06z03==1 | a06z04==1 | a06z05==1 | a06z07==1
 gen Scwork = 0
 replace Scwork = 1 if a21z01==1 | a21z02==1 | a21z03==1 | a21z04==1 | a21z05==1 | a21z07==1
+
+recode a08c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(97=97 "other")(96 98/99=.), gen(emp)
+replace emp = -999 if (a06z01==2 & a06z02==2) & (a06z03==1 | a06z04==1 | a06z05==1 | a06z06==1) & emp==990
+recode a23c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(97=97 "other")(96 98/99=.), gen(Semp)
+replace Semp = -999 if (a21z01==2 & a21z02==2) & (a21z03==1 | a21z04==1 | a21z05==1 | a21z06==1) & Semp==990
 
 recode a08b (0=990)(96 98/99=.), gen(workfor)
 replace workfor = -999 if (a06z01==2 & a06z02==2) & (a06z03==1 | a06z04==1 | a06z05==1 | a06z06==1) & workfor==990
@@ -2235,6 +2397,7 @@ gen live_sinson = (b04b08 >= 1 & b04b08 < 96)
 gen live_sindau = (b04b09 >= 1 & b04b09 < 96)
 gen live_parent = ((b04b01 >= 1 & b04b01 < 96) | (b04b02>=1 & b04b02 < 96))    // 與父親或母親同住
 gen live_sparent = ((b04b04 >= 1 & b04b04 < 96) | (b04b05>=1 & b04b05 < 96))    // 與配偶的父親或母親同住
+gen live_grachild = ((b04b30 >= 1 & b04b30 < 96) | (b04b31 >= 1 & b04b31 < 96))    //與(外)孫子女同住
 
 gen ohouse = (b08a==1)    //自己或配偶所有
 replace ohouse = -999 if (b06==2)
@@ -2323,17 +2486,20 @@ recode a18 (0=990 "Not available")(1/2=0 "0 無/自修")(3=1 "1 小學")(4/5=2 "
 (6/8=3 "3 高中職")(9/12=4 "4 專科或技術學院")(13=5 "5 大學或獨立學院")(14/15=6 "6 研究所(或)以上") ///
 (97=97 "97 其它")(96 98/99=.), gen(Sedu)
 
-* SWB variables
-recode a03a (0 96/99=.), gen(happy)
-recode a03b (0 96/99=.), gen(wellbeing)
 recode a04a (0 6/9=.), gen(health)
 replace health = (6-health)    //inversed coding
 recode a19 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
-recode c07a (0 6/9=.), gen(work_satis)
-replace work_satis = (5-work_satis)    //inversed coding
-recode c07b (0 6/9=.), gen(family_satis)
-replace family_satis = (5-family_satis)    //inversed coding
+
+recode b14a (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode b14b (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode b18d (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode b18e (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
 
 recode a04c (1=1 "Yes")(2=0 "No")(6/9=.), gen(handicap2)
 
@@ -2344,6 +2510,13 @@ gen cwork = 0
 replace cwork = 1 if a06z01==1 | a06z02==1 | a06z03==1 | a06z04==1 | a06z05==1 | a06z07==1
 gen Scwork = 0
 replace Scwork = 1 if a21z01==1 | a21z02==1 | a21z03==1 | a21z04==1 | a21z05==1 | a21z07==1
+
+recode a08c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(97=97 "other")(96 98/99=.), gen(emp)
+replace emp = -999 if (a06z01==2 & a06z02==2) & (a06z03==1 | a06z04==1 | a06z05==1 | a06z06==1) & emp==990
+recode a23c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(97=97 "other")(96 98/99=.), gen(Semp)
+replace Semp = -999 if (a21z01==2 & a21z02==2) & (a21z03==1 | a21z04==1 | a21z05==1 | a21z06==1) & Semp==990
 
 recode a08b (0=990)(96 98/99=.), gen(workfor)
 replace workfor = -999 if (a06z01==2 & a06z02==2) & (a06z03==1 | a06z04==1 | a06z05==1 | a06z06==1) & workfor==990
@@ -2449,6 +2622,7 @@ gen live_sinson = (b04b08 >= 1 & b04b08 < 96)
 gen live_sindau = (b04b09 >= 1 & b04b09 < 96)
 gen live_parent = ((b04b01 >= 1 & b04b01 < 96) | (b04b02>=1 & b04b02 < 96))    // 與父親或母親同住
 gen live_sparent = ((b04b04 >= 1 & b04b04 < 96) | (b04b05>=1 & b04b05 < 96))    // 與配偶的父親或母親同住
+gen live_grachild = ((b04b30 >= 1 & b04b30 < 96) | (b04b31 >= 1 & b04b31 < 96))    //與(外)孫子女同住
 
 gen ohouse = (b08a==1)    //自己或配偶所有
 replace ohouse = -999 if (b06==2)
@@ -2537,17 +2711,20 @@ recode a18 (0=990 "Not available")(1/2=0 "0 無/自修")(3=1 "1 小學")(4/5=2 "
 (6/8=3 "3 高中職")(9/12=4 "4 專科或技術學院")(13=5 "5 大學或獨立學院")(14/15=6 "6 研究所(或)以上") ///
 (97=97 "97 其它")(96 98/99=.), gen(Sedu)
 
-* SWB variables
-recode a03a (0 96/99=.), gen(happy)
-recode a03b (0 96/99=.), gen(wellbeing)
 recode a04a (0 6/9=.), gen(health)
 replace health = (6-health)    //inversed coding
 recode a19 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
-recode e01a (0 6/9=.), gen(work_satis)
-replace work_satis = (5-work_satis)    //inversed coding
-recode e01b (0 6/9=.), gen(family_satis)
-replace family_satis = (5-family_satis)    //inversed coding
+
+recode b14a (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode b14b (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode b18d (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode b18e (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
 
 recode a04c (1=1 "Yes")(2=0 "No")(6/9=.), gen(handicap2)
 
@@ -2558,6 +2735,14 @@ gen cwork = 0
 replace cwork = 1 if a06z01==1 | a06z02==1 | a06z03==1 | a06z04==1 | a06z05==1 | a06z07==1
 gen Scwork = 0
 replace Scwork = 1 if a21z01==1 | a21z02==1 | a21z03==1 | a21z04==1 | a21z05==1 | a21z07==1
+
+recode a08c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(97=97 "other")(96 98/99=.), gen(emp)
+replace emp = -999 if (a06z01==2 & a06z02==2) & (a06z03==1 | a06z04==1 | a06z05==1 | a06z06==1) & emp==990
+recode a23c (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(97=97 "other")(96 98/99=.), gen(Semp)
+replace Semp = -999 if (a21z01==2 & a21z02==2) & (a21z03==1 | a21z04==1 | a21z05==1 | a21z06==1) & Semp==990
+
 
 recode a08b (0=990)(96 98/99=.), gen(workfor)
 replace workfor = -999 if (a06z01==2 & a06z02==2) & (a06z03==1 | a06z04==1 | a06z05==1 | a06z06==1) & workfor==990
@@ -2666,6 +2851,7 @@ gen live_sinson = (b04b08 >= 1 & b04b08 < 96)
 gen live_sindau = (b04b09 >= 1 & b04b09 < 96)
 gen live_parent = ((b04b01 >= 1 & b04b01 < 96) | (b04b02>=1 & b04b02 < 96))    // 與父親或母親同住
 gen live_sparent = ((b04b04 >= 1 & b04b04 < 96) | (b04b05>=1 & b04b05 < 96))    // 與配偶的父親或母親同住
+gen live_grachild = ((b04b30 >= 1 & b04b30 < 96) | (b04b31 >= 1 & b04b31 < 96))    //與(外)孫子女同住
 
 gen ohouse = (b08a==1)    //自己或配偶所有
 replace ohouse = -999 if (b06==2)
@@ -2756,23 +2942,30 @@ recode a27 (0=990 "Not available")(1/2=0 "0 無/自修")(3=1 "1 小學")(4/5=2 "
 (97=97 "97 其它")(96 98/99=.), gen(Sedu)
 replace Sedu = -999 if a16a==1 | a16a==2
 
-* SWB variables
-recode a03a (0 96/99=.), gen(happy)
-recode a03b (0 96/99=.), gen(wellbeing)
 recode a04a (0 6/9=.), gen(health)
 replace health = (6-health)    //inversed coding
 recode a28 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
-recode c07a (0 6/9=.), gen(work_satis)
-replace work_satis = (5-work_satis)    //inversed coding
-recode c07b (0 6/9=.), gen(family_satis)
-replace family_satis = (5-family_satis)    //inversed coding
 
+recode b20af1 (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode b20am1 (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode b23bf2 (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode b23bm2 (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
 
 recode a04c (1=1 "Yes")(2=0 "No")(6/9=.), gen(handicap2)
 
 recode a05 (0=990 "不適用")(1/2=1 "有")(3=0 "沒有")(6/99=.), gen(work)
 recode a29 (0=990 "不適用")(1/2=1 "有")(3=0 "沒有")(6/99=.), gen(Swork)
+
+recode a07b (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(97=97 "other")(96 98/99=.), gen(emp)
+recode a31b (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(97=97 "other")(96 98/99=.), gen(Semp)
 
 recode a07a01 (0 = 990 "990 不適用/跳答 ")(1/3 = 1 "農、林、漁、牧、狩獵與採礦業 ") ///
 (5/7 = 1 " 農、林、漁、牧、狩獵與採礦業 ")(8/34 = 2 " 製造業 ")(35/39 = 3 " 水電燃氣業 ") ///
@@ -2871,6 +3064,7 @@ gen live_sinson = (b11b08 >= 1 & b11b08 < 96)
 gen live_sindau = (b11b09 >= 1 & b11b09 < 96)
 gen live_parent = ((b11b01 >= 1 & b11b01 < 96) | (b11b02>=1 & b11b02 < 96))    // 與父親或母親同住
 gen live_sparent = ((b11b04 >= 1 & b11b04 < 96) | (b11b05>=1 & b11b05 < 96))    // 與配偶的父親或母親同住
+gen live_grachild = ((b11b30 >= 1 & b11b30 < 96) | (b11b31 >= 1 & b11b31 < 96))    //與(外)孫子女同住
 
 recode b13 (96/99=.), gen(offspring)
 
@@ -2950,19 +3144,20 @@ recode a28 (0=990 "990 不適用")(1/2=0 "0 無/自修")(3=1 "1 小學")(4=2 "2 
 (5/8=3 "3 高中職")(9/12=4 "4 專科或技術學院")(13=5 "5 大學或獨立學院")(14/15=6 "6 研究所(或)以上") ///
 (97=97 "97 其它")(96 98/99=.), gen(Sedu)
 
-* SWB variables
-recode a03a (0 96/99=.), gen(happy)
-recode a03b (0 96/99=.), gen(wellbeing)
 recode a04a (0 6/9=.), gen(health)
 replace health = (6-health)    //inversed coding
 recode a29 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
-recode a06b (0 6/9=.), gen(work_satis)
-replace work_satis = (5-work_satis)    //inversed coding
-recode b12 (0 6/9=.), gen(family_satis)
-replace family_satis = (5-family_satis)    //inversed coding
-recode c12 (0 6/9=.), gen(economic_satis)
-replace economic_satis = (5-economic_satis)    //inversed coding
+
+recode b18af1 (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode b18am1 (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode b23af2 (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode b23am2 (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
 
 recode a04c (1=1 "Yes")(2=0 "No")(6/9=.), gen(handicap2)
 
@@ -2971,6 +3166,11 @@ recode a30z01 (0=990 "不適用")(1/2=1 "有")(3=0 "沒有")(6/99=.), gen(Swork)
 
 gen cwork = 0
 replace cwork = 1 if a11b01==1 | a11b02==1 | a11b03==1 | a11b04==1 | a11b05==1 | a11b07==1 | a11b08==1
+
+recode a08b (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(97=97 "other")(96 98/99=.), gen(emp)
+recode a32b (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(97=97 "other")(96 98/99=.), gen(Semp)
 
 recode a08a01 (0 = 990 "990 不適用/跳答 ")(1/3 = 1 "農、林、漁、牧、狩獵與採礦業 ") ///
 (5/7 = 1 " 農、林、漁、牧、狩獵與採礦業 ")(8/34 = 2 " 製造業 ")(35/39 = 3 " 水電燃氣業 ") ///
@@ -3033,7 +3233,7 @@ recode a10b01 (0 991/999=.), gen(workhr)
 recode a34b01 (0 991/999=.), gen(Sworkhr)
 
 gen seniority = (2016-1911)-a12a01 if (a12a01 > 0 & a12a01 < 996)
-replace seniority = -999 if (a11b01==0 & seniority == .) & (a11b02==1 | a11b03==1 | a11b04==4 | a11b05==1 | a11b06==1 | a11b07==1)
+replace seniority = -999 if (seniority == . & a11b02==1 | a11b03==1 | a11b04==4 | a11b05==1 | a11b06==1 | a11b07==1)
 gen Sseniority = (2016-1911)-a34c01 if (a34c01 > 0 & a34c01 < 996)
 
 gen retire = 0
@@ -3062,6 +3262,7 @@ gen live_sinson = (b11b08 >= 1 & b11b08 < 96)
 gen live_sindau = (b11b09 >= 1 & b11b09 < 96)
 gen live_parent = ((b11b01 >= 1 & b11b01 < 96) | (b11b02>=1 & b11b02 < 96))    // 與父親或母親同住
 gen live_sparent = ((b11b04 >= 1 & b11b04 < 96) | (b11b05>=1 & b11b05 < 96))    // 與配偶的父親或母親同住
+gen live_grachild = ((b11b30 >= 1 & b11b30 < 96) | (b11b31 >= 1 & b11b31 < 96))    //與(外)孫子女同住
 
 recode b15 (96/99=.), gen(offspring)
 
@@ -3150,26 +3351,30 @@ recode a27 (0=990 "990 不適用")(1/2=0 "0 無/自修")(3=1 "1 小學")(4=2 "2 
 (97=97 "97 其它")(96 98/99=.), gen(Sedu)
 replace Sedu = -999 if Sedu==990 & (a17a==2 & a17b==2)
 
-* SWB variables
-recode a03c (0 96/99=.), gen(happy)
-recode a03d (0 96/99=.), gen(wellbeing)
 recode a04a (0 6/9=.), gen(health)
 replace health = (6-health)    //inversed coding
 recode a29 (0 6/9=.), gen(Shealth)
 replace Shealth = (6-Shealth)    //inversed coding
-recode a06b (0 6/9=.), gen(work_satis)
-replace work_satis = (5-work_satis)    //inversed coding
-recode b08 (0 6/9=.), gen(family_satis)
-replace family_satis = (5-family_satis)    //inversed coding
-recode c19 (0 6/9=.), gen(economic_satis)
-replace economic_satis = (5-economic_satis)    //inversed coding
-recode b24a (0 6/9=.), gen(mar_satis)
-replace mar_satis = (5-mar_satis)    //inversed coding
+
+recode b14af1 (0 7/99=.)(6=50), gen(health_f)
+replace health_f = (6-health_f)    //inversed coding
+recode b14am1 (0 7/99=.)(6=50), gen(health_m)
+replace health_m = (6-health_m)    //inversed coding
+
+recode b19af2 (0 7/99=.)(6=50), gen(health_sf)
+replace health_sf = (6-health_sf)    //inversed coding
+recode b19am2 (0 7/99=.)(6=50), gen(health_sm)
+replace health_sm = (6-health_sm)    //inversed coding
 
 recode a04c (1=1 "Yes")(2=0 "No")(6/9=.), gen(handicap2)
 
 recode a06a (0=990 "不適用")(1/2=1 "有")(3=0 "沒有")(6/99=.), gen(work)
 recode a30 (0=990 "不適用")(1/2=1 "有")(3=0 "沒有")(6/99=.), gen(Swork)
+
+recode a08b (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(97=97 "other")(96 98/99=.), gen(emp)
+recode a32b (0=990 "990 Not available")(1=1 "3 or less")(2=2 "4-9")(3=3 "10-29") ///
+(4=4 "30-49")(5=5 "50-99")(6/7=6 "100-499")(8=7 "500 or more")(97=97 "other")(96 98/99=.), gen(Semp)
 
 recode a08a01 (0 = 990 "990 不適用/跳答 ")(1/3 = 1 "農、林、漁、牧、狩獵與採礦業 ") ///
 (5/7 = 1 " 農、林、漁、牧、狩獵與採礦業 ")(8/34 = 2 " 製造業 ")(35/39 = 3 " 水電燃氣業 ") ///
@@ -3235,14 +3440,14 @@ gen cwork = 0
 replace cwork = 1 if a11z06==2
 
 gen seniority = (2018-1911)-a12a01 if (a12a01 > 0 & a12a01 < 996)
-replace seniority = -999 if (a11z01==0 & seniority==.) & (a11z02==1 | a11z03==1 | a11z04==1 | a11z05==1 | a11z06==1 | a11z08==1)
+replace seniority = -999 if (seniority==. & a11z02==1 | a11z03==1 | a11z04==1 | a11z05==1 | a11z06==1 | a11z08==1)
 replace seniority = 1 if a11z07==1
 gen Sseniority = (2018-1911)-a34c01 if (a34c01 > 0 & a34c01 < 996)
 
 gen retire = 0
 replace retire = 1 if (a12g==3 | a12h==3) | (a15b==8) | (c05==1 | c05==2) | (c09d01==1 | c09d01==2)
 gen Sretire = 0
-replace Sretire = 1 if (a35b==8) | (c11a01==1 | c11a01==2)
+replace Sretire = 1 if (a35b==8) | (c11a01==1 | c11a01==2) | (c11a01==1 | c11a01==2)
 
 recode a17a (1=1 "未婚")(2=2 "同居/已婚")(3/4=3 "分居/離婚")(5=4 "喪偶")(6/9=.), gen(mar4)
 replace mar4 = 2 if a17d==1 & (a17a==1 | a17a==4 | a17a==5)
@@ -3265,6 +3470,7 @@ gen live_sinson = (b07b08 >= 1 & b07b08 < 96)
 gen live_sindau = (b07b09 >= 1 & b07b09 < 96)
 gen live_parent = ((b07b01 >= 1 & b07b01 < 96) | (b07b02>=1 & b07b02 < 96))    // 與父親或母親同住
 gen live_sparent = ((b07b04 >= 1 & b07b04 < 96) | (b07b05>=1 & b07b05 < 96))    // 與配偶的父親或母親同住
+gen live_grachild = ((b07b30 >= 1 & b07b30 < 96) | (b07b31 >= 1 & b07b31 < 96))    //與(外)孫子女同住
 
 recode b11 (96/99=.), gen(offspring)
 
@@ -3274,7 +3480,6 @@ recode b12ac`a' (0 96/99=.), gen(child`a'_order)
 recode b12bc`a' (0=990 "990 Not available")(6/9=.), gen(child`a'_sex)    //1=male; 2=female
 
 gen child`a'_age = (period-1911-b12c01z01c`a') if b12c01z01c`a'>0 & b12c01z01c`a'<996
-replace child`a'_age = b12c02c`a' if b12c02c`a' > 0 & b12c02c`a' < 96
 
 recode b12gc`a' (0=990 "990 Not available")(1/2 16=0 "0 無/自修")(3=1 "1 小學") ///
 (4=2 "2 國中/初職")(5/8=3 "3 高中職")(9/12=4 "4 專科或技術學院") ///
@@ -3287,6 +3492,7 @@ recode child`a'_cores (8=1)(0=990)(96 98/99=.)(*=0)
 foreach x of varlist b12n01z02c? {
 	recode `x' (0 9999991/9999999=.), gen(`x'n)
 }
+
 egen callowance = rowtotal(b12n01z02c?n)    //至多6位子女之金額加總
 drop b12n01z02c?n
 
@@ -3384,267 +3590,6 @@ recode c17a (9999991/9999999=.), gen(exp_insurance)
 
 keep x01 period x01b district - exp_insurance
 save R_2018, replace
-
-
-*RR2020
-use rr2020_v202202, clear
-gen period = x02    //產生一個測量period年份
-order period, after(x01)
-replace x01b = 6 if x01b==6
-
-recode x05 (1/99=99 "國外地區（含中國及港澳地區）")(0 996/999=.), gen(district)
-
-recode a01 (2=0), gen(male)
-
-gen birth_y = (1911+a02a) if a02a < 96
-gen Sbirth_y = (1911+w32z01) if w32z01 > 0 & w32z01 < 96
-
-recode a03a (1/2=0 "0 無/自修")(3=1 "1 小學")(4=2 "2 國中/初職")(5/8=3 "3 高中職") ///
-(9/12=4 "4 專科或技術學院") (13=5 "5 大學或獨立學院") (14/15=6 "6 研究所(或)以上") ///
-(97=97 "97 其它")(96 98/99=.), gen(edu)
-
-recode w31 (0=990 "990 不適用")(1/2=0 "0 無/自修")(3=1 "1 小學")(4=2 "2 國中/初職")(5/8=3 "3 高中職") ///
-(9/12=4 "4 專科或技術學院") (13=5 "5 大學或獨立學院") (14/15=6 "6 研究所(或)以上") ///
-(97=97 "97 其它")(96 98/99=.), gen(Sedu)
-replace Sedu = -999 if Sedu==990 & (w20a==2 & w20b==2)
-
-* SWB variables
-recode w01b (0 96/99=.), gen(happy)
-recode w01c (0 96/99=.), gen(wellbeing)
-recode w01e (0 6/9=.), gen(health)
-replace health = (6-health)    //inversed coding
-recode w35 (0 6/9=.), gen(Shealth)
-replace Shealth = (6-Shealth)    //inversed coding
-recode w04 (0 6/9=.), gen(work_satis)
-replace work_satis = (5-work_satis)    //inversed coding
-recode b08 (0 6/9=.), gen(family_satis)
-replace family_satis = (5-family_satis)    //inversed coding
-recode c19a (0 6/9=.), gen(economic_satis)
-replace economic_satis = (5-economic_satis)    //inversed coding
-recode w54 (0 6/9=.), gen(mar_satis)
-replace mar_satis = (5-mar_satis)    //inversed coding
-recode w57 (0 6/9=.), gen(affair_satis)
-replace affair_satis = (5-affair_satis)    //inversed coding
-
-recode w01g (1=1 "Yes")(2=0 "No")(6/9=.), gen(handicap2)
-
-recode w03 (0=990 "不適用")(1/2=1 "有")(3=0 "沒有")(6/99=.), gen(work)
-recode w36 (0=990 "不適用")(1/2=1 "有")(3=0 "沒有")(6/99=.), gen(Swork)
-
-recode w05c01 (0 = 990 "990 不適用/跳答 ")(1/3 = 1 "農、林、漁、牧、狩獵與採礦業 ") ///
-(5/7 = 1 " 農、林、漁、牧、狩獵與採礦業 ")(8/34 = 2 " 製造業 ")(35/39 = 3 " 水電燃氣業 ") ///
-(41/43 = 4 " 營造業 ")(45/48 = 5 " 商業 ")(49/54 = 6 " 運輸、倉儲、及通信業 ") ///
-(55/56 = 5 " 商業 ")(58/63 = 8 " 公共行政、社會服務及個人服務業 ") ///
-(64/82 = 7 " 金融、保險、不動產、及工商服務業 ")(83/96 = 8 " 公共行政、社會服務及個人服務業 ") ///
-(996/999 =.), gen (indust)    //無工作/失業者編碼為990
-
-recode w05c02 (0 9996/9999=.), gen(ver6)
-merge m:1 ver6 using "2011_ISCO", keepus(isco*) 
-drop if _merge==2
-drop _merge ver6
-gen occu = int(isco88/1000)
-recode occu (0 = 10)
-lab def isco 1"民意代表、主管及經理人員" 2"專業人員 " 3"技術員及助理專業人員" ///
-4"事務支援人員" 5" 服務及銷售工作人員" 6"農、林、漁、牧業生產人員" 7"技藝有關工作人員" ///
-8"機械設備操作及組裝人員" 9"基層技術工及勞力工" 10"軍人" 990"Not available"
-label value occu isco
-replace occu = 990 if w05c02==0
-drop isco*
-
-recode w37d01 (0 = 990 "990 不適用/跳答 ")(1/3 = 1 "農、林、漁、牧、狩獵與採礦業 ") ///
-(5/7 = 1 " 農、林、漁、牧、狩獵與採礦業 ")(8/34 = 2 " 製造業 ")(35/39 = 3 " 水電燃氣業 ") ///
-(41/43 = 4 " 營造業 ")(45/48 = 5 " 商業 ")(49/54 = 6 " 運輸、倉儲、及通信業 ") ///
-(55/56 = 5 " 商業 ")(58/63 = 8 " 公共行政、社會服務及個人服務業 ") ///
-(64/82 = 7 " 金融、保險、不動產、及工商服務業 ")(83/96 = 8 " 公共行政、社會服務及個人服務業 ") ///
-(996/999 =.), gen (Sindust)    //無工作/失業者編碼為990
-
-recode w37d02 (0 9996/9999=.), gen(ver6) 
-merge m:1 ver6 using "2011_ISCO", keepus(isco*) 
-drop if _merge==2
-drop _merge ver6
-gen Soccu = int(isco88/1000)
-recode Soccu (0 = 10)
-label value Soccu isco
-replace Soccu = 990 if w37d02==0
-drop isco*
-
-recode w05a (0=990)(96 98/99=.), gen(workfor)
-recode w37a (0=990)(96 98/99=.), gen(Sworkfor)
-
-recode w05e02 (0=990)(1/99=99)(993/999=.), gen(workplace)
-recode w37f02 (0=990)(1/99=99)(993/999=.), gen(Sworkplace)
-
-recode w06a (0 9999991/9999999=.), gen(wage)
-recode w06b (0 96/99=.)(1=0)(2=5000)(3=15000)(4=25000)(5=35000)(6=45000)(7=55000) ///
-			  (8=65000)(9=75000)(10=85000)(11=95000)(12=105000)(13=115000)(14=125000) ///
-			  (15=135000)(16=145000)(17=155000)(18=165000)(19=175000)(20=185000) ///
-			  (21=195000)(22=250000)(23=300000)(24=400000), gen(income)
-replace wage = income if wage==.
-
-recode w38a (0 9999991/9999999=.), gen(Swage)
-recode w38b (0 96/99=.)(1=0)(2=5000)(3=15000)(4=25000)(5=35000)(6=45000)(7=55000) ///
-			  (8=65000)(9=75000)(10=85000)(11=95000)(12=105000)(13=115000)(14=125000) ///
-			  (15=135000)(16=145000)(17=155000)(18=165000)(19=175000)(20=185000) ///
-			  (21=195000)(22=250000)(23=350000)(24=400000), gen(Sincome)
-replace Swage = Sincome if Swage==.
-
-recode w06g (0 991/999=.), gen(workhr)
-recode w38g (0 991/999=.), gen(Sworkhr)
-
-gen cwork = 0
-replace cwork = 1 if w09z06==2
-
-gen seniority = (2020-1911)-w10z01 if (w10z01 > 0 & w10z01 < 996)
-replace seniority = -999 if (w09z01==0 & seniority==.) & (w09z02==1 | w09z03==1 | w09z04==1 | w09z05==1 | w09z06==1 | w09z08==1)
-replace seniority = 1 if w09z07==1
-gen Sseniority = (2020-1911)-w39z01 if (w39z01 > 0 & w39z01 < 996)
-
-gen retire = 0
-replace retire = 1 if (w13b==3 | w13c==3) | (w17b==8) | (c05==1 | c05==2) | (c09d01==1 | c09d01==2)
-gen Sretire = 0
-replace Sretire = 1 if (w40b==8) | (c11a01==1 | c11a01==2)
-
-recode w20b (1=1 "未婚")(2=2 "同居/已婚")(3/4=3 "分居/離婚")(5=4 "喪偶")(6/9=.), gen(mar4)
-replace mar4 = 2 if w24==1 & (w20b==1 | w20b==4 | w20b==5)
-
-gen ohouse = (b03a==1)    //自己或配偶所有
-replace ohouse = -999 if (b01a==2)
-
-recode b03c (0=990 "不適用")(1=1 "有")(2=0 "沒有")(6/9=.), gen(loan_house)
-replace loan_house = -999 if (b01a==2)
-
-recode c16a (9999991/9999999=.), gen(exp_hmortage)
-
-gen family = b07a if (b07a < 96)    //the number of people living together
-replace family = 90 if b07a==95    //超過90人以90作為計算
-
-gen live_spouse = (b07b03 >= 1 & b07b03 < 96)
-gen live_marson = (b07b06 >= 1 & b07b06 < 96)
-gen live_mardau = (b07b07 >= 1 & b07b07 < 96)
-gen live_sinson = (b07b08 >= 1 & b07b08 < 96)
-gen live_sindau = (b07b09 >= 1 & b07b09 < 96)
-gen live_parent = ((b07b01 >= 1 & b07b01 < 96) | (b07b02>=1 & b07b02 < 96))    // 與父親或母親同住
-gen live_sparent = ((b07b04 >= 1 & b07b04 < 96) | (b07b05>=1 & b07b05 < 96))    // 與配偶的父親或母親同住
-
-recode b11 (96/99=.), gen(offspring)
-
-forvalue a = 1/6 {
-recode b12ac`a' (0 96/99=.), gen(child`a'_order)
-
-recode b12bc`a' (0=990 "990 Not available")(6/9=.), gen(child`a'_sex)    //1=male; 2=female
-
-gen child`a'_age = (period-1911-b12c01z01c`a') if b12c01z01c`a'>0 & b12c01z01c`a'<996
-replace child`a'_age = b12c02c`a' if b12c02c`a' > 0 & b12c02c`a' < 96
-
-recode b12gc`a' (0=990 "990 Not available")(1/2 16=0 "0 無/自修")(3=1 "1 小學") ///
-(4=2 "2 國中/初職")(5/8=3 "3 高中職")(9/12=4 "4 專科或技術學院") ///
-(13/15=5 "5 大學(或)以上")(96 98/99=.), gen(child`a'_edu)
-
-gen child`a'_cores = b12p01c`a'
-recode child`a'_cores (8=1)(0=990)(96 98/99=.)(*=0)
-}
-
-foreach x of varlist b12n01z02c? {
-	recode `x' (0 9999991/9999999=.), gen(`x'n)
-}
-egen callowance = rowtotal(b12n01z02c?n)    //至多6位子女之金額加總
-drop b12n01z02c?n
-
-recode b17b02 (0 9999991/9999999=.), gen(exp_parent)
-recode b22b02 (0 9999991/9999999=.), gen(exp_Sparent)
-
-gen invest = 0    //包含不適用、拒答或不知道，編碼為0
-replace invest = (c03z02 * -1) if (c03z02 < 9999991 & c03z01==2)
-replace invest = (c03z02 * 1) if (c03z02 < 9999991 & c03z01==1)
-
-recode c04a02 (9999991/9999999=.), gen(ann_wage)
-replace ann_wage = . if c04a01==2
-recode c04b02 (9999991/9999999=.), gen(Sann_wage)
-replace Sann_wage = . if c04b01==2
-
-gen retire_y = (1911+c06a01) if c06a01 > 0 & c06a01 < 996
-replace retire_y = (2020-c06b) if retire_y==. & (c06b > 0 & c06b < 96)
-gen Sretire_y = (1911+c11b01) if c11b01 > 0 & c11b01 < 996
-replace Sretire_y = (2020-c11c) if Sretire_y==. & (c11c > 0 & c11c < 96)
-
-recode c07a01 (0 = 990 "990 不適用/跳答 ")(1/3 = 1 "農、林、漁、牧、狩獵與採礦業 ") ///
-(5/7 = 1 " 農、林、漁、牧、狩獵與採礦業 ")(8/34 = 2 " 製造業 ")(35/39 = 3 " 水電燃氣業 ") ///
-(41/43 = 4 " 營造業 ")(45/48 = 5 " 商業 ")(49/54 = 6 " 運輸、倉儲、及通信業 ") ///
-(55/56 = 5 " 商業 ")(58/63 = 8 " 公共行政、社會服務及個人服務業 ") ///
-(64/82 = 7 " 金融、保險、不動產、及工商服務業 ")(83/96 = 8 " 公共行政、社會服務及個人服務業 ") ///
-(995 = 97 "其它")(996/999 =.), gen (r_indust)    //無工作/失業者編碼為990
-
-recode c07a02 (0 9996/9999=.), gen(ver6)
-merge m:1 ver6 using "2011_ISCO", keepus(isco*) 
-drop if _merge==2
-drop _merge ver6
-gen r_occu = int(isco88/1000)
-recode r_occu (0 = 10)
-label value r_occu isco
-replace r_occu = 990 if c07a02==0
-drop isco*
-
-recode c07b (0=990)(96 98/99=.), gen(r_workfor)
-
-recode c08a (0 9999991/9999999=.), gen(r_wage)
-recode c08b (0 96/99=.)(1=0)(2=5000)(3=15000)(4=25000)(5=35000)(6=45000)(7=55000) ///
-			(8=65000)(9=75000)(10=85000)(11=95000)(12=105000)(13=115000)(14=125000) ///
-			(15=135000)(16=145000)(17=155000)(18=165000)(19=175000)(20=185000) ///
-			(21=195000)(22=250000)(23=300000)(24=400000), gen(r_income)
-replace r_wage = r_income if r_wage==.
-
-recode c09a (0=990)(6=0)(96/99=.), gen(r_socinsur)
-recode c11d (0=990)(6=0)(96/99=.), gen(Sr_socinsur)
-lab define r_socinsur 1"勞工保險(勞保)" 2"農民保險(農保)" 3"公教保(公務,公職人員)" ///
-					  4"公教保(私校教職)" 5"軍人保險(軍保)" 0"沒有職業保險" 990 "不適用"
-lab value r_socinsur Sr_socinsur r_socinsur
-			
-recode c09b (0=990)(96/99=.), gen(r_reason)
-lab define r_reason 1"屆齡退休" 2"因身體因素申請退休" 3"因生涯規劃申請退休" 4"提前優退" ///
-					5"公營事業移轉民營化" 6"因工作或雇主更換結清年資" 7"家人因素" ///
-					8"擔心以後領不到或退休金會減少" 990 "不適用"
-lab value r_reason r_reason
-
-
-gen r_pensions1 = c09c04 if (c09c04 < 9999991 & c09c01==1)    //一次領退休金的金額
-gen r_pensionsm = c09c05 if (c09c05 < 9999991 & c09c02==1)    //按月領退休金的金額
-
-recode c10z01 (0=990)(6 8/9=.)(7=97), gen(r_hopeage1)
-lab define r_hopeage1 990 "不適用" 1"希望自己____歲退休" 2"做到屆齡退休" 3"做到不能做為止" ///
-					  4"沒有想過" 97"其他"
-lab value r_hopeage1 r_hopeage1
-recode c10z02 (0 96/99=.), gen(r_hopeage2)
-
-recode c12z01 (0=990)(6 8/9=.)(7=97), gen(Sr_hopeage1)
-lab define Sr_hopeage1 990 "不適用" 1"希望配偶____歲退休" 2"做到屆齡退休" 3"做到不能做為止" ///
-					   4"沒有想過" 97"其他"
-lab value Sr_hopeage1 Sr_hopeage1
-recode c12z02 (0 96/99=.), gen(Sr_hopeage2)
-
-recode c09d01 (0=990 "不適用")(1=1 "有")(2/3=0 "無")(6/9=.), gen(pensions)
-recode c09d02 (0 9999991/9999999=.), gen(pension_1)
-recode c09d03 (0 9999991/9999999=.), gen(pension_2)
-recode c09d04 (0 9999991/9999999=.), gen(pension_3)
-recode c09d05 (0 9999991/9999999=.), gen(pension_4)
-recode c09d06 (0 9999991/9999999=.), gen(pension_5)
-
-recode c11a01 (0=990 "不適用")(1=1 "有")(2/3=0 "無")(6/9=.), gen(Spensions)
-recode c11a02 (0 9999991/9999999=.), gen(Spension_1)
-recode c11a03 (0 9999991/9999999=.), gen(Spension_2)
-recode c11a04 (0 9999991/9999999=.), gen(Spension_3)
-recode c11a05 (0 9999991/9999999=.), gen(Spension_4)
-recode c11a06 (0 9999991/9999999=.), gen(Spension_5)
-
-recode c14z02 (0 9999991/9999999=.), gen(oincome_1)
-recode c14z04 (0 9999991/9999999=.), gen(oincome_2)
-recode c14z06 (0 9999991/9999999=.), gen(oincome_3)
-recode c14z08 (0 9999991/9999999=.), gen(oincome_4)
-egen oincomes = rowtotal(oincome_?)
-
-recode c17a (9999991/9999999=.), gen(exp_insurance)
-
-keep x01 period x01b district - exp_insurance
-save R_2020, replace
 
 
 *****************************  Append data  *****************************
@@ -3770,9 +3715,9 @@ by x01: replace mar_4 = mar4[_n-`a'] if mar4==1 & mar4[_n-`a']==4
 }
 
 forvalue a = 1/18 { 
-by x01: replace birth_y = birth_y[_n-`a'] if birth_y==-999 & birth_y[_n-`a'] !=. & birth_y[_n-`a'] !=-999
+by x01: replace birth_y = birth_y[_n-`a'] if (birth_y==-999 | birth_y==.) & birth_y[_n-`a'] !=. & birth_y[_n-`a'] !=-999
 
-by x01: replace Sbirth_y = Sbirth_y[_n-`a'] if Sbirth_y==-999 & Sbirth_y[_n-`a'] !=. & Sbirth_y[_n-`a'] !=-999  & mar4[_n-`a']==2
+by x01: replace Sbirth_y = Sbirth_y[_n-`a'] if (Sbirth_y==-999 | Sbirth_y==.) & Sbirth_y[_n-`a'] !=. & Sbirth_y[_n-`a'] !=-999  & mar4[_n-`a']==2
 
 by x01: replace edu = edu[_n-`a'] if edu==-999 & edu[_n-`a'] !=. & edu[_n-`a'] !=-999
 
@@ -3780,7 +3725,11 @@ by x01: replace Sedu = Sedu[_n-`a'] if Sedu==-999 & Sedu[_n-`a'] !=. & Sedu[_n-`
 
 by x01: replace workfor = workfor[_n-`a'] if workfor==-999 & workfor[_n-`a'] !=. & workfor[_n-`a'] !=-999 & workfor[_n-`a'] !=990
 
-by x01: replace Sworkfor = Sworkfor[_n-`a'] if Sworkfor==-999 & Sworkfor[_n-`a'] !=. & Sworkfor[_n-`a'] !=-999 & Sworkfor[_n-`a'] !=990  & mar4[_n-`a']==2
+by x01: replace Sworkfor = Sworkfor[_n-`a'] if Sworkfor==-999 & Sworkfor[_n-`a'] !=. & Sworkfor[_n-`a'] !=-999 & Sworkfor[_n-`a'] !=990 & mar4[_n-`a']==2
+
+by x01: replace emp = emp[_n-`a'] if emp==-999 & emp[_n-`a'] !=. & emp[_n-`a'] != -999 & emp[_n-`a'] != 990
+
+by x01: replace Semp = Semp[_n-`a'] if Semp==-999 & Semp[_n-`a'] !=. & Semp[_n-`a'] != -999 & Semp[_n-`a'] != 990 & mar4[_n-`a']==2
 
 by x01: replace workplace = workplace[_n-`a'] if workplace==-999 & workplace[_n-`a'] !=. & workplace[_n-`a'] !=-999 & workplace[_n-`a'] !=990
 
@@ -3803,6 +3752,11 @@ by x01: replace Sseniority = Sseniority[_n-`a']+(`a'*2) if Sseniority==-999 & Sc
 by x01: replace ohouse = ohouse[_n-`a'] if ohouse==-999 & ohouse[_n-`a'] !=. & ohouse[_n-`a'] !=-999 
 
 by x01: replace loan_house = loan_house[_n-`a'] if loan_house==-999 & loan_house[_n-`a'] !=. & loan_house[_n-`a'] !=-999 /*& loan_house[_n-`a'] != 990*/
+
+forvalue n = 1/6 {
+	by x01: replace child`n'_age = child`n'_age[_n-`a']+`a' if child`n'_age==. & child`n'_age[_n-`a'] !=. & period<=2012    //填補子女年齡資訊
+	by x01: replace child`n'_age = child`n'_age[_n-`a']+(`a'*2) if child`n'_age==. & child`n'_age[_n-`a'] !=. & period[_n-`a']>=2012
+	}
 
 }
 
@@ -3839,17 +3793,36 @@ by x01: replace r_occu = r_occu[_n+`a'] if r_occu== . & r_occu[_n+`a'] != . & pe
 
 by x01: replace Sr_indust = Sr_indust[_n+`a'] if Sr_indust== . & Sr_indust[_n+`a'] != . & period >= Sretire_y 
 
-by x01: replace Sr_occu = Sr_occu[_n+`a'] if Sr_occu== . & Sr_occu[_n+`a'] != . & period >= Sretire_y 
+by x01: replace Sr_occu = Sr_occu[_n+`a'] if Sr_occu== . & Sr_occu[_n+`a'] != . & period >= Sretire_y
+
+by x01: replace health = health[_n-`a'] if health==. & health[_n-`a'] !=.
+by x01: replace health = health[_n+`a'] if health==. & health[_n+`a'] !=.
+
+by x01: replace Shealth = Shealth[_n-`a'] if Shealth==. & Shealth[_n-`a'] !=. & mar4[_n-`a']==2
+by x01: replace Shealth = Shealth[_n+`a'] if Shealth==. & Shealth[_n+`a'] !=. & mar4[_n+`a']==2
+
+by x01: replace health_f = health_f[_n-`a'] if health_f==. & health_f[_n-`a'] !=. & health_f[_n-`a'] !=-44
+by x01: replace health_f = health_f[_n+`a'] if health_f==. & health_f[_n+`a'] !=. & health_f[_n+`a'] !=-44
+by x01: replace health_f = health_f[_n+1] if health_f==. & health_f[_n+1] ==-44
+
+by x01: replace health_m = health_m[_n-`a'] if health_m==. & health_m[_n-`a'] !=. & health_m[_n-`a'] !=-44
+by x01: replace health_m = health_m[_n+`a'] if health_m==. & health_m[_n+`a'] !=. & health_m[_n+`a'] !=-44
+by x01: replace health_m = health_m[_n+1] if health_m==. & health_m[_n+1] ==-44
+
+by x01: replace health_sf = health_sf[_n-`a'] if health_sf==. & health_sf[_n-`a'] !=. & health_sf[_n-`a'] !=-44 & mar4[_n-`a']==2
+by x01: replace health_sf = health_sf[_n+`a'] if health_sf==. & health_sf[_n+`a'] !=. & health_sf[_n+`a'] !=-44 & mar4[_n+`a']==2
+by x01: replace health_sf = health_sf[_n+1] if health_sf==. & health_sf[_n+1] ==-44 & mar4[_n+1]==2
+
+by x01: replace health_sm = health_sm[_n-`a'] if health_sm==. & health_sm[_n-`a'] !=. & health_sm[_n-`a'] !=-44 & mar4[_n-`a']==2
+by x01: replace health_sm = health_sm[_n+`a'] if health_sm==. & health_sm[_n+`a'] !=. & health_sm[_n+`a'] !=-44 & mar4[_n+`a']==2
+by x01: replace health_sm = health_sm[_n+1] if health_sm==. & health_sm[_n+1] ==-44 & mar4[_n+1]==2
 
 replace retire = 1 if pensions==1    //如果曾經領取退休金，則視為退休
-by x01: replace retire = retire[_n-`a'] if retire[_n-`a']==1 & retire !=.    //曾經回報過退休者，往後則視為退休
+by x01: replace retire = retire[_n-`a'] if (retire[_n-`a']==1 & retire !=.)    //曾經回報過退休者，往後則視為退休
+
+replace Sretire = 1 if Spensions==1    //如果配偶曾經領取退休金，則視為退休
+by x01: replace Sretire = Sretire[_n-`a'] if (Sretire[_n-`a']==1 & Sretire !=.) & Sbirth_y==Sbirth_y[_n-`a']    //曾經回報過退休者，往後則視為退休
 
 } 
-
-lab var pension_1 "按月領取的退休金，每月金額"
-lab var pension_2 "按年領取的退休金，每年金額"
-lab var pension_3 "一次領清的退休金，總共金額"
-lab var pension_4 "每年分數次領取的退休金，去年金額"
-lab var pension_5 "先領一部分，再按月領的退休金，去年金額"
 
 save RET_ALL_long, replace
