@@ -606,6 +606,16 @@ args name touse
 			replace `name' = 99999998 if `name'== .r & `touse'
 			replace `name' = 99999999 if `name'== .m & `touse'
 		}
+		else {
+			replace `name' = -11 if `name'== .a & `touse'
+			replace `name' = 96 if `name'== .j & `touse'
+			replace `name' = 91 if `name'== .u & `touse'
+			replace `name' = 91 if `name'== .b & `touse'
+			replace `name' = 95 if `name'== .o & `touse'
+			replace `name' = 96 if `name'== .d & `touse'
+			replace `name' = 98 if `name'== .r & `touse'
+			replace `name' = 99 if `name'== .m & `touse'
+		}
 end
 
 program define num_movetopsfd_new
