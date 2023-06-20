@@ -685,4 +685,14 @@ args name touse
 			replace `name' = -8 if `name'== .r & `touse'
 			replace `name' = -9 if `name'== .m & `touse'
 		}
+		else {
+			replace `name' = -11 if `name'== .a & `touse'
+			replace `name' = -10 if `name'== .j & `touse'
+			replace `name' = -1 if `name'== .u & `touse'
+			replace `name' = -2 if `name'== .b & `touse'
+			replace `name' = -5 if `name'== .o & `touse'
+			replace `name' = -6 if `name'== .d & `touse'
+			replace `name' = -8 if `name'== .r & `touse'
+			replace `name' = -9 if `name'== .m & `touse'
+		}
 end
