@@ -608,7 +608,7 @@ program define num_movetopsfd_old
 args name touse
 
 	quietly sum `name' 
-		if inlist(r(max),0,1,2,3,4,5,7)  {
+		if inrange(r(max),0,5)  {
 			replace `name' = 0 if `name'== .j & `touse'
 			replace `name' = 6 if `name'== .d & `touse'
 			replace `name' = 8 if `name'== .r & `touse'
@@ -697,7 +697,7 @@ program define num_movetopsfd_new
 args name touse
 
 	quietly sum `name' 
-		if inlist(r(max),0,1,2,3,4,5,7)  {
+		if inrange(r(max),0,5)  {
 			replace `name' = -10 if `name'== .j & `touse'
 			replace `name' = -6 if `name'== .d & `touse'
 			replace `name' = -8 if `name'== .r & `touse'
