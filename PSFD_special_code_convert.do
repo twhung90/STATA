@@ -37,12 +37,14 @@ args name touse
 
 	quietly sum `name' 
 		if inrange(r(max),0,9)  {
+			replace `name' = .k if `name'==94 & `touse'    //其他
 			replace `name' = .j if `name'==96 & `touse'
 			replace `name' = .d if `name'==97 & `touse'
 			replace `name' = .r if `name'==98 & `touse'
 			replace `name' = .m if `name'==99 & `touse'
 		}
 		if inrange(r(max),10,99)  {
+			replace `name' = .k if `name'==94 & `touse'    //其他
 			replace `name' = .j if `name'==96  & `touse'
 			replace `name' = .u if `name'==91 & `touse'
 			replace `name' = .o if `name'==95 & `touse'
@@ -103,12 +105,14 @@ args name touse
 
 	quietly sum `name' 
 		if inrange(r(max),0,9)  {
+			replace `name' = .k if `name'==94 & `touse'    //其他
 			replace `name' = .j if `name'==96 & `touse'
 			replace `name' = .d if `name'==97 & `touse'
 			replace `name' = .r if `name'==98 & `touse'
 			replace `name' = .m if `name'==99 & `touse'
 		}
 		if inrange(r(max),10,99)  {
+			replace `name' = .k if `name'==94 & `touse'    //其他
 			replace `name' = .j if `name'==96  & `touse'
 			replace `name' = .u if `name'==91 & `touse'
 			replace `name' = .o if `name'==95 & `touse'
@@ -220,6 +224,7 @@ local test: list var in skip
 		if inrange(r(max),0,9)  {
 			replace `name' = .j if `name'==0 & `touse'
 			replace `name' = .d if `name'==6 & `touse'
+			replace `name' = .k if `name'==7 & `touse'    //其他
 			replace `name' = .r if `name'==8 & `touse'
 			replace `name' = .m if `name'==9 & `touse'
 		}
@@ -228,6 +233,7 @@ local test: list var in skip
 			replace `name' = .u if `name'==91 & `touse'
 			replace `name' = .o if `name'==95 & `touse'
 			replace `name' = .d if `name'==96 & `touse'
+			replace `name' = .k if `name'==97 & `touse'    //其他
 			replace `name' = .r if `name'==98 & `touse'
 			replace `name' = .m if `name'==99 & `touse'
 		}
@@ -277,6 +283,7 @@ local test: list var in skip
 		if inrange(r(max),0,9)  {
 			
 			replace `name' = .d if `name'==6 & `touse'
+			replace `name' = .k if `name'==7 & `touse'    //其他
 			replace `name' = .r if `name'==8 & `touse'
 			replace `name' = .m if `name'==9 & `touse'
 		}
@@ -285,6 +292,7 @@ local test: list var in skip
 			replace `name' = .u if `name'==91 & `touse'
 			replace `name' = .o if `name'==95 & `touse'
 			replace `name' = .d if `name'==96 & `touse'
+			replace `name' = .k if `name'==97 & `touse'    //其他
 			replace `name' = .r if `name'==98 & `touse'
 			replace `name' = .m if `name'==99 & `touse'
 		}
@@ -435,14 +443,16 @@ args name touse
 		if inrange(r(max),0,9)  {
 			replace `name' = 95 if `name'== .o & `touse'
 			replace `name' = 96 if `name'== .j & `touse'
+			replace `name' = 94 if `name'== .k & `touse'    //其他
 			replace `name' = 97 if `name'== .d & `touse'
 			replace `name' = 98 if `name'== .r & `touse'
 			replace `name' = 99 if `name'== .m & `touse'
 		}
 		if inrange(r(max),10,99)  {
 			replace `name' = -11 if `name'== .a & `touse'
+			replace `name' = 94 if `name'== .k & `touse'    //其他
 			replace `name' = 95 if `name'== .o & `touse'
-			replace `name' = 96 if `name'== .j  & `touse'
+			replace `name' = 96 if `name'== .j & `touse'
 			replace `name' = 91 if `name'== .u & `touse'    //991同時包含不固定、虧損 或 打平
 			replace `name' = 91 if `name'== .b & `touse'    //991同時包含不固定、虧損 或 打平
 			replace `name' = 95 if `name'== .o & `touse'
@@ -508,6 +518,7 @@ args name touse
 
 	quietly sum `name' 
 		if inrange(r(max),0,9)  {
+			replace `name' = 94 if `name'== .k & `touse'    //其他
 			replace `name' = 95 if `name'== .o & `touse'
 			replace `name' = 96 if `name'== .j & `touse'
 			replace `name' = 97 if `name'== .d & `touse'
@@ -516,10 +527,11 @@ args name touse
 		}
 		if inrange(r(max),10,99)  {
 			replace `name' = -11 if `name'== .a & `touse'
+			replace `name' = 94 if `name'== .k & `touse'    //其他
 			replace `name' = 95 if `name'== .o & `touse'
 			replace `name' = 96 if `name'== .j  & `touse'
 			replace `name' = 91 if `name'== .u & `touse'
-			replace `name' = 92 if `name'== .b & `touse'    //「打平」於2022年後，從991中切分出來
+			replace `name' = 92 if `name'== .b & `touse'    //「打平」於2022年後，從-91中切分出來
 			replace `name' = 95 if `name'== .o & `touse'
 			replace `name' = 97 if `name'== .d & `touse'
 			replace `name' = 98 if `name'== .r & `touse'
@@ -529,7 +541,7 @@ args name touse
 			replace `name' = -11 if `name'== .a & `touse'
 			replace `name' = 996 if `name'== .j & `touse'
 			replace `name' = 991 if `name'== .u & `touse'
-			replace `name' = 992 if `name'== .b & `touse'    //「打平」於2022年後，從991中切分出來
+			replace `name' = 992 if `name'== .b & `touse'    //「打平」於2022年後，從-91中切分出來
 			replace `name' = 995 if `name'== .o & `touse'
 			replace `name' = 997 if `name'== .d & `touse'
 			replace `name' = 998 if `name'== .r & `touse'
@@ -540,7 +552,7 @@ args name touse
 			replace `name' = -11 if `name'== .a & `touse'
 			replace `name' = 9996 if `name'== .j & `touse'
 			replace `name' = 9991 if `name'== .u & `touse'
-			replace `name' = 9992 if `name'== .b & `touse'    //「打平」於2022年後，從991中切分出來
+			replace `name' = 9992 if `name'== .b & `touse'    //「打平」於2022年後，從-91中切分出來
 			replace `name' = 9995 if `name'== .o & `touse'
 			replace `name' = 9997 if `name'== .d & `touse'
 			replace `name' = 9998 if `name'== .r & `touse'
@@ -550,7 +562,7 @@ args name touse
 			replace `name' = -11 if `name'== .a & `touse'
 			replace `name' = 999996 if `name'== .j & `touse'
 			replace `name' = 999991 if `name'== .u & `touse'
-			replace `name' = 999992 if `name'== .b & `touse'    //「打平」於2022年後，從991中切分出來
+			replace `name' = 999992 if `name'== .b & `touse'    //「打平」於2022年後，從-91中切分出來
 			replace `name' = 999995 if `name'== .o & `touse'
 			replace `name' = 999997 if `name'== .d & `touse'
 			replace `name' = 999998 if `name'== .r & `touse'
@@ -560,7 +572,7 @@ args name touse
 			replace `name' = -11 if `name'== .a & `touse'
 			replace `name' = 9999996 if `name'== .j & `touse'
 			replace `name' = 9999991 if `name'== .u & `touse'
-			replace `name' = 9999992 if `name'== .b & `touse'    //「打平」於2022年後，從991中切分出來
+			replace `name' = 9999992 if `name'== .b & `touse'    //「打平」於2022年後，從-91中切分出來
 			replace `name' = 9999995 if `name'== .o & `touse'
 			replace `name' = 9999997 if `name'== .d & `touse'
 			replace `name' = 9999998 if `name'== .r & `touse'
@@ -570,7 +582,7 @@ args name touse
 			replace `name' = -11 if `name'== .a & `touse'
 			replace `name' = 99999996 if `name'== .j & `touse'
 			replace `name' = 99999991 if `name'== .u & `touse'
-			replace `name' = 99999992 if `name'== .b & `touse'    //「打平」於2022年後，從991中切分出來
+			replace `name' = 99999992 if `name'== .b & `touse'    //「打平」於2022年後，從-91中切分出來
 			replace `name' = 99999995 if `name'== .o & `touse'
 			replace `name' = 99999997 if `name'== .d & `touse'
 			replace `name' = 99999998 if `name'== .r & `touse'
@@ -611,6 +623,7 @@ args name touse
 		if inrange(r(max),0,5)  {
 			replace `name' = 0 if `name'== .j & `touse'
 			replace `name' = 6 if `name'== .d & `touse'
+			replace `name' = 7 if `name'== .k & `touse'    //其他
 			replace `name' = 8 if `name'== .r & `touse'
 			replace `name' = 9 if `name'== .m & `touse'
 		}
@@ -618,6 +631,7 @@ args name touse
 			replace `name' = 0 if `name'== .j & `touse'
 			replace `name' = 95 if `name'== .o & `touse'
 			replace `name' = 96 if `name'== .d & `touse'
+			replace `name' = 97 if `name'== .k & `touse'    //其他
 			replace `name' = 98 if `name'== .r & `touse'
 			replace `name' = 99 if `name'== .m & `touse'
 		}
@@ -627,6 +641,7 @@ args name touse
 			replace `name' = 91 if `name'== .b & `touse'
 			replace `name' = 95 if `name'== .o & `touse'
 			replace `name' = 96 if `name'== .d & `touse'
+			replace `name' = 97 if `name'== .k & `touse'    //其他
 			replace `name' = 98 if `name'== .r & `touse'
 			replace `name' = 99 if `name'== .m & `touse'
 		}
@@ -637,6 +652,7 @@ args name touse
 			replace `name' = 991 if `name'== .b & `touse'
 			replace `name' = 995 if `name'== .o & `touse'
 			replace `name' = 996 if `name'== .d & `touse'
+			replace `name' = 997 if `name'== .k & `touse'    //其他
 			replace `name' = 998 if `name'== .r & `touse'
 			replace `name' = 999 if `name'== .m & `touse'
 			
@@ -700,6 +716,7 @@ args name touse
 		if inrange(r(max),0,5)  {
 			replace `name' = -10 if `name'== .j & `touse'
 			replace `name' = -6 if `name'== .d & `touse'
+			replace `name' = 7 if `name'== .k & `touse'    //其他
 			replace `name' = -8 if `name'== .r & `touse'
 			replace `name' = -9 if `name'== .m & `touse'
 		}
@@ -707,6 +724,7 @@ args name touse
 			replace `name' = -10 if `name'== .j & `touse'
 			replace `name' = -5 if `name'== .o & `touse'
 			replace `name' = -6 if `name'== .d & `touse'
+			replace `name' = 97 if `name'== .k & `touse'    //其他
 			replace `name' = -8 if `name'== .r & `touse'
 			replace `name' = -9 if `name'== .m & `touse'
 		}
@@ -716,6 +734,7 @@ args name touse
 			replace `name' = -2 if `name'== .b & `touse'
 			replace `name' = -5 if `name'== .o & `touse'
 			replace `name' = -6 if `name'== .d & `touse'
+			replace `name' = 97 if `name'== .k & `touse'    //其他
 			replace `name' = -8 if `name'== .r & `touse'
 			replace `name' = -9 if `name'== .m & `touse'
 		}
@@ -726,6 +745,7 @@ args name touse
 			replace `name' = -2 if `name'== .b & `touse'
 			replace `name' = -5 if `name'== .o & `touse'
 			replace `name' = -6 if `name'== .d & `touse'
+			replace `name' = 997 if `name'== .k & `touse'    //其他
 			replace `name' = -8 if `name'== .r & `touse'
 			replace `name' = -9 if `name'== .m & `touse'
 			
