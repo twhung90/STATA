@@ -348,6 +348,7 @@ args name touse
 			replace `name' = .d if `name'== -6 & `touse'
 			replace `name' = .r if `name'== -8 & `touse'
 			replace `name' = .m if `name'== -9 & `touse'
+			replace `name' = .k if `name'== 97 & `touse'
 		}
 		if inrange(r(max),10,99)  {
 			replace `name' = .j if `name'== -10  & `touse'
@@ -357,6 +358,7 @@ args name touse
 			replace `name' = .d if `name'== -6 & `touse'
 			replace `name' = .r if `name'== -8 & `touse'
 			replace `name' = .m if `name'== -9 & `touse'
+			replace `name' = .k if `name'== 97 & `touse'
 		}
 		if inrange(r(max),100,999)  {
 			replace `name' = .j if `name'== -10 & `touse'
@@ -716,7 +718,7 @@ args name touse
 		if inrange(r(max),0,5)  {
 			replace `name' = -10 if `name'== .j & `touse'
 			replace `name' = -6 if `name'== .d & `touse'
-			replace `name' = 7 if `name'== .k & `touse'    //其他
+			replace `name' = 97 if `name'== .k & `touse'    //其他
 			replace `name' = -8 if `name'== .r & `touse'
 			replace `name' = -9 if `name'== .m & `touse'
 		}
