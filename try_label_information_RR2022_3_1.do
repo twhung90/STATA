@@ -204,15 +204,15 @@ program define seg_data_collecting
 	file close myfile
 
 	bysort variable: gen span = _N
-
 	replace description = "" if (n != 1 & n != .)
 	replace variable = "" if (n != 1 & n != .)
+	
+	gen remark = ""
+	sort novar n   //按變項流水號排序
 	gen nn =_n, before(n)
 	gen i = nn if n==1
 	order i span, after(n)
-	gen remark = ""
-	sort novar nn n   //按變項流水號排序
-
+	
 	save "label_rr2022_part_${part}.dta", replace
 	! del _*_.dta    // delete temp data in the folder (for Windows)
 	
