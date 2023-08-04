@@ -79,10 +79,18 @@ marksample touse, strok
 	putdocx pagebreak    //插入分頁符號
 	putdocx save _codebook_cover_.docx, replace
 	
-	local tt = $part - 1
-	forvalue n = 1/`tt' {
+	if $part==1 {
+		putdocx append "_codebook_cover_.docx" "_codebook_table_part_1_.docx"
+	}
+	else if $part > 1 {
+		local tt = $part - 1
+		forvalue n = 1/`tt' {
 		putdocx append "_codebook_cover_.docx" "_codebook_table_part_`n'_.docx"
 		erase "_codebook_table_part_`n'_.docx"
+		}
+	}
+	else {
+		disp "無法順利產生codebook，請確認是否開啟相關檔案或文件！"
 	}
 	
 end
