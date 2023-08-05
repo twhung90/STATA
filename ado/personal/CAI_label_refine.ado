@@ -16,7 +16,7 @@ quietly ds, has(vallabel)
 local valist "`r(varlist)'"
 
  local i = 1
- foreach var of varlist a01 - d71 {
+ foreach var of varlist * {
  	local test: list var in valist    //判斷變項是否有定義值標籤
 	
    if `test'==0 {
