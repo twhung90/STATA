@@ -81,6 +81,7 @@ marksample touse, strok
 	
 	if $part==1 {
 		putdocx append "_codebook_cover_.docx" "_codebook_table_part_1_.docx"
+		erase "_codebook_table_part_1_.docx"
 	}
 	else if $part > 1 {
 		local tt = $part - 1
@@ -92,7 +93,8 @@ marksample touse, strok
 	else {
 		disp "無法順利產生codebook，請確認是否開啟相關檔案或文件！"
 	}
-	
+	disp "------------恭喜！已順利完成 PSFD 編碼簿的製作------------"
+
 end
 
 program define blocks
@@ -203,7 +205,7 @@ program define seg_data_collecting
 	}
 	file close myfile
 
-	bysort variable: gen span = _N
+	bysort variable: gen span = _N    //計算重複的間格格數
 	replace description = "" if (n != 1 & n != .)
 	replace variable = "" if (n != 1 & n != .)
 	
