@@ -121,7 +121,7 @@ local valist "`r(varlist)'"
 		
 		 cap gen var_labs = var_vals + " " + var_lab
 		
-		 * 產生指令的文字字串
+		 * 產生Stata指令的文字字串
 		 cap gen syntax = "lab define "+ variable + " " + string(var_val) + " "+ "`"+`"""'+var_labs + `"""'+"'" + ", modify"
 		
 		 *cap drop novar - var_labs
