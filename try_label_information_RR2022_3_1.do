@@ -80,21 +80,17 @@ marksample touse, strok
 	putdocx save _codebook_cover_.docx, replace
 	
 	if $part==1 {
-		putdocx append "_codebook_cover_.docx" "_codebook_table_part_1_.docx"
+		quietly putdocx append "_codebook_cover_.docx" "_codebook_table_part_1_.docx"
 		erase "_codebook_table_part_1_.docx"
 	}
 	else if $part > 1 {
 		local tt = $part - 1
 		forvalue n = 1/`tt' {
-		putdocx append "_codebook_cover_.docx" "_codebook_table_part_`n'_.docx"
+		quietly putdocx append "_codebook_cover_.docx" "_codebook_table_part_`n'_.docx"
 		erase "_codebook_table_part_`n'_.docx"
 		}
 	}
-	else {
-		disp "無法順利產生codebook，請確認是否開啟相關檔案或文件！"
-	}
 	disp "------------恭喜！已順利完成 PSFD 編碼簿的製作------------"
-
 end
 
 program define blocks
@@ -107,8 +103,7 @@ syntax [anything]
 			local which = 2
 			macro shift `which'    //將macro的參照對象移至第二個結果
 			local rest `*'
-	}
-	
+	}	
 end
 
 program define data_process
@@ -170,11 +165,11 @@ local varlists "`varlist'"
 			cap order var_vals, before(var_lab)
 			cap order var_lens, after(var_lab)
 			cap drop item_num val_max var_lab
-			/*
+			
 			egen max_n = max(n)
 			if max_n > 100 {
-				drop if var_val > 99 & var_val <= 9990     //僅保留小於100以下的選項名稱，通常為「郵遞區號」
-			}*/
+				drop if var_val > 99 & var_val <= 9990     //僅保留小於100以下的選項名稱，通常為「郵遞區號」或「行職業碼」等地會被刪除
+			}
 			save ".\label\rawdata\_`var'_.dta", replace    //只有選項總數小於100以下才存檔
 		restore
 		
