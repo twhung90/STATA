@@ -37,5 +37,8 @@
 ●更新日期：2023/07/21  
 ●更新內容：上傳Stata軟體中，在ado資料夾裡頭自定義的PSFD處理CAI系統資料時，常用的小工具
 
-●**最後更新日期：2023/08/04**  
-●更新內容：上傳PSFD資料編碼部的產生器try_label_information_RR2022_3_1.do（仍開發改進中，但已有雛型），可透過抓取dta資料檔中的值標籤(value labels)輸出成MS Word格式的 Codebook
+●更新日期：2023/08/04  
+●更新內容：上傳PSFD資料編碼簿的產生器try_label_information_RR2022_3_1.do（仍開發改進中，但已有雛型），可透過抓取dta資料檔中的值標籤(value labels)輸出成MS Word格式的 Codebook
+
+●**最後更新日期：2023/08/18**  
+●更新內容：上傳PSFD資料編碼簿的產生器try_label_information_RR2022_3_2_1.do（可在資料檔預設路經中，新增documents資料夾，將codebook存放於其中）
