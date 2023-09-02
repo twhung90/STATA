@@ -151,8 +151,6 @@ local varlists "`varlist'"
 			cap split var_val, p(" ")
 			cap destring var_val?*, replace
 			cap egen item_num = anycount(var_val?*), value(0/90)
-			cap egen val_max = rowmax(var_val?*)
-			cap egen val_min = rowmin(var_val?*)
 		
 			cap split var_lab, p(`"" ""')    //使用跳脫字元，以「字串」與「字串」之間的" "間隙進行切分
 			cap drop var_val var_lab
@@ -174,8 +172,10 @@ local varlists "`varlist'"
 			keep if var_val > 0 & var_val < .    //保留標籤數值為大於0的正值
 			gen n = _n, after(variable)
 			
+			quietly sum var_val
+			cap gen val_max = r(max)
 			cap tostring val_max, replace
-			cap gen var_lens = length(val_max) 
+			cap gen var_lens = length(val_max)     //值標籤中的最大數值的「長度」
 		
 			cap order var_vals, before(var_lab)
 			cap order var_lens, after(var_lab)
