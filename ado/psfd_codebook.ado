@@ -161,7 +161,7 @@ local varlists "`varlist'"
 			cap drop var_val var_lab
 		
 			cap reshape long var_val var_lab, i(variable) j(n)
-		
+			drop n
 			cap replace var_lab = subinstr(var_lab,`"""',"", .)    //消除字串中多餘的"字元符號
 		
 			cap gen var_vals = string(var_val)
@@ -172,13 +172,15 @@ local varlists "`varlist'"
 			cap order var_vals, before(var_lab)
 			cap order var_lens, after(var_lab)
 			cap drop item_num val_max var_lab
-			
+
+		    	keep if var_val >= 0 & var_val < .    //保留標籤數值為大於0的正值
+			gen n = _n, after(variable)
+
 			egen max_n = max(n)
 			if max_n > 100 {
 				drop if var_val > 99 & var_val < 9991     //僅保留小於100以下的選項名稱，通常為「郵遞區號」或「行職業碼」等地會被刪除
 			}
 			
-		    	keep if var_val > 0 & var_val < .
 			save ".\documents\rawdata\_`var'_.dta", replace    //只有選項總數小於100以下才存檔
 		restore
 		
