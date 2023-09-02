@@ -178,7 +178,7 @@ local varlists "`varlist'"
 			cap order var_lens, after(var_lab)
 			cap drop item_num val_max var_lab
 
-		    	keep if var_val >= 0 & var_val < .    //保留標籤數值為大於0的正值
+		    	keep if var_val > 0 & var_val < .    //保留標籤數值為大於0的正值
 			gen n = _n, after(variable)
 
 			egen max_n = max(n)
