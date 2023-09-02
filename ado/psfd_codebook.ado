@@ -154,16 +154,13 @@ local varlists "`varlist'"
 			cap egen val_max = rowmax(var_val?*)
 			cap egen val_min = rowmin(var_val?*)
 		
-			cap tostring val_max, replace
-			cap gen var_lens = length(val_max) 
-		
 			cap split var_lab, p(`"" ""')    //使用跳脫字元，以「字串」與「字串」之間的" "間隙進行切分
 			cap drop var_val var_lab
 		
 			cap reshape long var_val var_lab, i(variable) j(n)
 			drop n
 			cap replace var_lab = subinstr(var_lab,`"""',"", .)    //消除字串中多餘的"字元符號
-
+			
 			cap split var_lab, p(" ") gen(little)   //僅擷取值標籤中，後半段的文字
 			cap replace var_lab = little2 if strtrim(little2)!=""
 			cap replace var_lab = little1 if strtrim(little2)==""
@@ -174,13 +171,16 @@ local varlists "`varlist'"
 			cap replace var_vals = ("0" + var_vals) if (item_num >= 10 & item_num < 91) & (var_val >=0 & var_val < 10)
 			cap replace var_vals = ("("+ var_vals + ")" + " " + var_lab)
 		
+			keep if var_val > 0 & var_val < .    //保留標籤數值為大於0的正值
+			gen n = _n, after(variable)
+			
+			cap tostring val_max, replace
+			cap gen var_lens = length(val_max) 
+		
 			cap order var_vals, before(var_lab)
 			cap order var_lens, after(var_lab)
 			cap drop item_num val_max var_lab
-
-		    	keep if var_val > 0 & var_val < .    //保留標籤數值為大於0的正值
-			gen n = _n, after(variable)
-
+			
 			egen max_n = max(n)
 			if max_n > 100 {
 				drop if var_val > 99 & var_val < 9991     //僅保留小於100以下的選項名稱，通常為「郵遞區號」或「行職業碼」等地會被刪除
