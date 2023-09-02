@@ -163,6 +163,11 @@ local varlists "`varlist'"
 			cap reshape long var_val var_lab, i(variable) j(n)
 			drop n
 			cap replace var_lab = subinstr(var_lab,`"""',"", .)    //消除字串中多餘的"字元符號
+
+			cap split var_lab, p(" ") gen(little)   //僅擷取值標籤中，後半段的文字
+			cap replace var_lab = little2 if strtrim(little2)!=""
+			cap replace var_lab = little1 if strtrim(little2)==""
+			cap drop little*
 		
 			cap gen var_vals = string(var_val)
 			cap replace var_vals = ("00" + var_vals) if (item_num >= 100 & item_num < 991) & (var_val >=0 & var_val < 10)
