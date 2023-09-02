@@ -175,9 +175,10 @@ local varlists "`varlist'"
 			
 			egen max_n = max(n)
 			if max_n > 100 {
-				drop if var_val > 99 & var_val <= 9990     //僅保留小於100以下的選項名稱，通常為「郵遞區號」或「行職業碼」等地會被刪除
+				drop if var_val > 99 & var_val < 9991     //僅保留小於100以下的選項名稱，通常為「郵遞區號」或「行職業碼」等地會被刪除
 			}
-		    
+			
+		    	keep if var_val > 0 & var_val < .
 			save ".\documents\rawdata\_`var'_.dta", replace    //只有選項總數小於100以下才存檔
 		restore
 		
