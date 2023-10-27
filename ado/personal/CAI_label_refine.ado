@@ -125,6 +125,7 @@ local valist "`r(varlist)'"
 		 cap gen syntax = "lab define "+ variable + " " + string(var_val) + " "+ "`"+`"""'+var_labs + `"""'+"'" + ", modify"
 		
 		 *cap drop novar - var_labs
+		 ! if not exist ".\label\rawdata\" mkdir ".\label\rawdata\"
 		 save ".\label\rawdata\\`var'.dta", replace
 		
 		 * export the value labels
@@ -134,7 +135,7 @@ local valist "`r(varlist)'"
 			 $sya
 		 }
 		 
-		 cd ..    //退回上一層資料夾
+		 *cd ..    //退回上一層資料夾
 		 ! if not exist ".\label\do\" mkdir ".\label\do\"    //使用Windows batch建立一個存放do檔的資料夾
 		 label save `var' using `".\\label\\do\\`var'"', replace
 		
