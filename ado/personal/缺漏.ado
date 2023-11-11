@@ -4,7 +4,7 @@ program define 缺漏
 syntax varlist(min=1) [if] [in]
 marksample touse, novarlist strok    //使得syntax 後的「條件」argument能被以`touse'的型態被呼叫使用
 	foreach var of local varlist {
-		if regexm("`var'", "^x0+[1-4]+") {
+		if regexm("`var'", "^x0[1-4]+.*|^id+") {
 			display "Warnning: `var'這變項為PSFD定義的「樣本特質描述」，將不進行轉換！"
 			continue
 		}
