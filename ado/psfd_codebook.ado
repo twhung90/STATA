@@ -142,8 +142,10 @@ local varlists "`varlist'"
 			cap gen novar = `i'    //變項流水號
 			cap gen description = "`lab'"    //變項說明 
                            		
-			cap gen item = ustrtitle(regexs(1)) + strtrim(regexs(3)) ///
-						   if regexm("`var'", "^([a-z]+[0-9]?[0-9]?)([a-z 0-9]*)([cfmprs]?[0-9]*)$"), before(description)
+			cap gen item = ustrtitle(regexs(1)) + strtrim(regexs(2)) ///
+					if regexm("`var'", "^([a-z]+[0-9]?[0-9]?)([a-z]*[0-9]?[0-9]?)$"), before(description)
+			cap replace item = ustrtitle(regexs(1)) + strtrim(regexs(3)) ///
+					if regexm("`var'", "^([a-z]+[0-9]?[0-9]?)(.*)([cfmprs]+[0-9])$")
 			cap gen variable = "`var'"
 			cap gen var_val = r(values)
 			cap gen var_lab = r(labels)
