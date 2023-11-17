@@ -4,7 +4,7 @@
 
 program define nonresp_rate
 version 13.0
-syntax anything, id(varname) [keep(varlist)]
+syntax anything, id(varname) range(varlist) [keep(varlist)]
 
 	use "`anything'", clear
 	global path "`pwd'"
@@ -12,10 +12,10 @@ syntax anything, id(varname) [keep(varlist)]
 
 preserve
 
-	transCAI a01 - d71, from("new")
-	movetoPSFD a01- d71, version("new")
+	transCAI `range', from("new")
+	movetoPSFD `range', version("new")
 
-	foreach v of varlist a01 - d71 {
+	foreach v of local range {
 
 		cap confirm string var `v'
 		if !_rc {
@@ -28,23 +28,23 @@ preserve
 	}
 
 	gen total_ans = 0
-	foreach v of varlist a01 - d71 {
+	foreach v of local range {
 		replace total_ans = total_ans + 1 if `v' != -10 & `v' < .
 	}
 	lab var total_ans "The total questions which are answered"
 
 	gen nonresp_96 = 0
-	foreach v of varlist a01 - d71 {
+	foreach v of local range {
 		replace nonresp_96 = nonresp_96 + 1 if `v'== -6
 	}
 	lab var nonresp_96 "(Don't know) accumulated times"
 	gen nonresp_98 = 0
-	foreach v of varlist a01 - d71 {
+	foreach v of local range {
 		replace nonresp_98 = nonresp_98 + 1 if `v'== -8
 	}
 	lab var nonresp_98 "(Refuse) accumulated times"
 	gen nonresp_99 = 0
-	foreach v of varlist a01 - d71 {
+	foreach v of local range {
 		replace nonresp_99 = nonresp_99 + 1 if `v'== -9
 	}
 	lab var nonresp_99 "(Missing) accumulated times"
