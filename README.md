@@ -40,5 +40,8 @@
 ●更新日期：2023/08/04  
 ●更新內容：上傳PSFD資料編碼簿的產生器try_label_information_RR2022_3_1.do（仍開發改進中，但已有雛型），可透過抓取dta資料檔中的值標籤(value labels)輸出成MS Word格式的 Codebook
 
-●**最後更新日期：2023/08/18**  
+●最後更新日期：2023/08/18  
 ●更新內容：上傳PSFD資料編碼簿的產生器try_label_information_RR2022_3_2_1.do（可在資料檔預設路經中，新增documents資料夾，將codebook存放於其中）
+
+●**最後更新日期：2023/11/18**  
+●更新內容：上傳nonresp_rate.ado，可計算PSFD資料檔中所有的有效填答數，以及「不知道」或「拒答」的題數比率
