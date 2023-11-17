@@ -29,7 +29,7 @@ preserve
 
 	gen total_ans = 0
 	foreach v of varlist a01 - d71 {
-		replace total_ans = total_ans + 1 if `v' >= 0 & `v' < .
+		replace total_ans = total_ans + 1 if `v' != -10 & `v' < .
 	}
 	lab var total_ans "The total questions which are answered"
 
