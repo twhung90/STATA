@@ -1,6 +1,6 @@
 * Title: 計算單期資料的「拒答數」與「不知道」數
 * Author: Tamao
-* Date: 2023.11.17
+* Version: 1.0.2
 
 program define nonresp_rate
 version 13.0
@@ -34,7 +34,7 @@ preserve
 	}	
 
 	quietly movetoPSFD `range', version("new")
-	disp "--------- Form conversion have been finished! ---------"
+	disp in yellow "Form conversion have been finished!"
 	
 	gen total_ans = 0
 	lab var total_ans "The total number of questions answered"
@@ -72,7 +72,7 @@ preserve
 
 	keep `id' `keep' total_ans - nonresp99_rate 
 	save Nonresponse_Rate, replace
-	disp "The new data `""Nonresponse_Rate.dta""' has been saved in the folder"
+	disp "The new data have been saved in working directory"
 	
 restore
 
