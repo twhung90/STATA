@@ -1,6 +1,7 @@
 * Title: 計算單期資料的「拒答數」與「不知道」數
 * Author: Tamao
 * Version: 1.0.2
+* Date: 2023.11.19
 
 program define nonresp_rate
 version 13.0
