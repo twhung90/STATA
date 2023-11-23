@@ -171,7 +171,7 @@ local varlists "`varlist'"
 			cap replace var_vals = ("0" + var_vals) if (item_num >= 10 & item_num < 91) & (var_val >=0 & var_val < 10)
 			cap replace var_vals = ("("+ var_vals + ")" + " " + var_lab)
 		
-			keep if var_val > 0 & var_val < .    //保留標籤數值為大於0的正值
+			keep if var_val >= 0 & var_val < .    //保留標籤數值為大於等於0的正值
 			gen n = _n, after(variable)
 			
 			quietly sum var_val
@@ -185,7 +185,7 @@ local varlists "`varlist'"
 			
 			egen max_n = max(n)
 			if max_n > 100 {
-				drop if var_val > 99 & var_val < 9991     //僅保留小於100以下的選項名稱，通常為「郵遞區號」或「行職業碼」等地會被刪除
+				drop if var_val > 60 & var_val < 9991     //僅保留小於60以下的選項名稱，通常為「郵遞區號」或「行職業碼」等地會被刪除
 			}
 			
 			save ".\documents\rawdata\_`var'_.dta", replace    //只有選項總數小於100以下才存檔
