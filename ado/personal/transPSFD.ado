@@ -177,6 +177,7 @@ args name touse
 			replace `name' = .r if `name'== -8 & `touse'
 			replace `name' = .m if `name'== -9 & `touse'
 			replace `name' = .k if `name'== 97 & `touse'
+			replace `name' = .x if `name'== -3 & `touse'    //保留碼(僅1個)
 		}
 		if inrange(r(max),10,99)  {
 			replace `name' = .j if `name'== -10  & `touse'
@@ -187,6 +188,7 @@ args name touse
 			replace `name' = .r if `name'== -8 & `touse'
 			replace `name' = .m if `name'== -9 & `touse'
 			replace `name' = .k if `name'== 97 & `touse'
+			replace `name' = .x if `name'== -3 & `touse'    //保留碼(僅1個)
 		}
 		if inrange(r(max),100,999)  {
 			replace `name' = .j if `name'== -10 & `touse'
