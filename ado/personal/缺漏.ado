@@ -43,10 +43,10 @@ end
 
 program define dostr_miss
 args name touse
-		if strmatch(`name', "*96") | strmatch(`name', "*97") | strmatch(`name', "*98") {
-		replace `name' = "99" if `touse'
+		if (strmatch(`name', "*96") | strmatch(`name', "*97") | strmatch(`name', "*98")) {
+			replace `name' = "99" if `touse'
 		}
 		else {
-		replace `name' = "" if `touse'
+			replace `name' = "" if `touse'
 		}
 end
