@@ -57,7 +57,7 @@ end
 
 program define dostr_skip
 args name touse
-		if strmatch(`name', "*96") {
+		if (strmatch(`name', "*96") | strmatch(`name', "*97") | strmatch(`name', "*98")) {
 		replace `name' = "96" if `touse'
 		}
 		else {
