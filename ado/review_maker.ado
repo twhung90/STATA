@@ -5,7 +5,7 @@ syntax anything, year(integer) merge_data(string) [attr_set(namelist)]
 marksample touse, strok
 
 if "`attr_set'"=="" {
-	local eqlist `"Name Group Sex"'
+	local attr_set `"Name Group Sex"'
 }
 
 import excel `anything', firstrow clear
@@ -86,7 +86,7 @@ local total = id_total[1]
 		}
 		if mod(`r',4)==3 {
 			local ++sp
-			putdocx table list(`sp',1) = ("Review= "+ review[`co']+"；Modify= "+ modify[`co']), colspan(9) font("新細明體",12) border(top, nil)
+			putdocx table list(`sp',1) = ("Review= "+ review[`co']+"； Modify= "+ modify[`co']), colspan(9) font("新細明體",12) border(top, nil)
 		}
 		if mod(`r',4)==0 {
 			local ++sp
