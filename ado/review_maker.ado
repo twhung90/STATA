@@ -1,7 +1,7 @@
 * PSFD調查補問問卷產生器
 
 program define review_maker
-syntax anything, year(integer) merge_data(string) [attr_set(namelist)]
+syntax anything, year(integer) type(string) merge_data(string) [attr_set(namelist)]
 marksample touse, strok
 
 if "`attr_set'"=="" {
@@ -15,9 +15,9 @@ drop if _merge==2
 drop _merge
 
 gen type = ""
-replace type = "C" + "`year'-網調問卷" if Group==1
-replace type = "RCI" + "`year'-網調問卷" if Group==2
-replace type = "RR" + "`year'-網調問卷" if Group==3
+replace type = "C" + "`year'-" + "`type'" + "問卷" if Group==1
+replace type = "RCI" + "`year'-" + "`type'" + "問卷" if Group==2
+replace type = "RR" + "`year'-" + "`type'" + "問卷" if Group==3
 
 gen sex = ""
 replace sex = "先生" if Sex==1
@@ -29,7 +29,7 @@ bysort id: gen id_total = _N
 local a = 1
 
 local total = _N
-while `a' < `total' {
+while `a' <= `total' {
 	preserve
 	keep if id==id[`a']
 	display in yellow "-----------Reading at rows `a'-----------"
@@ -86,7 +86,8 @@ local total = id_total[1]
 		}
 		if mod(`r',4)==3 {
 			local ++sp
-			putdocx table list(`sp',1) = ("Review= "+ review[`co']+"； Modify= "+ modify[`co']), colspan(9) font("新細明體",12) border(top, nil)
+			putdocx table list(`sp',1) = ("Review： "+ review[`co']+"；"), colspan(9) font("新細明體",12) border(top, nil)
+			putdocx table list(`sp',1) = ("Modify： "+ modify[`co']), font("新細明體",12, cornflowerblue) append
 		}
 		if mod(`r',4)==0 {
 			local ++sp
