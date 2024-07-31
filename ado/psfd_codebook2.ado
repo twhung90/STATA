@@ -5,13 +5,24 @@
 
 program define psfd_codebook2
 version 17
-syntax anything
+syntax anything, type(string) year(string)
 marksample touse, strok
 ! if not exist ".\documents\rawdata\" mkdir ".\documents\rawdata\"
 	
 	global file "${S_FN}"
 	global path "`pwd'"
 	global part = 1
+	
+	if strupper("`type'")=="RCI" {
+		local question = "子女轉主樣本問卷"
+	}
+	if strupper("`type'")=="C" {
+		local question = "子女樣本問卷"
+	}
+	if strupper("`type'")=="RR" {
+		local question = "追蹤問卷"
+	}
+	
 	cap blocks `anything'   //使用自定義的程式
 	
 	* export the table to Word (需使用Stata 17)
@@ -21,9 +32,9 @@ marksample touse, strok
 	putdocx begin, pagesize("A4") margin(top, 1 cm) margin(bottom, 1 cm) margin(left, 1.2 cm) margin(right, 1.2 cm)     //stata 17適用
 	putdocx paragraph, font("新細明體",12) spacing(after, 12 pt) halign("center")    //設定段落與後段間距為12點
 	putdocx text ("家庭動態調查："), bold font("新細明體",12)
-	putdocx text ("2022"), bold font("Times New Roman",12)
-	putdocx text ("追蹤問卷（"), bold font("新細明體",12)
-	putdocx text ("RR 2022"), bold font("Times New Roman",12)
+	putdocx text ("`year'"), bold font("Times New Roman",12)
+	putdocx text ("`question'（"), bold font("新細明體",12)
+	putdocx text ("`type' `year'"), bold font("Times New Roman",12)
 	putdocx text ("）"), bold font("新細明體",12)
 	putdocx text ("Codebook"), bold font("Times New Roman",12)
 
@@ -193,7 +204,7 @@ local varlists "`varlist'"
 			
 			cap egen max_n = max(n)
 			cap if max_n > 100 {
-				cap drop if var_val > 0 & var_val < 9999     //通常為「郵遞區號」或「行職業碼」等地會被刪除
+				cap drop if var_val > 0 & var_val < 9990     //通常為「郵遞區號」或「行職業碼」等地會被刪除
 			}
 			
 			save ".\documents\rawdata\_`var'_.dta", replace    //只有選項總數小於100以下才存檔
