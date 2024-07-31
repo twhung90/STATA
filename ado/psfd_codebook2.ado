@@ -1,7 +1,7 @@
 * Title: PSFD編碼簿產生器
 * Author: Tamao
 * Version: 3.2.2
-* Date: 2023.09.15
+* Date: 2024.07.31
 
 program define psfd_codebook2
 version 17
@@ -13,13 +13,14 @@ marksample touse, strok
 	global path "`pwd'"
 	global part = 1
 	
-	if strupper("`type'")=="RCI" {
+	local type = strupper("`type'")
+	if "`type'"=="RCI" {
 		local question = "子女轉主樣本問卷"
 	}
-	if strupper("`type'")=="C" {
+	if "`type'"=="C" {
 		local question = "子女樣本問卷"
 	}
-	if strupper("`type'")=="RR" {
+	if "`type'"=="RR" {
 		local question = "追蹤問卷"
 	}
 	
@@ -204,7 +205,7 @@ local varlists "`varlist'"
 			
 			cap egen max_n = max(n)
 			cap if max_n > 100 {
-				cap drop if var_val > 0 & var_val < 9990     //通常為「郵遞區號」或「行職業碼」等地會被刪除
+				cap drop if var_val > 0 & var_val <= 9990     //通常為「郵遞區號」或「行職業碼」等地會被刪除
 			}
 			
 			save ".\documents\rawdata\_`var'_.dta", replace    //只有選項總數小於100以下才存檔
