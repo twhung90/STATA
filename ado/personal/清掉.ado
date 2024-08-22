@@ -9,9 +9,9 @@ program define 清掉
 syntax varlist(min=1) [if] [in]
 marksample touse, novarlist strok    //使得syntax 後的「條件」argument能被以`touse'的型態被呼叫使用
 	foreach var of local varlist {
-		if regexm("`var'", "^x0[1-4]+.*|^id+") {
-				display "Warnning: `var'這變項為PSFD定義的「樣本特質描述」，將不進行轉換！"
-				continue
+		if regexm("`var'", "^x0+[1-4]+|^id+") {
+			display "Warnning: `var'這變項為PSFD定義的「樣本特質描述」，將不進行轉換！"
+			continue
 		}
 		cap confirm string variable `var'
 		if !_rc {
@@ -57,10 +57,13 @@ end
 
 program define dostr_skip
 args name touse
-		if (strmatch(`name', "*96") | strmatch(`name', "*97") | strmatch(`name', "*98")) {
-		replace `name' = "96" if `touse'
+	tempvar reg_test
+	quietly gen `reg_test' = 1 if regexm(`name',"[9][6-9]$")
+	quietly sum `reg_test'
+		if (r(max) >=1 & r(max) < .) {
+			replace `name' = "96" if `touse'
 		}
 		else {
-		replace `name' = "" if `touse'
+			replace `name' = "" if `touse'
 		}
 end
