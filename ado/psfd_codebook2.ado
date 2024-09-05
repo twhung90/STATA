@@ -3,7 +3,7 @@
 * Version: 3.2.3
 * Date: 2024.09.05
 
-program define psfd_codebook31
+program define psfd_codebook2
 version 17
 syntax anything, type(string) year(string)
 marksample touse, strok
@@ -29,7 +29,7 @@ marksample touse, strok
 	
 	cap blocks `anything'   //使用自定義的程式
 	
-	* export the table to Word (需使用Stata 17)
+	* export the table to MS Word (需使用Stata 17)
 	quietly cd ".\documents"
 	
 	putdocx clear
