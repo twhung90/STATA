@@ -1,9 +1,9 @@
 * Title: PSFD編碼簿產生器
 * Author: Tamao
-* Version: 3.2.2
-* Date: 2024.07.31
+* Version: 3.2.3
+* Date: 2024.09.05
 
-program define psfd_codebook2
+program define psfd_codebook31
 version 17
 syntax anything, type(string) year(string)
 marksample touse, strok
@@ -16,6 +16,9 @@ marksample touse, strok
 	local type = strupper("`type'")
 	if "`type'"=="RCI" {
 		local question = "子女轉主樣本問卷"
+	}
+	if "`type'"=="RI" {
+		local question = "新抽樣本問卷"
 	}
 	if "`type'"=="C" {
 		local question = "子女樣本問卷"
@@ -158,6 +161,8 @@ local varlists "`varlist'"
 					if regexm("`var'", "^([a-z]+[0-9]?[0-9]?)([a-z]*[0-9]?[0-9]?)$"), before(description)
 			cap replace item = ustrtitle(regexs(1)) + strtrim(regexs(3)) ///
 					if regexm("`var'", "^([a-z]+[0-9]?[0-9]?)(.*)([cfmprs]+[0-9])$")
+			cap replace item = ustrtitle(regexs(1)) + strtrim(regexs(2)) ///
+					if regexm("`var'", "^([a-z]+[0-9]?[0-9]?)([a-z])$")
 					
 			cap gen variable = "`var'"
 			cap gen var_val = r(values)
@@ -173,15 +178,16 @@ local varlists "`varlist'"
 			cap reshape long var_val var_lab, i(variable) j(n)
 			cap drop n
 			cap replace var_lab = subinstr(var_lab,`"""',"", .)    //消除字串中多餘的"字元符號
+			cap replace var_lab = strtrim(regexr(var_lab, "^[0-9]*", ""))   //若值標籤開頭自帶有數值，僅擷取值標籤之中，後半段的文字
 			
-			cap split var_lab, p(" ") gen(little)   //僅擷取值標籤中，後半段的文字
-			cap replace var_lab = little2 if strtrim(little2)!=""
-			cap replace var_lab = little1 if strtrim(little2)==""
-			cap drop little*
+			cap quietly sum var_val
+			cap gen val_max = r(max)
+			cap tostring val_max, replace
+			cap gen var_lens = length(val_max)     //值標籤中的最大數值的「長度」
 		
 			cap gen var_vals = string(var_val)
-			cap replace var_vals = ("00" + var_vals) if (item_num >= 100 & item_num < 991) & (var_val >=0 & var_val < 10)
-			cap replace var_vals = ("0" + var_vals) if (item_num >= 10 & item_num < 91) & (var_val >=0 & var_val < 10)
+			cap replace var_vals = ("00" + var_vals) if (((item_num >= 100 & item_num < 991) & (var_val >=0 & var_val < 10)) | ((var_val >=0 & var_val < 10) & var_lens==3))
+			cap replace var_vals = ("0" + var_vals)  if (((item_num >= 10 & item_num < 91) & (var_val >=0 & var_val < 10)) | ((var_val >=0 & var_val < 10) & var_lens==2))
 			cap replace var_vals = ("("+ var_vals + ")" + " " + var_lab)
 		
 			cap keep if var_val >= 0 & var_val < .   //保留標籤數值為大於等於0的正值 
@@ -194,11 +200,6 @@ local varlists "`varlist'"
 			}
 			cap gen n = _n, after(variable)
 			
-			cap quietly sum var_val
-			cap gen val_max = r(max)
-			cap tostring val_max, replace
-			cap gen var_lens = length(val_max)     //值標籤中的最大數值的「長度」
-		
 			cap order var_vals, before(var_lab)
 			cap order var_lens, after(var_lab)
 			cap drop item_num val_max var_lab
