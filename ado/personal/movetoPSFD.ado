@@ -40,7 +40,6 @@ args name touse
 			replace `name' = 97 if `name'== .k & `touse'    //其他
 			replace `name' = 98 if `name'== .r & `touse'
 			replace `name' = 99 if `name'== .m & `touse'
-			replace `name' = 93 if `name'== .x & `touse'    //保留碼(僅1個)
 		}
 		if inrange(r(max),10,99)  {
 			replace `name' = 0 if `name'== .j  & `touse'
@@ -51,7 +50,6 @@ args name touse
 			replace `name' = 97 if `name'== .k & `touse'    //其他
 			replace `name' = 98 if `name'== .r & `touse'
 			replace `name' = 99 if `name'== .m & `touse'
-			replace `name' = 93 if `name'== .x & `touse'    //保留碼(僅1個)
 		}
 		if inrange(r(max),100,999)  {
 			replace `name' = -11 if `name'== .a & `touse'
@@ -77,6 +75,18 @@ args name touse
 			replace `name' = 9996 if `name'== .d & `touse'
 			replace `name' = 9998 if `name'== .r & `touse'
 			replace `name' = 9999 if `name'== .m & `touse'
+		}
+		if inrange(r(max),10000,99999)  {
+			replace `name' = -11 if `name'== .a & `touse'
+			replace `name' = 0 if `name'== .j & `touse'
+			replace `name' = 99991 if `name'== .u & `touse'
+			replace `name' = 99991 if `name'== .b & `touse'
+			replace `name' = 99993 if `name'== .x & `touse'    //保留碼
+			replace `name' = 99994 if `name'== .y & `touse'    //保留碼
+			replace `name' = 99995 if `name'== .o & `touse'
+			replace `name' = 99996 if `name'== .d & `touse'
+			replace `name' = 99998 if `name'== .r & `touse'
+			replace `name' = 99999 if `name'== .m & `touse'
 		}
 		if inrange(r(max),100000,999999)  {
 			replace `name' = -11 if `name'== .a & `touse'
@@ -130,15 +140,11 @@ args name touse
 			replace `name' = 97 if `name'== .k & `touse'    //其他
 			replace `name' = -8 if `name'== .r & `touse'
 			replace `name' = -9 if `name'== .m & `touse'
-			replace `name' = -3 if `name'== .x & `touse'    //保留碼(僅1個)
-			replace `name' = -4 if `name'== .y & `touse'    //保留碼(僅1個)
 		}
 		if inrange(r(max),6,9)  {
 			replace `name' = -10 if `name'== .j & `touse'
 			replace `name' = -5 if `name'== .o & `touse'
 			replace `name' = -6 if `name'== .d & `touse'
-			replace `name' = -3 if `name'== .x & `touse'    //保留碼
-			replace `name' = -4 if `name'== .y & `touse'    //保留碼
 			replace `name' = 97 if `name'== .k & `touse'    //其他
 			replace `name' = -8 if `name'== .r & `touse'
 			replace `name' = -9 if `name'== .m & `touse'
@@ -149,8 +155,6 @@ args name touse
 			replace `name' = -2 if `name'== .b & `touse'
 			replace `name' = -5 if `name'== .o & `touse'
 			replace `name' = -6 if `name'== .d & `touse'
-			replace `name' = -3 if `name'== .x & `touse'    //保留碼
-			replace `name' = -4 if `name'== .y & `touse'    //保留碼
 			replace `name' = 97 if `name'== .k & `touse'    //其他
 			replace `name' = -8 if `name'== .r & `touse'
 			replace `name' = -9 if `name'== .m & `touse'
@@ -181,13 +185,25 @@ args name touse
 			replace `name' = -8 if `name'== .r & `touse'
 			replace `name' = -9 if `name'== .m & `touse'
 		}
+		if inrange(r(max),10000,99999)  {
+			replace `name' = -11 if `name'== .a & `touse'
+			replace `name' = -10 if `name'== .j & `touse'
+			replace `name' = -1 if `name'== .u & `touse'
+			replace `name' = -2 if `name'== .b & `touse'
+			replace `name' = -3 if `name'== .x & `touse'    //保留碼
+			replace `name' = -4 if `name'== .y & `touse'    //保留碼
+			replace `name' = -5 if `name'== .o & `touse'
+			replace `name' = -6 if `name'== .d & `touse'
+			replace `name' = -8 if `name'== .r & `touse'
+			replace `name' = -9 if `name'== .m & `touse'
+		}
 		if inrange(r(max),100000,999999)  {
 			replace `name' = -11 if `name'== .a & `touse'
 			replace `name' = -10 if `name'== .j & `touse'
 			replace `name' = -1 if `name'== .u & `touse'
 			replace `name' = -2 if `name'== .b & `touse'
-			replace `name' = 999993 if `name'== .x & `touse'    //保留碼
-			replace `name' = 999994 if `name'== .y & `touse'    //保留碼
+			replace `name' = -3 if `name'== .x & `touse'    //保留碼
+			replace `name' = -4 if `name'== .y & `touse'    //保留碼
 			replace `name' = -5 if `name'== .o & `touse'
 			replace `name' = -6 if `name'== .d & `touse'
 			replace `name' = -8 if `name'== .r & `touse'
@@ -198,8 +214,8 @@ args name touse
 			replace `name' = -10 if `name'== .j & `touse'
 			replace `name' = -1 if `name'== .u & `touse'
 			replace `name' = -2 if `name'== .b & `touse'
-			replace `name' = 9999993 if `name'== .x & `touse'    //保留碼
-			replace `name' = 9999994 if `name'== .y & `touse'    //保留碼
+			replace `name' = -3 if `name'== .x & `touse'    //保留碼
+			replace `name' = -4 if `name'== .y & `touse'    //保留碼
 			replace `name' = -5 if `name'== .o & `touse'
 			replace `name' = -6 if `name'== .d & `touse'
 			replace `name' = -8 if `name'== .r & `touse'
@@ -210,8 +226,8 @@ args name touse
 			replace `name' = -10 if `name'== .j & `touse'
 			replace `name' = -1 if `name'== .u & `touse'
 			replace `name' = -2 if `name'== .b & `touse'
-			replace `name' = 99999993 if `name'== .x & `touse'    //保留碼
-			replace `name' = 99999994 if `name'== .y & `touse'    //保留碼
+			replace `name' = -3 if `name'== .x & `touse'    //保留碼
+			replace `name' = -4 if `name'== .y & `touse'    //保留碼
 			replace `name' = -5 if `name'== .o & `touse'
 			replace `name' = -6 if `name'== .d & `touse'
 			replace `name' = -8 if `name'== .r & `touse'

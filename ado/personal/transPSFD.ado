@@ -81,6 +81,16 @@ local test: list var in skip
 			replace `name' = .x if `name'==9993 & `touse'    //保留碼
 			replace `name' = .y if `name'==9994 & `touse'    //保留碼
 		}
+		if inrange(r(max),10000,99999)  {
+			replace `name' = .j if `name'==0 & `touse'
+			replace `name' = .u if `name'==99991 & `touse'
+			replace `name' = .o if `name'==99995 & `touse'
+			replace `name' = .d if (`name'==99992 | `name'==99996) & `touse'
+			replace `name' = .r if `name'==99998 & `touse'
+			replace `name' = .m if `name'==99999 & `touse'
+			replace `name' = .x if `name'==99993 & `touse'    //保留碼
+			replace `name' = .y if `name'==99994 & `touse'    //保留碼
+		}
 		if inrange(r(max),100000,999999)  {
 			replace `name' = .j if `name'==0 & `touse'
 			replace `name' = .u if `name'==999991 & `touse'
@@ -140,6 +150,14 @@ local test: list var in skip
 			replace `name' = .r if `name'==9998 & `touse'
 			replace `name' = .m if `name'==9999 & `touse'
 		}
+		if inrange(r(max),10000,99999)  {
+			
+			replace `name' = .u if `name'==99991 & `touse'
+			replace `name' = .o if `name'==99995 & `touse'
+			replace `name' = .d if (`name'==99992 | `name'==99996) & `touse'
+			replace `name' = .r if `name'==99998 & `touse'
+			replace `name' = .m if `name'==99999 & `touse'
+		}
 		if inrange(r(max),100000,999999)  {
 			
 			replace `name' = .u if `name'==999991 & `touse'
@@ -177,7 +195,6 @@ args name touse
 			replace `name' = .r if `name'== -8 & `touse'
 			replace `name' = .m if `name'== -9 & `touse'
 			replace `name' = .k if `name'== 97 & `touse'
-			replace `name' = .x if `name'== -3 & `touse'    //保留碼(僅1個)
 		}
 		if inrange(r(max),10,99)  {
 			replace `name' = .j if `name'== -10  & `touse'
@@ -188,7 +205,6 @@ args name touse
 			replace `name' = .r if `name'== -8 & `touse'
 			replace `name' = .m if `name'== -9 & `touse'
 			replace `name' = .k if `name'== 97 & `touse'
-			replace `name' = .x if `name'== -3 & `touse'    //保留碼(僅1個)
 		}
 		if inrange(r(max),100,999)  {
 			replace `name' = .j if `name'== -10 & `touse'
@@ -203,6 +219,18 @@ args name touse
 			replace `name' = .m if `name'== -9 & `touse'
 		}
 		if inrange(r(max),1000,9999)  {
+			replace `name' = .j if `name'== -10 & `touse'
+			replace `name' = .a if `name'== -11 & `touse'
+			replace `name' = .u if `name'== -1 & `touse'
+			replace `name' = .b if `name'== -2 & `touse'
+			replace `name' = .x if `name'== -3 & `touse'    //保留碼
+			replace `name' = .y if `name'== -4 & `touse'    //保留碼
+			replace `name' = .o if `name'== -5 & `touse'
+			replace `name' = .d if `name'== -6 & `touse'
+			replace `name' = .r if `name'== -8 & `touse'
+			replace `name' = .m if `name'== -9 & `touse'
+		}
+		if inrange(r(max),10000,99999)  {
 			replace `name' = .j if `name'== -10 & `touse'
 			replace `name' = .a if `name'== -11 & `touse'
 			replace `name' = .u if `name'== -1 & `touse'
