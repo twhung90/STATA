@@ -27,15 +27,17 @@ args name touse
 
 	quietly sum `name' 
 		if inrange(r(max),0,9)  {
+			replace `name' = 93 if `name'== .x & `touse'    //保留碼 -3
+			replace `name' = 94 if `name'== .k & `touse'    //其他
 			replace `name' = 95 if `name'== .o & `touse'
 			replace `name' = 96 if `name'== .j & `touse'
-			replace `name' = 94 if `name'== .k & `touse'    //其他
 			replace `name' = 97 if `name'== .d & `touse'
 			replace `name' = 98 if `name'== .r & `touse'
 			replace `name' = 99 if `name'== .m & `touse'
 		}
 		if inrange(r(max),10,99)  {
 			replace `name' = -11 if `name'== .a & `touse'
+			replace `name' = 93 if `name'== .x & `touse'    //保留碼 -3
 			replace `name' = 94 if `name'== .k & `touse'    //其他
 			replace `name' = 95 if `name'== .o & `touse'
 			replace `name' = 96 if `name'== .j & `touse'
@@ -55,9 +57,8 @@ args name touse
 			replace `name' = 997 if `name'== .d & `touse'
 			replace `name' = 998 if `name'== .r & `touse'
 			replace `name' = 999 if `name'== .m & `touse'
-			replace `name' = 993 if `name'== .x & `touse'    //保留碼
-			replace `name' = 994 if `name'== .y & `touse'    //保留碼
-			
+			replace `name' = 993 if `name'== .x & `touse'    //保留碼 -3
+			replace `name' = 994 if `name'== .y & `touse'    //保留碼 -4			
 		}
 		if inrange(r(max),1000,9999)  {
 			replace `name' = -11 if `name'== .a & `touse'
@@ -68,8 +69,8 @@ args name touse
 			replace `name' = 9997 if `name'== .d & `touse'
 			replace `name' = 9998 if `name'== .r & `touse'
 			replace `name' = 9999 if `name'== .m & `touse'
-			replace `name' = 9993 if `name'== .x & `touse'    //保留碼
-			replace `name' = 9994 if `name'== .y & `touse'    //保留碼
+			replace `name' = 9993 if `name'== .x & `touse'    //保留碼 -3
+			replace `name' = 9994 if `name'== .y & `touse'    //保留碼 -4
 		}
 		if inrange(r(max),10000,99999)  {
 			replace `name' = -11 if `name'== .a & `touse'
@@ -80,8 +81,8 @@ args name touse
 			replace `name' = 99997 if `name'== .d & `touse'
 			replace `name' = 99998 if `name'== .r & `touse'
 			replace `name' = 99999 if `name'== .m & `touse'
-			replace `name' = 99993 if `name'== .x & `touse'    //保留碼
-			replace `name' = 99994 if `name'== .y & `touse'    //保留碼
+			replace `name' = 99993 if `name'== .x & `touse'    //保留碼 -3
+			replace `name' = 99994 if `name'== .y & `touse'    //保留碼 -4
 		}
 		if inrange(r(max),100000,999999)  {
 			replace `name' = -11 if `name'== .a & `touse'
@@ -92,6 +93,8 @@ args name touse
 			replace `name' = 999997 if `name'== .d & `touse'
 			replace `name' = 999998 if `name'== .r & `touse'
 			replace `name' = 999999 if `name'== .m & `touse'
+			replace `name' = 999993 if `name'== .x & `touse'    //保留碼 -3
+			replace `name' = 999994 if `name'== .y & `touse'    //保留碼 -4
 		}
 		if inrange(r(max),1000000,9999999)  {
 			replace `name' = -11 if `name'== .a & `touse'
@@ -102,6 +105,8 @@ args name touse
 			replace `name' = 9999997 if `name'== .d & `touse'
 			replace `name' = 9999998 if `name'== .r & `touse'
 			replace `name' = 9999999 if `name'== .m & `touse'
+			replace `name' = 9999993 if `name'== .x & `touse'    //保留碼 -3
+			replace `name' = 9999994 if `name'== .y & `touse'    //保留碼 -4
 		}
 		if inrange(r(max),10000000,99999999)  {
 			replace `name' = -11 if `name'== .a & `touse'
@@ -112,6 +117,8 @@ args name touse
 			replace `name' = 99999997 if `name'== .d & `touse'
 			replace `name' = 99999998 if `name'== .r & `touse'
 			replace `name' = 99999999 if `name'== .m & `touse'
+			replace `name' = 99999993 if `name'== .x & `touse'    //保留碼 -3
+			replace `name' = 99999994 if `name'== .y & `touse'    //保留碼 -4
 		}
 end
 
@@ -120,6 +127,7 @@ args name touse
 
 	quietly sum `name' 
 		if inrange(r(max),0,9)  {
+			replace `name' = 93 if `name'== .x & `touse'    //保留碼 -3
 			replace `name' = 94 if `name'== .k & `touse'    //其他
 			replace `name' = 95 if `name'== .o & `touse'
 			replace `name' = 96 if `name'== .j & `touse'
@@ -129,6 +137,7 @@ args name touse
 		}
 		if inrange(r(max),10,99)  {
 			replace `name' = -11 if `name'== .a & `touse'
+			replace `name' = 93 if `name'== .x & `touse'    //保留碼 -3
 			replace `name' = 94 if `name'== .k & `touse'    //其他
 			replace `name' = 95 if `name'== .o & `touse'
 			replace `name' = 96 if `name'== .j  & `touse'
@@ -148,8 +157,8 @@ args name touse
 			replace `name' = 997 if `name'== .d & `touse'
 			replace `name' = 998 if `name'== .r & `touse'
 			replace `name' = 999 if `name'== .m & `touse'
-			replace `name' = 993 if `name'== .x & `touse'    //保留碼
-			replace `name' = 994 if `name'== .y & `touse'    //保留碼
+			replace `name' = 993 if `name'== .x & `touse'    //保留碼 -3
+			replace `name' = 994 if `name'== .y & `touse'    //保留碼 -4
 			
 		}
 		if inrange(r(max),1000,9999)  {
@@ -161,8 +170,8 @@ args name touse
 			replace `name' = 9997 if `name'== .d & `touse'
 			replace `name' = 9998 if `name'== .r & `touse'
 			replace `name' = 9999 if `name'== .m & `touse'
-			replace `name' = 9993 if `name'== .x & `touse'    //保留碼
-			replace `name' = 9994 if `name'== .y & `touse'    //保留碼
+			replace `name' = 9993 if `name'== .x & `touse'    //保留碼 -3
+			replace `name' = 9994 if `name'== .y & `touse'    //保留碼 -4
 		}
 		if inrange(r(max),10000,99999)  {
 			replace `name' = -11 if `name'== .a & `touse'
@@ -173,8 +182,8 @@ args name touse
 			replace `name' = 99997 if `name'== .d & `touse'
 			replace `name' = 99998 if `name'== .r & `touse'
 			replace `name' = 99999 if `name'== .m & `touse'
-			replace `name' = 99993 if `name'== .x & `touse'    //保留碼
-			replace `name' = 99994 if `name'== .y & `touse'    //保留碼
+			replace `name' = 99993 if `name'== .x & `touse'    //保留碼 -3
+			replace `name' = 99994 if `name'== .y & `touse'    //保留碼 -4
 		}
 		if inrange(r(max),100000,999999)  {
 			replace `name' = -11 if `name'== .a & `touse'
@@ -185,6 +194,8 @@ args name touse
 			replace `name' = 999997 if `name'== .d & `touse'
 			replace `name' = 999998 if `name'== .r & `touse'
 			replace `name' = 999999 if `name'== .m & `touse'
+			replace `name' = 999993 if `name'== .x & `touse'    //保留碼 -3
+			replace `name' = 999994 if `name'== .y & `touse'    //保留碼 -4
 		}
 		if inrange(r(max),1000000,9999999)  {
 			replace `name' = -11 if `name'== .a & `touse'
@@ -195,6 +206,8 @@ args name touse
 			replace `name' = 9999997 if `name'== .d & `touse'
 			replace `name' = 9999998 if `name'== .r & `touse'
 			replace `name' = 9999999 if `name'== .m & `touse'
+			replace `name' = 9999993 if `name'== .x & `touse'    //保留碼 -3
+			replace `name' = 9999994 if `name'== .y & `touse'    //保留碼 -4
 		}
 		if inrange(r(max),10000000,99999999)  {
 			replace `name' = -11 if `name'== .a & `touse'
@@ -205,5 +218,7 @@ args name touse
 			replace `name' = 99999997 if `name'== .d & `touse'
 			replace `name' = 99999998 if `name'== .r & `touse'
 			replace `name' = 99999999 if `name'== .m & `touse'
+			replace `name' = 99999993 if `name'== .x & `touse'    //保留碼 -3
+			replace `name' = 99999994 if `name'== .y & `touse'    //保留碼 -4
 		}
 end
