@@ -1,6 +1,6 @@
 * Title: 可打印出Stata變項的基礎描述統計結果至MS Word檔案中
-* Version: 1.0.2
-* Date: 2024.09.24
+* Version: 1.0.3
+* Date: 2024.09.26
 * Author: Tamao
 
 program define printdes
@@ -72,8 +72,8 @@ foreach var1 of local varlist {
 		putdocx paragraph
 		putdocx text ("`var1'的描述性統計：`var_name'")
 	
-		if r(min) <= 90 {
-			des_nominal `var1' `touse'
+		if (r(min) >= 0 & r(min) <= 90) {
+			des_nominal `var1' `form' `touse'
 		}
 		
 		else {
@@ -83,25 +83,25 @@ foreach var1 of local varlist {
 
 			if "`var_type'" == "float" | "`var_type'" == "double" {
 				//如果是連續變項，計算平均值和標準差
-				des_continuous `var1' `touse'
+				des_continuous `var1' `form' `touse'
 			} 
 			else if "`var_type'" == "int" | "`var_type'" == "long" {
 				//如果是整數型連續變項，計算平均值和標準差
-				des_continuous `var1' `touse'
+				des_continuous `var1' `form' `touse'
 			} 
-			else if "`var_type'" == "byte" & `lab_max' <= 90 {
+			else if "`var_type'" == "byte" & ((`lab_min' >= 0 & `lab_max' <= 90) | (`lab_min' < 0 & `lab_max' <= 90)) {
 				//如果是byte變項，且最大值標籤小於等於90，呈現資料次數分配				
-				des_nominal `var1' `touse'
+				des_nominal `var1' `form' `touse'
 			}
-			else if "`var_type'" == "byte" & `lab_max' > 90 & `lab_max' < . {
+			else if "`var_type'" == "byte" & ((`lab_min' < 0  & `lab_max' < 0)  | (`lab_max' > 90 & `lab_max' < .)) {
 				//如果是byte變項，且最大值標籤大於90，計算平均值和標準差
-				des_continuous `var1' `touse'
+				des_continuous `var1' `form' `touse'
 			}
 			else if r(N)==0 {
-				des_continuous `var1' `touse'
+				des_continuous `var1' `form' `touse'
 			}
 			else {
-				des_nominal `var1' `touse'
+				des_nominal `var1'  `form' `touse'
 			}
 		}
 	}
@@ -113,9 +113,9 @@ restore
 end
 
 program define des_nominal
-args name touse
-
-	preserve
+args name type touse
+preserve
+if ustrlower(`"`type'"') =="cai" {
 	quietly replace `name' = 91 if `touse'  & `name'== .u
 	quietly replace `name' = 92 if `touse'  & `name'== .b
 	quietly replace `name' = 93 if `touse'  & `name'== .x    //保留碼
@@ -124,6 +124,17 @@ args name touse
 	quietly replace `name' = 97 if `touse'  & `name'== .d
 	quietly replace `name' = 98 if `touse'  & `name'== .r
 	quietly replace `name' = 99 if `touse'  & `name'== .m
+}
+if ustrlower(`"`type'"') =="psfd" {
+	quietly replace `name' = -1 if `touse'  & `name'== .u
+	quietly replace `name' = -2 if `touse'  & `name'== .b
+	quietly replace `name' = -3 if `touse'  & `name'== .x    //保留碼
+	quietly replace `name' = -4 if `touse'  & `name'== .k
+	quietly replace `name' = -5 if `touse'  & `name'== .o
+	quietly replace `name' = -6 if `touse'  & `name'== .d
+	quietly replace `name' = -8 if `touse'  & `name'== .r
+	quietly replace `name' = -9 if `touse'  & `name'== .m
+}
 	
 	lab var `name' ""    //清除變項名稱
 	table `name' if `touse', stat(freq) stat (percent)     //stata 18 版本適用
@@ -138,7 +149,7 @@ args name touse
 end
 
 program define des_continuous
-args name touse
+args name type touse
 
 	summarize `name' if `touse'
 	local mean = round(r(mean), 0.001)
