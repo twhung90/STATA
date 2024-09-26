@@ -10,7 +10,7 @@ marksample touse, novarlist strok
 
 * 壓縮資料檔
 preserve
-display in yellow " ● STEP - 1. 資料轉換中 - "
+display in yellow " ● STEP - 1. 資料格式轉換中 - "
 quietly compress
 
 * 先轉換特殊碼
@@ -116,6 +116,11 @@ program define des_nominal
 args name touse
 
 	preserve
+	quietly replace `name' = 91 if `touse'  & `name'== .u
+	quietly replace `name' = 92 if `touse'  & `name'== .b
+	quietly replace `name' = 93 if `touse'  & `name'== .x    //保留碼
+	quietly replace `name' = 94 if `touse'  & `name'== .k
+	quietly replace `name' = 95 if `touse'  & `name'== .o
 	quietly replace `name' = 97 if `touse'  & `name'== .d
 	quietly replace `name' = 98 if `touse'  & `name'== .r
 	quietly replace `name' = 99 if `touse'  & `name'== .m
