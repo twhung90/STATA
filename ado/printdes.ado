@@ -89,7 +89,7 @@ foreach var1 of local varlist {
 				//如果是整數型連續變項，計算平均值和標準差
 				des_continuous `var1' `form' `version' `touse'
 			} 
-			else if "`var_type'" == "byte" & ((`lab_min' >= 0 & `lab_max' <= 90) | (`lab_min' < 0 & (`lab_max' > 0 & `lab_max' <= 90))) {
+			else if "`var_type'" == "byte" & ((`lab_min' >= 0 & `lab_max' <= 90) | (`lab_min' <= 0 & (`lab_max' > 0 & `lab_max' <= 90))) {
 				//如果是byte變項，且最大值標籤小於等於90，呈現資料次數分配				
 				des_nominal `var1' `form' `version' `touse'
 			}
