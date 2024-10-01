@@ -22,16 +22,20 @@ if ustrlower(`"`form'"') =="psfd" {
 	else {
 		disp "--------- Convert the PSFD data format now ---------"
 		quietly transPSFD `varlist', from("new")
+		local version = "new"
 	}
 }
 else {
 	if ustrlower(`"`version'"')=="old" {
 		disp "--------- Convert the CAI data format now ---------"
 		quietly transCAI `varlist', from(`"`version'"')
+		local form = "cai"
 	}
 	else {
 		disp "--------- Convert the CAI data format now ---------"
 		quietly transCAI `varlist', from("new")
+		local form = "cai"
+		local version = "new"
 	}
 }
 
