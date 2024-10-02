@@ -76,7 +76,7 @@ foreach var1 of local varlist {
 		putdocx paragraph
 		putdocx text ("`var1'的描述性統計：`var_name'")
 	
-		if (r(min) > 0 & r(min) <= 90) {
+		if (`lab_min' > 0 & `lab_min' <= 90) {
 			des_nominal `var1' `form' `version' `touse'
 		}
 		
@@ -93,7 +93,7 @@ foreach var1 of local varlist {
 				//如果是整數型連續變項，計算平均值和標準差
 				des_continuous `var1' `form' `version' `touse'
 			} 
-			else if "`var_type'" == "byte" & ((`lab_min' >= 0 & `lab_max' <= 90) | (`lab_min' <= 0 & (`lab_max' > 0 & `lab_max' <= 90))) {
+			else if "`var_type'" == "byte" & ((`lab_min' >= 0 & `lab_max' <= 90) | (`lab_min' < 0 & (r(max) >= 0 & r(max) <= 90)) | (`lab_min' <= 0 & (`lab_max' > 0 & `lab_max' <= 99))) {
 				//如果是byte變項，且最大值標籤小於等於90，呈現資料次數分配				
 				des_nominal `var1' `form' `version' `touse'
 			}
