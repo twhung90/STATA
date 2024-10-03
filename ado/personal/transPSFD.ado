@@ -191,6 +191,7 @@ args name touse
 	quietly sum `name' 
 		if inrange(r(max),0,9)  {
 			replace `name' = .j if `name'== -10 & `touse'
+			replace `name' = .a if `name'== -11 & `touse'
 			replace `name' = .d if `name'== -6 & `touse'
 			replace `name' = .r if `name'== -8 & `touse'
 			replace `name' = .m if `name'== -9 & `touse'
@@ -198,6 +199,7 @@ args name touse
 		}
 		if inrange(r(max),10,99)  {
 			replace `name' = .j if `name'== -10  & `touse'
+			replace `name' = .a if `name'== -11  & `touse'
 			replace `name' = .u if `name'== -1 & `touse'
 			replace `name' = .b if `name'== -2 & `touse'
 			replace `name' = .o if `name'== -5 & `touse'
