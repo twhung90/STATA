@@ -1,40 +1,52 @@
-* PSFD調查補問問卷產生器
+* Title: PSFD調查補問問卷產生器(需要區分問卷別)
+* Author: Tamao
+* Version: 1.0.2
+* Date: 2024.10.02
 
 program define review_maker
-syntax anything, year(integer) type(string) merge_data(string) [attr_set(namelist)]
+syntax anything, year(integer) mode(string) merge_data(string) [id(name) attr_set(namelist)]
 marksample touse, strok
 
+if "`id'"=="" {
+	local id = `"id"'
+}
+
 if "`attr_set'"=="" {
-	local attr_set `"Name Group Sex"'
+	local attr_set `"Group Name Sex"'
+	tokenize "`attr_set'"
+}
+else {
+	tokenize "`attr_set'"
+	local attr_set `"`1' `2' `3'"'
 }
 
 import excel `anything', firstrow clear
 drop if strtrim(review)==""    //刪除不需要補問的條目與內容
-merge m:1 id using `merge_data', keepusing(`attr_set')    //併入當期的屬性資料檔
+merge m:1 `id' using `merge_data', keepusing(`attr_set')    //併入當期的屬性資料檔
 drop if _merge==2
 drop _merge
 
 gen type = ""
-replace type = "C" + "`year'-" + "`type'" + "問卷" if Group==1
-replace type = "RCI" + "`year'-" + "`type'" + "問卷" if Group==2
-replace type = "RR" + "`year'-" + "`type'" + "問卷" if Group==3
+replace type = "C" + "`year'-" + "`mode'" + "問卷" if `1'==1
+replace type = "RCI" + "`year'-" + "`mode'" + "問卷" if `1'==2
+replace type = "RR" + "`year'-" + "`mode'" + "問卷" if `1'==3
 
 gen sex = ""
-replace sex = "先生" if Sex==1
-replace sex = "女士" if Sex==2
+replace sex = "先生" if `3'==1
+replace sex = "女士" if `3'==2
 
-bysort id: gen idn = _n
-bysort id: gen id_total = _N
+bysort `id': gen idn = _n
+bysort `id': gen id_total = _N
 
 local a = 1
 
 local total = _N
 while `a' <= `total' {
 	preserve
-	keep if id==id[`a']
+	keep if `id'==`id'[`a']
 	display in yellow "-----------Reading at rows `a'-----------"
 
-	output_docx `year' `touse'
+	output_docx `year' `id' `1' `2' `3' `touse'
 	
 	local a = `a' + id_total[1]
 	restore
@@ -43,16 +55,15 @@ while `a' <= `total' {
 end
 
 program define output_docx
-args number touse
+args number ID Group Name Sex touse
 version 17
 
-local id = id[1]
-local name = Name[1]
+local id = `ID'[1]
+local name = `Name'[1]
 local type = type[1]
 local sex = sex[1]
 local rows = (id_total[1] * 4)    //共計入選4個欄位：Description, Result, Review, Remark
 local total = id_total[1]
-
 
 	putdocx clear
 	putdocx begin, pagesize("A4") margin(top, 1.27 cm) margin(bottom, 1.27 cm) margin(left, 1.27 cm) margin(right, 1.27 cm)
