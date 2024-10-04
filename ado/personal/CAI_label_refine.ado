@@ -1,7 +1,7 @@
 * Title: CAI編碼轉換器，轉成PSFDy資料編碼
 * Author: Tamao
-* Version: 1.0.2
-* Date: 2023.11.03
+* Version: 1.0.3
+* Date: 2024.10.04
 
 program define CAI_label_refine
 version 15
@@ -9,8 +9,7 @@ syntax [anything] , range(namelist)
 marksample touse, novar strok
 
 if "`anything'" !="" {
-	local data `anything'
-	use "`data'", clear
+	use "`anything'", clear
 }
 else {
 	use "${S_FN}", clear    //使用當前開啟的檔案
