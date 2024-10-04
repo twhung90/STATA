@@ -5,7 +5,7 @@
 
 program define CAI_label_refine
 version 15
-syntax [anything] , range(namelist)
+syntax [anything] , range(varlist)
 marksample touse, novar strok
 
 if "`anything'" !="" {
