@@ -1,11 +1,24 @@
+* Title: CAI編碼轉換器，轉成PSFDy資料編碼
+* Author: Tamao
+* Version: 1.0.2
+* Date: 2023.11.03
 
 program define CAI_label_refine
 version 15
-syntax [anything]
-marksample touse, strok
+syntax [anything] , range(namelist)
+marksample touse, novar strok
 
-local data `anything'
-use "`data'", clear
+if "`anything'" !="" {
+	local data `anything'
+	use "`data'", clear
+}
+else {
+	use "${S_FN}", clear    //使用當前開啟的檔案
+}
+
+! if not exist ".\label\do\" mkdir ".\label\do\"    //使用Windows batch建立一個存放do檔的資料夾
+! if not exist ".\label\rawdata\" mkdir ".\label\rawdata\"
+disp in yellow "Caution: The program may build a new folder which named `""label""' and save the value label as do-files in the directory folder."
 
 cap which elabel
 if _rc {
@@ -16,7 +29,7 @@ quietly ds, has(vallabel)
 local valist "`r(varlist)'"
 
  local i = 1
- foreach var of varlist * {
+ foreach var of local range {
  	local test: list var in valist    //判斷變項是否有定義值標籤
 	
    if `test'==0 {
@@ -73,6 +86,7 @@ local valist "`r(varlist)'"
 			 replace var_val = -8 if var_val==98
 			 replace var_val = -9 if var_val==99
 			 replace var_val = 97 if var_val==94    //其他，轉為編碼97
+			 replace var_val = -3 if inlist(var_val==93,95)    //保留碼轉為-3
 			
 			 cap gen var_vals = string(var_val)
 		 }
@@ -82,6 +96,10 @@ local valist "`r(varlist)'"
 			 replace var_val = -8 if var_val==98
 			 replace var_val = -9 if var_val==99
 			 replace var_val = 97 if var_val==94    //其他，轉為編碼97
+			 replace var_val = -3 if inlist(var_val,93)    //保留碼轉為-3
+			 replace var_val = -5 if var_val==95
+			 replace var_val = -1 if var_val==91
+			 replace var_val = -2 if var_val==92
 			
 			 cap gen var_vals = string(var_val)
 			 cap replace var_vals = ("0" + var_vals) if var_val >= 0 & var_val < 10 & (item_num >= 10 & item_num < .) 
@@ -95,6 +113,12 @@ local valist "`r(varlist)'"
 			 replace var_val = -8 if var_val==9998
 			 replace var_val = -9 if var_val==999
 			 replace var_val = -9 if var_val==9999
+			 replace var_val = -5 if var_val==995
+			 replace var_val = -5 if var_val==9995
+			 replace var_val = -1 if var_val==991
+			 replace var_val = -1 if var_val==9991
+			 replace var_val = -2 if var_val==992
+			 replace var_val = -2 if var_val==9992
 			
 			 cap gen var_vals = string(var_val)
 			 cap replace var_vals = ("00" + var_vals) if var_val >= 0 & var_val < 10 & (item_num >= 10 & item_num < .) 
@@ -109,6 +133,12 @@ local valist "`r(varlist)'"
 			 replace var_val = -8 if var_val==99998
 			 replace var_val = -9 if var_val==9999
 			 replace var_val = -9 if var_val==99999
+			 replace var_val = -5 if var_val==9995
+			 replace var_val = -5 if var_val==99995
+			 replace var_val = -1 if var_val==9991
+			 replace var_val = -1 if var_val==99991
+			 replace var_val = -2 if var_val==9992
+			 replace var_val = -2 if var_val==99992
 			
 			 cap gen var_vals = string(var_val)
 			 cap replace var_vals = ("000" + var_vals) if var_val >= 0 & var_val < 10 & (item_num >= 10 & item_num < .) 
@@ -123,9 +153,6 @@ local valist "`r(varlist)'"
 		
 		 * 產生Stata指令的文字字串
 		 cap gen syntax = "lab define "+ variable + " " + string(var_val) + " "+ "`"+`"""'+var_labs + `"""'+"'" + ", modify"
-		
-		 *cap drop novar - var_labs
-		 ! if not exist ".\label\rawdata\" mkdir ".\label\rawdata\"
 		 save ".\label\rawdata\\`var'.dta", replace
 		
 		 * export the value labels
@@ -135,8 +162,6 @@ local valist "`r(varlist)'"
 			 $sya
 		 }
 		 
-		 *cd ..    //退回上一層資料夾
-		 ! if not exist ".\label\do\" mkdir ".\label\do\"    //使用Windows batch建立一個存放do檔的資料夾
 		 label save `var' using `".\\label\\do\\`var'"', replace
 		
 	 restore
