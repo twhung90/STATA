@@ -1,41 +1,41 @@
-* Title: 計算單期資料的「拒答數」與「不知道」數
+* Title: 計算單期資料的「拒答數」與「不知道」數（僅計算數值變項，不包含字串）
 * Author: Tamao
-* Version: 1.0.2
-* Date: 2023.11.19
+* Version: 1.1.0
+* Date: 2024.10.06
 
-program define nonresp_rate
+program define nonresp_rate, rclass
 version 13.0
-syntax anything, id(varname) range(varlist) [keep(varlist) form(string) version(string)]  //form defuult = "psfd"; version default = "old"
+syntax varlist(min=1), id(name) [keep(varlist) form(string) version(string) saveto(string)]    //form default = "psfd"; version default = "old"
+marksample touse, novar strok
 
-	use "`anything'", clear
-	global path "`pwd'"
-	global file "${S_FN}"
+global path: pwd
+global file "${S_FN}"
 	
 preserve
 
 	if ustrlower(`"`form'"') =="cai" {
 		if ustrlower(`"`version'"')=="new" {
-			disp "--------- Convert the CAI data form now ---------"
-			quietly transCAI `range', from(`"`version'"')
+			disp "--------- Convert the CAI data format now ---------"
+			quietly transCAI `varlist', from(`"`version'"')
 		}
 		else {
-			disp "--------- Convert the CAI data form now ---------"
-			quietly transCAI `range', from("old")
+			disp "--------- Convert the CAI data format now ---------"
+			quietly transCAI `varlist', from("old")
 		}
 	}
 	else {
 		if ustrlower(`"`version'"')=="new" {
-			disp "--------- Convert the PSFD data form now ---------"
-			quietly transPSFD `range', from(`"`version'"')
+			disp "--------- Convert the PSFD data format now ---------"
+			quietly transPSFD `varlist', from(`"`version'"')
 		}
 		else {
-			disp "--------- Convert the PSFD data form now ---------"
-			quietly transPSFD `range', from("old")
+			disp "--------- Convert the PSFD data format now ---------"
+			quietly transPSFD `varlist', from("old")
 		}
 	}	
 
-	quietly movetoPSFD `range', version("new")
-	disp in yellow "Form conversion have been finished!"
+	quietly movetoPSFD `varlist', version("new")
+	disp in yellow "Format conversion have been finished!"
 	
 	gen total_ans = 0
 	lab var total_ans "The total number of questions answered"
@@ -47,16 +47,18 @@ preserve
 	lab var nonresp_98 "(Refuse) accumulated number"
 	gen nonresp_99 = 0
 	lab var nonresp_99 "(Missing) accumulated number"
+	gen skip_string = 0
+	lab var skip_string "The total number of String variables that do not be counted into"
 
-	foreach v of local range {
-
+	foreach v of local varlist {
 		cap confirm string var `v'
 		if !_rc {
+			quietly replace skip_string = skip_string + 1
 			continue
 		}
 		if _rc {
 			quietly replace total_ans = total_ans + 1 if `v' != -10 & `v' < .
-			quietly replace skip_ans = skip_ans + 1 if `v'== -10 & `v' < .
+			quietly replace skip_ans = skip_ans + 1 if `v'== -10
 			quietly replace nonresp_96 = nonresp_96 + 1 if `v'== -6
 			quietly replace nonresp_98 = nonresp_98 + 1 if `v'== -8
 			quietly replace nonresp_99 = nonresp_99 + 1 if `v'== -9
@@ -70,10 +72,18 @@ preserve
 	lab var nonresp96_rate "The rate of (Don't know)"
 	lab var nonresp98_rate "The rate of (Refuse)"
 	lab var nonresp99_rate "The rate of (Missing)"
+	
+	return scalar total_var = (skip_string + total_ans + skip_ans)    //return the number of variables
 
 	keep `id' `keep' total_ans - nonresp99_rate 
-	save Nonresponse_Rate, replace
-	disp "The new data have been saved in working directory"
+	if "`saveto'" != "" {
+		save "`saveto'", replace
+		disp "The results (`saveto'.dta) have been saved in working directory"
+	}
+	else {
+		save Nonresponse_Rate, replace
+		disp "The results (Nonresponse_Rate.dta) have been saved in working directory"
+	}
 	
 restore
 
