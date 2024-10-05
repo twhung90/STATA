@@ -1,8 +1,11 @@
-
 * self-defined program
+cap which elabel
+if _rc {
+	ssc install elabel
+}
 
 program define transCAI
-syntax varlist(min=1), from(string asis)
+syntax varlist(min=1), from(string)
 marksample touse, novarlist strok
 	foreach var of local varlist {
 	quietly misstable sum `var'
@@ -13,10 +16,10 @@ marksample touse, novarlist strok
 			}
 			cap confirm string variable `var'
 			if _rc {
-				if `from'=="old" {
+				if ustrlower(`"`from'"')=="old" {
 					num_transcai_old `var' `touse'
 				}
-				if `from'=="new" {
+				if ustrlower(`"`from'"')=="new" {
 					num_transcai_new `var' `touse'
 				}
 			}
@@ -34,13 +37,13 @@ args name touse
 
 	capture quietly elabel list (`name')
 	if !_rc {
-			local lab_min = r(min)
-			local lab_max = r(max)
-		}
+		local lab_min = r(min)
+		local lab_max = r(max)
+	}
 	if _rc {
-			local lab_min = .
-			local lab_max = .
-		}
+		local lab_min = .
+		local lab_max = .
+	}
 		
 	quietly sum `name' 
 	
@@ -145,6 +148,7 @@ args name touse
 			replace `name' = .m if `name'==99 & `touse'
 		}
 		if inrange(r(max),10,99) & (`lab_min'==. | `lab_max' <= 99) {
+			replace `name' = .a if `name'== -11 & `touse'
 			replace `name' = .x if `name'==93 & `touse'	   //保留碼 -3
 			replace `name' = .k if `name'==94 & `touse'    //其他
 			replace `name' = .o if `name'==95 & `touse'

@@ -1,9 +1,11 @@
 * self-defined program
-
-cap program drop movetoCAI
+cap which elabel
+if _rc {
+	ssc install elabel
+}
 
 program define movetoCAI
-syntax varlist(min=1), version(string asis)
+syntax varlist(min=1), version(string)
 marksample touse, novarlist strok
 	foreach var of local varlist {
 		if regexm("`var'", "^x0+[1-4]+") {
@@ -12,10 +14,10 @@ marksample touse, novarlist strok
 		}
 		cap confirm string variable `var'
 		if _rc {
-			if `version'=="old" {
+			if ustrlower(`"`version'"')=="old" {
 				num_movetocai_old `var' `touse'
 			}
-			if `version'=="new" {
+			if ustrlower(`"`version'"')=="new" {
 				num_movetocai_old `var' `touse'
 			}
 		}
@@ -36,7 +38,7 @@ args name touse
 	}
 		
 	quietly sum `name' 
-		if ((inrange(r(max),0,9) & (`lab_min'==. | `lab_max' <= 99)) | (r(max)==. & `lab_max' <= 99)) {
+		if ((inrange(r(max),0,9) & (`lab_min'==.)) | (`lab_max' <= 99)) {
 			replace `name' = 93 if `name'== .x & `touse'    //保留碼 -3
 			replace `name' = 94 if `name'== .k & `touse'    //其他
 			replace `name' = 95 if `name'== .o & `touse'
@@ -45,7 +47,7 @@ args name touse
 			replace `name' = 98 if `name'== .r & `touse'
 			replace `name' = 99 if `name'== .m & `touse'
 		}
-		if ((inrange(r(max),10,99) & (`lab_min'==. | `lab_max' <= 99)) | (r(max)==. & `lab_max' <= 99)) {
+		if ((inrange(r(max),10,99) & (`lab_min'==.)) | (`lab_max' <= 99)) {
 			replace `name' = -11 if `name'== .a & `touse'
 			replace `name' = 93 if `name'== .x & `touse'    //保留碼 -3
 			replace `name' = 94 if `name'== .k & `touse'    //其他
@@ -58,7 +60,7 @@ args name touse
 			replace `name' = 98 if `name'== .r & `touse'
 			replace `name' = 99 if `name'== .m & `touse'
 		}
-		if ((inrange(r(max),100,999) & (`lab_min'==. | `lab_max' <= 999)) | (r(max)==. & `lab_max' <= 999)) {
+		if ((inrange(r(max),100,999) & (`lab_min'==.)) | (`lab_max' <= 999)) {
 			replace `name' = -11 if `name'== .a & `touse'
 			replace `name' = 996 if `name'== .j & `touse'
 			replace `name' = 991 if `name'== .u & `touse'    //991同時包含不固定、虧損 或 打平
@@ -70,7 +72,7 @@ args name touse
 			replace `name' = 993 if `name'== .x & `touse'    //保留碼 -3
 			replace `name' = 994 if `name'== .y & `touse'    //保留碼 -4			
 		}
-		if ((inrange(r(max),1000,9999) & (`lab_min'==. | `lab_max' <= 9999)) | (r(max)==. & `lab_max' <= 9999)) {
+		if ((inrange(r(max),1000,9999) & (`lab_min'==.)) | (`lab_max' <= 9999)) {
 			replace `name' = -11 if `name'== .a & `touse'
 			replace `name' = 9996 if `name'== .j & `touse'
 			replace `name' = 9991 if `name'== .u & `touse'    //991同時包含不固定、虧損 或 打平
@@ -82,7 +84,7 @@ args name touse
 			replace `name' = 9993 if `name'== .x & `touse'    //保留碼 -3
 			replace `name' = 9994 if `name'== .y & `touse'    //保留碼 -4
 		}
-		if ((inrange(r(max),10000,99999) & (`lab_min'==. | `lab_max' <= 99999)) | (r(max)==. & `lab_max' <= 99999)) {
+		if ((inrange(r(max),10000,99999) & (`lab_min'==.)) | (`lab_max' <= 99999)) {
 			replace `name' = -11 if `name'== .a & `touse'
 			replace `name' = 99996 if `name'== .j & `touse'
 			replace `name' = 99991 if `name'== .u & `touse'    //991同時包含不固定、虧損 或 打平
@@ -94,7 +96,7 @@ args name touse
 			replace `name' = 99993 if `name'== .x & `touse'    //保留碼 -3
 			replace `name' = 99994 if `name'== .y & `touse'    //保留碼 -4
 		}
-		if ((inrange(r(max),100000,999999) & (`lab_min'==. | `lab_max' <= 999999)) | (r(max)==. & `lab_max' <= 999999)) {
+		if ((inrange(r(max),100000,999999) & (`lab_min'==.)) | (`lab_max' <= 999999)) {
 			replace `name' = -11 if `name'== .a & `touse'
 			replace `name' = 999996 if `name'== .j & `touse'
 			replace `name' = 999991 if `name'== .u & `touse'    //991同時包含不固定、虧損 或 打平
@@ -106,7 +108,7 @@ args name touse
 			replace `name' = 999993 if `name'== .x & `touse'    //保留碼 -3
 			replace `name' = 999994 if `name'== .y & `touse'    //保留碼 -4
 		}
-		if ((inrange(r(max),1000000,9999999) & (`lab_min'==. | `lab_max' <= 9999999)) | (r(max)==. & `lab_max' <= 9999999)) {
+		if ((inrange(r(max),1000000,9999999) & (`lab_min'==.)) | (`lab_max' <= 9999999)) {
 			replace `name' = -11 if `name'== .a & `touse'
 			replace `name' = 9999996 if `name'== .j & `touse'
 			replace `name' = 9999991 if `name'== .u & `touse'    //991同時包含不固定、虧損 或 打平
@@ -118,7 +120,7 @@ args name touse
 			replace `name' = 9999993 if `name'== .x & `touse'    //保留碼 -3
 			replace `name' = 9999994 if `name'== .y & `touse'    //保留碼 -4
 		}
-		if ((inrange(r(max),10000000,99999999) & (`lab_min'==. | `lab_max' <= 99999999)) | (r(max)==. & `lab_max' <= 99999999))  {
+		if ((inrange(r(max),10000000,99999999) & (`lab_min'==.)) | (`lab_max' <= 99999999))  {
 			replace `name' = -11 if `name'== .a & `touse'
 			replace `name' = 99999996 if `name'== .j & `touse'
 			replace `name' = 99999991 if `name'== .u & `touse'    //991同時包含不固定、虧損 或 打平
@@ -146,7 +148,8 @@ args name touse
 	}
 
 	quietly sum `name' 
-		if ((inrange(r(max),0,9) & (`lab_min'==. | `lab_max' <= 99)) | (r(max)==. & `lab_max' <= 99)) {
+		if ((inrange(r(max),0,9) & (`lab_min'==.)) | (`lab_max' <= 99)) {
+			replace `name' = -11 if `name'== .a & `touse'
 			replace `name' = 93 if `name'== .x & `touse'    //保留碼 -3
 			replace `name' = 94 if `name'== .k & `touse'    //其他
 			replace `name' = 95 if `name'== .o & `touse'
@@ -155,7 +158,7 @@ args name touse
 			replace `name' = 98 if `name'== .r & `touse'
 			replace `name' = 99 if `name'== .m & `touse'
 		}
-		if ((inrange(r(max),10,99) & (`lab_min'==. | `lab_max' <= 99)) | (r(max)==. & `lab_max' <= 99))  {
+		if ((inrange(r(max),10,99) & (`lab_min'==.)) | (`lab_max' <= 99)) {
 			replace `name' = -11 if `name'== .a & `touse'
 			replace `name' = 93 if `name'== .x & `touse'    //保留碼 -3
 			replace `name' = 94 if `name'== .k & `touse'    //其他
@@ -168,7 +171,7 @@ args name touse
 			replace `name' = 98 if `name'== .r & `touse'
 			replace `name' = 99 if `name'== .m & `touse'
 		}
-		if ((inrange(r(max),100,999)  & (`lab_min'==. | `lab_max' <= 999)) | (r(max)==. & `lab_max' <= 999))  {
+		if ((inrange(r(max),100,999)  & (`lab_min'==.)) | (`lab_max' <= 999)) {
 			replace `name' = -11 if `name'== .a & `touse'
 			replace `name' = 996 if `name'== .j & `touse'
 			replace `name' = 991 if `name'== .u & `touse'
@@ -181,7 +184,7 @@ args name touse
 			replace `name' = 994 if `name'== .y & `touse'    //保留碼 -4
 			
 		}
-		if ((inrange(r(max),1000,9999)  & (`lab_min'==. | `lab_max' <= 9999)) | (r(max)==. & `lab_max' <= 9999))  {
+		if ((inrange(r(max),1000,9999)  & (`lab_min'==.)) | (`lab_max' <= 9999)) {
 			replace `name' = -11 if `name'== .a & `touse'
 			replace `name' = 9996 if `name'== .j & `touse'
 			replace `name' = 9991 if `name'== .u & `touse'
@@ -193,7 +196,7 @@ args name touse
 			replace `name' = 9993 if `name'== .x & `touse'    //保留碼 -3
 			replace `name' = 9994 if `name'== .y & `touse'    //保留碼 -4
 		}
-		if ((inrange(r(max),10000,99999)  & (`lab_min'==. | `lab_max' <= 99999)) | (r(max)==. & `lab_max' <= 99999))  {
+		if ((inrange(r(max),10000,99999)  & (`lab_min'==.)) | (`lab_max' <= 99999)) {
 			replace `name' = -11 if `name'== .a & `touse'
 			replace `name' = 99996 if `name'== .j & `touse'
 			replace `name' = 99991 if `name'== .u & `touse'
@@ -205,7 +208,7 @@ args name touse
 			replace `name' = 99993 if `name'== .x & `touse'    //保留碼 -3
 			replace `name' = 99994 if `name'== .y & `touse'    //保留碼 -4
 		}
-		if ((inrange(r(max),100000,999999)  & (`lab_min'==. | `lab_max' <= 999999)) | (r(max)==. & `lab_max' <= 999999))  {
+		if ((inrange(r(max),100000,999999)  & (`lab_min'==.)) | (`lab_max' <= 999999))  {
 			replace `name' = -11 if `name'== .a & `touse'
 			replace `name' = 999996 if `name'== .j & `touse'
 			replace `name' = 999991 if `name'== .u & `touse'
@@ -217,7 +220,7 @@ args name touse
 			replace `name' = 999993 if `name'== .x & `touse'    //保留碼 -3
 			replace `name' = 999994 if `name'== .y & `touse'    //保留碼 -4
 		}
-		if ((inrange(r(max),1000000,9999999)  & (`lab_min'==. | `lab_max' <= 9999999)) | (r(max)==. & `lab_max' <= 9999999))  {
+		if ((inrange(r(max),1000000,9999999)  & (`lab_min'==.)) | (`lab_max' <= 9999999))  {
 			replace `name' = -11 if `name'== .a & `touse'
 			replace `name' = 9999996 if `name'== .j & `touse'
 			replace `name' = 9999991 if `name'== .u & `touse'
@@ -229,7 +232,7 @@ args name touse
 			replace `name' = 9999993 if `name'== .x & `touse'    //保留碼 -3
 			replace `name' = 9999994 if `name'== .y & `touse'    //保留碼 -4
 		}
-		if ((inrange(r(max),10000000,99999999)  & (`lab_min'==. | `lab_max' <= 99999999)) | (r(max)==. & `lab_max' <= 99999999))  {
+		if ((inrange(r(max),10000000,99999999)  & (`lab_min'==.)) | (`lab_max' <= 99999999))  {
 			replace `name' = -11 if `name'== .a & `touse'
 			replace `name' = 99999996 if `name'== .j & `touse'
 			replace `name' = 99999991 if `name'== .u & `touse'
