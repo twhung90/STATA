@@ -1,11 +1,11 @@
 * Title: 可打印出Stata變項的基礎描述統計結果至MS Word檔案中
-* Version: 1.0.3
-* Date: 2024.09.26
+* Version: 1.0.4
+* Date: 2024.10.17
 * Author: Tamao
 
 program define printdes
 version 18
-syntax varlist(min=1) [if] [in] [, form(string) version(string)]  //form defuult = "CAI"; version default = "new"
+syntax varlist(min=1) [if] [in] [, form(string) version(string)]  //form default = "CAI"; version default = "new"
 marksample touse, novarlist strok
 
 * 壓縮資料檔
@@ -61,7 +61,7 @@ foreach var1 of local varlist {
 		quietly count if `touse' & `var1'==.m
 		global miss = r(N)
 		quietly count if `touse' & `var1' < .
-		global total = r(N)
+		global valid = r(N)
 	
 		//讀取elabel值標籤
 		cap quietly elabel list (`var1')
@@ -76,7 +76,7 @@ foreach var1 of local varlist {
 		putdocx paragraph
 		putdocx text ("`var1'的描述性統計：`var_name'")
 	
-		if (`lab_min' > 0 & `lab_min' <= 90) {
+		if (`lab_min' > 0 & `lab_min' <= 90) & ${valid} != 0 {
 			des_nominal `var1' `form' `version' `touse'
 		}
 		
@@ -93,9 +93,14 @@ foreach var1 of local varlist {
 				//如果是整數型連續變項，計算平均值和標準差
 				des_continuous `var1' `form' `version' `touse'
 			} 
-			else if "`var_type'" == "byte" & ((`lab_min' >= 0 & `lab_max' <= 90) | (`lab_min' <= 0 & (`lab_max' > 0 & `lab_max' <= 99))) {
-				//如果是byte變項，且最大值標籤小於等於90，呈現資料次數分配				
+			else if "`var_type'" == "byte" & ((`lab_min' >= 0 & `lab_max' <= 90) | (`lab_min' < 0 & (`lab_max' > 0 & `lab_max' <= 97))  | (`lab_min'== 0 & (`lab_max' > 0 & `lab_max' <= 99))) & r(N) != 0  {
+				//如果是byte變項，且最大值標籤小於等於90，且有效觀察值不為0，呈現資料次數分配				
 				des_nominal `var1' `form' `version' `touse'
+			}
+			else if "`var_type'" == "byte" & ((`lab_min' >= 0 & `lab_max' <= 90) | (`lab_min' < 0 & (`lab_max' > 0 & `lab_max' <= 97))  | (`lab_min'== 0 & (`lab_max' > 0 & `lab_max' <= 99))) & r(N) == 0  {
+				//如果是byte變項，且最大值標籤小於等於90，且有效觀察值為0，計算平均值和標準差
+				des_continuous `var1' `form' `version' `touse'
+				disp in yellow "`var1'：no valid observations"
 			}
 			else if "`var_type'" == "byte" & ((`lab_min' < 0  & `lab_max' < 0)  | (`lab_max' > 90 & `lab_max' < .)) {
 				//如果是byte變項，且最大值標籤大於90，計算平均值和標準差
@@ -103,22 +108,24 @@ foreach var1 of local varlist {
 			}
 			else if r(N)==0 {
 				des_continuous `var1' `form' `version' `touse'
+				disp in yellow "`var1'：no valid observations"
 			}
 			else {
 				des_nominal `var1'  `form' `version' `touse'
+				continue
 			}
 		}
 	}
 }
 
-putdocx save "output.docx", replace
+putdocx save "Descriptive_output.docx", replace
 restore
 	
 end
 
 program define des_nominal
 args name type vers touse
-preserve
+	preserve
 	if ustrlower(`"`type'"') =="cai" & ustrlower("`vers'")=="new" {
 		quietly replace `name' = .s if `name'==.j
 		quietly movetoCAI `name', version("`vers'")
@@ -140,7 +147,7 @@ preserve
 	table `name' if `touse', stat(freq) stat (percent)     //stata 18 版本適用
 	restore
 		
-	putdocx collect
+	quietly putdocx collect
 	putdocx paragraph
 	putdocx text ("不知道： ${dont}，拒答： ${refus}，遺漏值： ${miss}")
 	putdocx paragraph, font("", 11, gray)
@@ -151,17 +158,39 @@ end
 program define des_continuous
 args name type vers touse
 
-	summarize `name' if `touse'
+	quietly count if (`name' > . & `name' != .j) & `touse'
+	local special = r(N)
+	
+	quietly summarize `name' if `touse'
+	local min = r(min)
+	local max = r(max)
 	local mean = round(r(mean), 0.001)
 	local sd = round(r(sd), 0.001)
 
+	if ${valid} == 0 & `special'==0 {
 	//將結果寫入MS Word文檔
-	putdocx paragraph
-	putdocx text ("平均值為: `mean'，標準差為: `sd'"), font("", 12) bold
-	putdocx paragraph
-	putdocx text ("不知道： ${dont}，拒答： ${refus}，遺漏值： ${miss}，")
-	putdocx text ("觀察值： ${total}"), bold
-	putdocx paragraph, font("", 11, gray)
-	putdocx text ("============================分 隔 線============================")
+		putdocx paragraph
+		putdocx text ("No valid observations"), font("", 12, red) bold
+		putdocx paragraph
+		putdocx text ("不知道： ${dont}，拒答： ${refus}，遺漏值： ${miss}，")
+		putdocx text ("有效觀察值： ${valid}"), bold
+		putdocx paragraph, font("", 11, gray)
+		putdocx text ("============================分 隔 線============================")
+	}
+	else {
+	//將結果寫入MS Word文檔
+		putdocx paragraph
+		putdocx text ("平均值為：`mean'，標準差為：`sd'"), font("", 12) bold
+		putdocx text (" （"), font("", 12)
+		putdocx text ("最小值：`min'"), font("", 12, cornflowerblue)
+		putdocx text ("，"), font("", 12)
+		putdocx text ("最大值：`max'"), font("", 12, cornflowerblue)
+		putdocx text ("）"), font("", 12)
+		putdocx paragraph
+		putdocx text ("不知道： ${dont}，拒答： ${refus}，遺漏值： ${miss}，")
+		putdocx text ("有效觀察值： ${valid}"), bold
+		putdocx paragraph, font("", 11, gray)
+		putdocx text ("============================分 隔 線============================")
+	}
 	
 end
