@@ -161,7 +161,7 @@ args name type vers touse
 	quietly count if (`name' > . & `name' != .j) & `touse'
 	local special = r(N)
 	
-	quietly summarize `name' if `touse'
+	summarize `name' if `touse'
 	local min = r(min)
 	local max = r(max)
 	local mean = round(r(mean), 0.001)
