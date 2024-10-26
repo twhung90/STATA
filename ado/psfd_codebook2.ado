@@ -1,7 +1,7 @@
 * Title: PSFD編碼簿產生器
 * Author: Tamao
-* Version: 3.2.3
-* Date: 2024.09.05
+* Version: 3.2.4
+* Date: 2024.10.25
 
 program define psfd_codebook2
 version 17
@@ -29,7 +29,7 @@ marksample touse, strok
 	
 	cap blocks `anything'   //使用自定義的程式
 	
-	* export the table to MS Word (需使用Stata 17)
+	* export the table to Word (需使用Stata 17)
 	quietly cd ".\documents"
 	
 	putdocx clear
@@ -111,7 +111,7 @@ marksample touse, strok
 		}
 	}
 	
-	! rmdir /s /q ".\rawdata"    //刪除所有rawdatay資料夾中的資料
+	*! rmdir /s /q ".\rawdata"    //刪除所有rawdatay資料夾中的資料
 	quietly cd "..\"
 	disp "------------恭喜！已順利完成 PSFD 編碼簿的製作------------"
 end
@@ -149,6 +149,10 @@ local varlists "`varlist'"
 
 		if _rc {
 		preserve
+		quietly sum `var'
+		local var_min = r(min)
+		local var_max = r(max)
+		
 		cap elabel list (`var')
 		local lab: variable label `var'
 		
@@ -157,13 +161,6 @@ local varlists "`varlist'"
 			cap gen novar = `i'    //變項流水號
 			cap gen description = "`lab'"    //變項說明 
                            		
-			cap gen item = ustrtitle(regexs(1)) ///
-					if regexm("`var'", "^([a-z]+[0-9]?[0-9]?)([a-z]*[0-9]?[0-9]?)$"), before(description)
-			cap replace item = ustrtitle(regexs(1)) + strtrim(regexs(3)) ///
-					if regexm("`var'", "^([a-z]+[0-9]?[0-9]?)(.*)([cfmprs]+[0-9])$")
-			cap replace item = ustrtitle(regexs(1)) + strtrim(regexs(2)) ///
-					if regexm("`var'", "^([a-z]+[0-9]?[0-9]?)([a-z])$")
-					
 			cap gen variable = "`var'"
 			cap gen var_val = r(values)
 			cap gen var_lab = r(labels)
@@ -180,11 +177,6 @@ local varlists "`varlist'"
 			cap replace var_lab = subinstr(var_lab,`"""',"", .)    //消除字串中多餘的"字元符號
 			cap replace var_lab = strtrim(regexr(var_lab, "^[0-9]*", ""))   //若值標籤開頭自帶有數值，僅擷取值標籤之中，後半段的文字
 			
-			cap quietly sum var_val
-			cap gen val_max = r(max)
-			cap tostring val_max, replace
-			cap gen var_lens = length(val_max)     //值標籤中的最大數值的「長度」
-		
 			cap gen var_vals = string(var_val)
 			cap replace var_vals = ("00" + var_vals) if (((item_num >= 100 & item_num < 991) & (var_val >=0 & var_val < 10)) | ((var_val >=0 & var_val < 10) & var_lens==3))
 			cap replace var_vals = ("0" + var_vals)  if (((item_num >= 10 & item_num < 91) & (var_val >=0 & var_val < 10)) | ((var_val >=0 & var_val < 10) & var_lens==2))
@@ -199,14 +191,23 @@ local varlists "`varlist'"
 				cap replace var_vals = ""
 			}
 			cap gen n = _n, after(variable)
+			gen var_lens = length("`var_max'")     //以變項中最大數值的「長度」，作為變項長度
+			
+			cap gen item = ustrtitle(regexs(1)) ///
+					if regexm("`var'", "^([a-z]+[0-9]?[0-9]?)([a-z]*[0-9]?[0-9]?)$"), before(description)
+			cap replace item = ustrtitle(regexs(1)) + strtrim(regexs(3)) ///
+					if regexm("`var'", "^([a-z]+[0-9]?[0-9]?)(.*)([cfmprs]+[0-9])$")
+			cap replace item = ustrtitle(regexs(1)) + strtrim(regexs(2)) ///
+					if regexm("`var'", "^([a-z]+[0-9]?[0-9]?)([a-z])$")
 			
 			cap order var_vals, before(var_lab)
 			cap order var_lens, after(var_lab)
-			cap drop item_num val_max var_lab
+			*cap drop item_num var_lab
 			
-			cap egen max_n = max(n)
-			cap if max_n > 100 {
-				cap drop if var_val > 0 & var_val <= 9990     //通常為「郵遞區號」或「行職業碼」等地會被刪除
+			cap gen max_n = _N     // or egen max_n = max(n)，產生值標籤的最大個數
+			cap if max_n > 90 {
+				cap drop if var_val > 0 & var_val <= 990 & var_lens==3      //通常為「郵遞區號」或「行職業碼」等地會被刪除
+				cap drop if var_val > 0 & var_val <= 9990 & var_lens==4
 			}
 			
 			save ".\documents\rawdata\_`var'_.dta", replace    //只有選項總數小於100以下才存檔
@@ -264,7 +265,7 @@ local pdata `anything'
 	putdocx clear
 	putdocx begin, pagesize("A4") margin(top, 1 cm) margin(bottom, 1 cm) margin(left, 1.2 cm) margin(right, 1.2 cm)     //stata 17適用
 	putdocx table tab1 = data(item variable description var_vals var_lens remark), ///
-					 varnames halign("left") headerrow(1) width(3,3,30,35,3,26) 
+					 varnames halign("left") headerrow(1) width(8,12,23,30,9,18) 
 	local total = _N
 	forvalue i = 1/`total' {
 		local b = (`i' + 1)   //需要加1，因為varnames也算一個row cell
