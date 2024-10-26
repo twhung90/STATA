@@ -1,7 +1,7 @@
 * Title: PSFD編碼簿產生器
 * Author: Tamao
-* Version: 3.2.4
-* Date: 2024.10.25
+* Version: 3.2.5
+* Date: 2024.10.26
 
 program define psfd_codebook2
 version 17
@@ -177,6 +177,9 @@ local varlists "`varlist'"
 			cap replace var_lab = subinstr(var_lab,`"""',"", .)    //消除字串中多餘的"字元符號
 			cap replace var_lab = strtrim(regexr(var_lab, "^[0-9]*", ""))   //若值標籤開頭自帶有數值，僅擷取值標籤之中，後半段的文字
 			
+			gen var_lens = length("`var_max'")     //以變項中最大數值的「長度」，作為變項長度
+			cap replace var_lens = 7 if var_lens > 4 & var_lens <=7    //根據CAI系統設，所定進行的特殊設定
+			
 			cap gen var_vals = string(var_val)
 			cap replace var_vals = ("00" + var_vals) if (((item_num >= 100 & item_num < 991) & (var_val >=0 & var_val < 10)) | ((var_val >=0 & var_val < 10) & var_lens==3))
 			cap replace var_vals = ("0" + var_vals)  if (((item_num >= 10 & item_num < 91) & (var_val >=0 & var_val < 10)) | ((var_val >=0 & var_val < 10) & var_lens==2))
@@ -189,9 +192,10 @@ local varlists "`varlist'"
 				cap replace variable = "`var'"
 				cap replace description = "`lab'"
 				cap replace var_vals = ""
+				cap replace var_lens = length("`var_max'")
+				cap replace var_lens = 7 if var_lens > 4 & var_lens <=7    //根據CAI系統設，所定進行的特殊設定
 			}
 			cap gen n = _n, after(variable)
-			gen var_lens = length("`var_max'")     //以變項中最大數值的「長度」，作為變項長度
 			
 			cap gen item = ustrtitle(regexs(1)) ///
 					if regexm("`var'", "^([a-z]+[0-9]?[0-9]?)([a-z]*[0-9]?[0-9]?)$"), before(description)
@@ -251,7 +255,7 @@ program define seg_data_collecting
 	order i span, after(n)
 	
 	save "label_rr2022_part_${part}.dta", replace
-	! del _*_.dta    // delete temp data in the folder (for Windows)
+	! del _*_.dta label_information.txt    // delete temp data in the folder (for Windows)
 	
 	printdocx "label_rr2022_part_${part}"
 	quietly cd "..\.."
