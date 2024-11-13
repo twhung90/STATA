@@ -1,3 +1,4 @@
+
 * self-defined program
 
 cap which lookfor2
@@ -57,14 +58,14 @@ local test: list var in skip
 
 	if `test'==1 {
 	quietly sum `name' 
-		if inrange(r(max),0,9) & (`lab_min'==. | `lab_max' <= 99) {
+		if (inrange(r(max),0,9) & (`lab_min'==. | `lab_max' <= 99))  | (`lab_max' <= 9) {
 			replace `name' = .j if `name'==0 & `touse'
 			replace `name' = .d if `name'==6 & `touse'
 			replace `name' = .k if `name'==7 & `touse'    //其他
 			replace `name' = .r if `name'==8 & `touse'
 			replace `name' = .m if `name'==9 & `touse'
 		}
-		if inrange(r(max),10,99) & (`lab_min'==. | `lab_max' <= 99) {
+		if (inrange(r(max),10,99) & (`lab_min'==. | `lab_max' <= 99)) | (`lab_max' <= 99)  {
 			replace `name' = .j if `name'==0  & `touse'
 			replace `name' = .u if `name'==91 & `touse'
 			replace `name' = .o if `name'==95 & `touse'
@@ -73,7 +74,7 @@ local test: list var in skip
 			replace `name' = .r if `name'==98 & `touse'
 			replace `name' = .m if `name'==99 & `touse'
 		}
-		if inrange(r(max),100,999) & (`lab_min'==. | `lab_max' <= 999) {
+		if (inrange(r(max),100,999) & (`lab_min'==. | `lab_max' <= 999)) | (`lab_max' <= 999) {
 			replace `name' = .j if `name'==0 & `touse'
 			replace `name' = .u if `name'==991 & `touse'
 			replace `name' = .o if `name'==995 & `touse'
@@ -83,7 +84,7 @@ local test: list var in skip
 			replace `name' = .x if `name'==993 & `touse'    //保留碼
 			replace `name' = .y if `name'==994 & `touse'    //保留碼
 		}
-		if inrange(r(max),1000,9999) & (`lab_min'==. | `lab_max' <= 9999) {
+		if (inrange(r(max),1000,9999) & (`lab_min'==. | `lab_max' <= 9999)) | (`lab_max' <= 9999) {
 			replace `name' = .j if `name'==0 & `touse'
 			replace `name' = .u if `name'==9991 & `touse'
 			replace `name' = .o if `name'==9995 & `touse'
@@ -93,7 +94,7 @@ local test: list var in skip
 			replace `name' = .x if `name'==9993 & `touse'    //保留碼
 			replace `name' = .y if `name'==9994 & `touse'    //保留碼
 		}
-		if inrange(r(max),10000,99999) & (`lab_min'==. | `lab_max' <= 99999) {
+		if (inrange(r(max),10000,99999) & (`lab_min'==. | `lab_max' <= 99999)) | (`lab_max' <= 99999) {
 			replace `name' = .j if `name'==0 & `touse'
 			replace `name' = .u if `name'==99991 & `touse'
 			replace `name' = .o if `name'==99995 & `touse'
@@ -103,7 +104,7 @@ local test: list var in skip
 			replace `name' = .x if `name'==99993 & `touse'    //保留碼
 			replace `name' = .y if `name'==99994 & `touse'    //保留碼
 		}
-		if inrange(r(max),100000,999999) & (`lab_min'==. | `lab_max' <= 999999) {
+		if (inrange(r(max),100000,999999) & (`lab_min'==. | `lab_max' <= 999999)) | (`lab_max' <= 999999) {
 			replace `name' = .j if `name'==0 & `touse'
 			replace `name' = .u if `name'==999991 & `touse'
 			replace `name' = .o if `name'==999995 & `touse'
@@ -111,7 +112,7 @@ local test: list var in skip
 			replace `name' = .r if `name'==999998 & `touse'
 			replace `name' = .m if `name'==999999 & `touse'
 		}
-		if inrange(r(max),1000000,9999999) & (`lab_min'==. | `lab_max' <= 9999999) {
+		if (inrange(r(max),1000000,9999999) & (`lab_min'==. | `lab_max' <= 9999999)) | (`lab_max' <= 9999999) {
 			replace `name' = .j if `name'==0 & `touse'
 			replace `name' = .u if `name'==9999991 & `touse'
 			replace `name' = .o if `name'==9999995 & `touse'
@@ -119,7 +120,7 @@ local test: list var in skip
 			replace `name' = .r if `name'==9999998 & `touse'
 			replace `name' = .m if `name'==9999999 & `touse'
 		}
-		if inrange(r(max),10000000,99999999) & (`lab_min'==. | `lab_max' <= 99999999) {
+		if (inrange(r(max),10000000,99999999) & (`lab_min'==. | `lab_max' <= 99999999)) | (`lab_max' <= 99999999) {
 			replace `name' = .j if `name'==0 & `touse'
 			replace `name' = .u if `name'==99999991 & `touse'
 			replace `name' = .o if `name'==99999995 & `touse'
@@ -130,14 +131,14 @@ local test: list var in skip
 	}
 	else {
 	quietly sum `name' 
-		if inrange(r(max),0,9) & (`lab_min'==. | `lab_max' <= 99) {
+		if (inrange(r(max),0,9) & (`lab_min'==. | `lab_max' <= 99)) | (`lab_max' <= 9) {
 			
 			replace `name' = .d if `name'==6 & `touse'
 			replace `name' = .k if `name'==7 & `touse'    //其他
 			replace `name' = .r if `name'==8 & `touse'
 			replace `name' = .m if `name'==9 & `touse'
 		}
-		if inrange(r(max),10,99) & (`lab_min'==. | `lab_max' <= 99) {
+		if (inrange(r(max),10,99) & (`lab_min'==. | `lab_max' <= 99)) | (`lab_max' <= 99) {
 			
 			replace `name' = .u if `name'==91 & `touse'
 			replace `name' = .o if `name'==95 & `touse'
@@ -146,7 +147,7 @@ local test: list var in skip
 			replace `name' = .r if `name'==98 & `touse'
 			replace `name' = .m if `name'==99 & `touse'
 		}
-		if inrange(r(max),100,999) & (`lab_min'==. | `lab_max' <= 999) {
+		if (inrange(r(max),100,999) & (`lab_min'==. | `lab_max' <= 999)) | (`lab_max' <= 999) {
 			
 			replace `name' = .u if `name'==991 & `touse'
 			replace `name' = .o if `name'==995 & `touse'
@@ -154,7 +155,7 @@ local test: list var in skip
 			replace `name' = .r if `name'==998 & `touse'
 			replace `name' = .m if `name'==999 & `touse'
 		}
-		if inrange(r(max),1000,9999) & (`lab_min'==. | `lab_max' <= 9999) {
+		if (inrange(r(max),1000,9999) & (`lab_min'==. | `lab_max' <= 9999)) | (`lab_max' <= 9999) {
 			
 			replace `name' = .u if `name'==9991 & `touse'
 			replace `name' = .o if `name'==9995 & `touse'
@@ -162,7 +163,7 @@ local test: list var in skip
 			replace `name' = .r if `name'==9998 & `touse'
 			replace `name' = .m if `name'==9999 & `touse'
 		}
-		if inrange(r(max),10000,99999) & (`lab_min'==. | `lab_max' <= 99999) {
+		if (inrange(r(max),10000,99999) & (`lab_min'==. | `lab_max' <= 99999)) | (`lab_max' <= 99999) {
 			
 			replace `name' = .u if `name'==99991 & `touse'
 			replace `name' = .o if `name'==99995 & `touse'
@@ -170,7 +171,7 @@ local test: list var in skip
 			replace `name' = .r if `name'==99998 & `touse'
 			replace `name' = .m if `name'==99999 & `touse'
 		}
-		if inrange(r(max),100000,999999) & (`lab_min'==. | `lab_max' <= 999999) {
+		if (inrange(r(max),100000,999999) & (`lab_min'==. | `lab_max' <= 999999)) | (`lab_max' <= 999999) {
 			
 			replace `name' = .u if `name'==999991 & `touse'
 			replace `name' = .o if `name'==999995 & `touse'
@@ -178,7 +179,7 @@ local test: list var in skip
 			replace `name' = .r if `name'==999998 & `touse'
 			replace `name' = .m if `name'==999999 & `touse'
 		}
-		if inrange(r(max),1000000,9999999) & (`lab_min'==. | `lab_max' <= 9999999) {
+		if (inrange(r(max),1000000,9999999) & (`lab_min'==. | `lab_max' <= 9999999)) | (`lab_max' <= 9999999) {
 			
 			replace `name' = .u if `name'==9999991 & `touse'
 			replace `name' = .o if `name'==9999995 & `touse'
@@ -186,7 +187,7 @@ local test: list var in skip
 			replace `name' = .r if `name'==9999998 & `touse'
 			replace `name' = .m if `name'==9999999 & `touse'
 		}
-		if inrange(r(max),10000000,99999999) & (`lab_min'==. | `lab_max' <= 99999999) {
+		if (inrange(r(max),10000000,99999999) & (`lab_min'==. | `lab_max' <= 99999999)) | (`lab_max' <= 99999999) {
 			
 			replace `name' = .u if `name'==99999991 & `touse'
 			replace `name' = .o if `name'==99999995 & `touse'
@@ -211,7 +212,7 @@ args name touse
 	}
 
 	quietly sum `name' 
-		if inrange(r(max),0,9) & (`lab_min'==. | `lab_max' <= 99) {
+		if (inrange(r(max),0,9) & (`lab_min'==. | `lab_max' <= 99)) | (`lab_max' <= 9) {
 			replace `name' = .j if `name'== -10 & `touse'
 			replace `name' = .a if `name'== -11 & `touse'
 			replace `name' = .d if `name'== -6 & `touse'
@@ -219,7 +220,7 @@ args name touse
 			replace `name' = .m if `name'== -9 & `touse'
 			replace `name' = .k if `name'== 97 & `touse'
 		}
-		if inrange(r(max),10,99) & (`lab_min'==. | `lab_max' <= 99) {
+		if (inrange(r(max),10,99) & (`lab_min'==. | `lab_max' <= 99)) | (`lab_max' <= 99) {
 			replace `name' = .j if `name'== -10  & `touse'
 			replace `name' = .a if `name'== -11  & `touse'
 			replace `name' = .u if `name'== -1 & `touse'
@@ -231,7 +232,7 @@ args name touse
 			replace `name' = .m if `name'== -9 & `touse'
 			replace `name' = .k if `name'== 97 & `touse'
 		}
-		if inrange(r(max),100,999) & (`lab_min'==. | `lab_max' <= 999) {
+		if (inrange(r(max),100,999) & (`lab_min'==. | `lab_max' <= 999)) | (`lab_max' <= 999) {
 			replace `name' = .j if `name'== -10 & `touse'
 			replace `name' = .a if `name'== -11 & `touse'
 			replace `name' = .u if `name'== -1 & `touse'
@@ -243,7 +244,7 @@ args name touse
 			replace `name' = .r if `name'== -8 & `touse'
 			replace `name' = .m if `name'== -9 & `touse'
 		}
-		if inrange(r(max),1000,9999) & (`lab_min'==. | `lab_max' <= 9999) {
+		if (inrange(r(max),1000,9999) & (`lab_min'==. | `lab_max' <= 9999)) | (`lab_max' <= 9999) {
 			replace `name' = .j if `name'== -10 & `touse'
 			replace `name' = .a if `name'== -11 & `touse'
 			replace `name' = .u if `name'== -1 & `touse'
@@ -255,7 +256,7 @@ args name touse
 			replace `name' = .r if `name'== -8 & `touse'
 			replace `name' = .m if `name'== -9 & `touse'
 		}
-		if inrange(r(max),10000,99999) & (`lab_min'==. | `lab_max' <= 99999) {
+		if (inrange(r(max),10000,99999) & (`lab_min'==. | `lab_max' <= 99999)) | (`lab_max' <= 99999) {
 			replace `name' = .j if `name'== -10 & `touse'
 			replace `name' = .a if `name'== -11 & `touse'
 			replace `name' = .u if `name'== -1 & `touse'
@@ -267,7 +268,7 @@ args name touse
 			replace `name' = .r if `name'== -8 & `touse'
 			replace `name' = .m if `name'== -9 & `touse'
 		}
-		if inrange(r(max),100000,999999) & (`lab_min'==. | `lab_max' <= 999999) {
+		if (inrange(r(max),100000,999999) & (`lab_min'==. | `lab_max' <= 999999)) | (`lab_max' <= 999999) {
 			replace `name' = .j if `name'== -10 & `touse'
 			replace `name' = .a if `name'== -11 & `touse'
 			replace `name' = .u if `name'== -1 & `touse'
@@ -279,7 +280,7 @@ args name touse
 			replace `name' = .r if `name'== -8 & `touse'
 			replace `name' = .m if `name'== -9 & `touse'
 		}
-		if inrange(r(max),1000000,9999999) & (`lab_min'==. | `lab_max' <= 9999999) {
+		if (inrange(r(max),1000000,9999999) & (`lab_min'==. | `lab_max' <= 9999999)) | (`lab_max' <= 9999999) {
 			replace `name' = .j if `name'== -10 & `touse'
 			replace `name' = .a if `name'== -11 & `touse'
 			replace `name' = .u if `name'== -1 & `touse'
@@ -291,7 +292,7 @@ args name touse
 			replace `name' = .r if `name'== -8 & `touse'
 			replace `name' = .m if `name'== -9 & `touse'
 		}
-		if inrange(r(max),10000000,99999999) & (`lab_min'==. | `lab_max' <= 99999999) {
+		if (inrange(r(max),10000000,99999999) & (`lab_min'==. | `lab_max' <= 99999999)) | (`lab_max' <= 99999999) {
 			replace `name' = .j if `name'== -10 & `touse'
 			replace `name' = .a if `name'== -11 & `touse'
 			replace `name' = .u if `name'== -1 & `touse'
