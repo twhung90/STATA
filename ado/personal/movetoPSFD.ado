@@ -40,7 +40,7 @@ args name touse
 	}
 
 	quietly sum `name' 
-		if ((inrange(r(max),0,5) & (`lab_min'==. | (`lab_min' < 0 & `lab_max' <= 99))) | (`lab_min' >= 0 & `lab_max' <= 9)) {
+		if ((inrange(r(max),0,5) & (`lab_min'==. | (`lab_min' < 0 & `lab_max' <= 7))) | (`lab_min' >= 0 & `lab_max' <= 9)) {
 			replace `name' = 0 if `name'== .j & `touse'
 			replace `name' = 6 if `name'== .d & `touse'
 			replace `name' = 7 if `name'== .k & `touse'    //其他
@@ -68,7 +68,7 @@ args name touse
 			replace `name' = 98 if `name'== .r & `touse'
 			replace `name' = 99 if `name'== .m & `touse'
 		}
-		if ((inrange(r(max),100,999) & (`lab_min'==. | (`lab_min' < 0 & `lab_max' <= 999)))  | (`lab_min' >= 0 & `lab_max' <= 999)) {
+		if ((inrange(r(max),100,999) & (`lab_min'==. | (`lab_min' < 0 & `lab_max' <= 999))) | (`lab_min' >= 0 & `lab_max' <= 999)) {
 			replace `name' = -11 if `name'== .a & `touse'
 			replace `name' = 0 if `name'== .j & `touse'
 			replace `name' = 991 if `name'== .u & `touse'

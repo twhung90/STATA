@@ -58,7 +58,7 @@ local test: list var in skip
 
 	if `test'==1 {
 	quietly sum `name' 
-		if (inrange(r(max),0,9) & (`lab_min'==. | `lab_max' <= 99))  | (`lab_max' <= 9) {
+		if (inrange(r(max),0,9) & (`lab_min'==. | `lab_max' <= 9))  | (`lab_max' <= 9) {
 			replace `name' = .j if `name'==0 & `touse'
 			replace `name' = .d if `name'==6 & `touse'
 			replace `name' = .k if `name'==7 & `touse'    //其他
@@ -131,7 +131,7 @@ local test: list var in skip
 	}
 	else {
 	quietly sum `name' 
-		if (inrange(r(max),0,9) & (`lab_min'==. | `lab_max' <= 99)) | (`lab_max' <= 9) {
+		if (inrange(r(max),0,9) & (`lab_min'==. | `lab_max' <= 9)) | (`lab_max' <= 9) {
 			
 			replace `name' = .d if `name'==6 & `touse'
 			replace `name' = .k if `name'==7 & `touse'    //其他
