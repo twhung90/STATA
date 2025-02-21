@@ -37,25 +37,25 @@ args name touse
 	}
 		
 	quietly sum `name' 
-		if (inrange(r(max),0,99) & (`lab_min'==. | `lab_max' <= 99)) | (`lab_max' <= 99)  {
+		if (inrange(r(max),0,99) & (`lab_min'==. | `lab_max' <= 99)) | (`lab_max' > 90 & `lab_max' <= 99)  {
 			replace `name' = 99 if `touse'
 		}
-		if (inrange(r(max),100,999) & (`lab_min'==. | `lab_max' <= 999)) | (`lab_max' <= 999)  {
+		if (inrange(r(max),100,999) & (`lab_min'==. | `lab_max' <= 999)) | (`lab_max' > 990 & `lab_max' <= 999)  {
 			replace `name' = 999 if `touse'
 		}
-		if (inrange(r(max),1000,9999) & (`lab_min'==. | `lab_max' <= 9999)) | (`lab_max' <= 9999)  {
+		if (inrange(r(max),1000,9999) & (`lab_min'==. | `lab_max' <= 9999)) | (`lab_max' > 9990 & `lab_max' <= 9999)  {
 			replace `name' = 9999 if `touse'
 		}
-		if (inrange(r(max),10000,99999) & (`lab_min'==. | `lab_max' <= 99999)) | (`lab_max' <= 99999)  {
+		if (inrange(r(max),10000,99999) & (`lab_min'==. | `lab_max' <= 99999)) | (`lab_max' > 99990 & `lab_max' <= 99999)  {
 			replace `name' = 99999 if `touse'
 		}
-		if (inrange(r(max),100000,999999) & (`lab_min'==. | `lab_max' <= 999999)) | (`lab_max' <= 999999)  {
+		if (inrange(r(max),100000,999999) & (`lab_min'==. | `lab_max' <= 999999)) | (`lab_max' > 999990 & `lab_max' <= 999999)  {
 			replace `name' = 999999 if `touse'
 		}
-		if (inrange(r(max),1000000,9999999) & (`lab_min'==. | `lab_max' <= 9999999)) | (`lab_max' <= 9999999)  {
+		if (inrange(r(max),1000000,9999999) & (`lab_min'==. | `lab_max' <= 9999999)) | (`lab_max' > 9999990 & `lab_max' <= 9999999)  {
 			replace `name' = 9999999 if `touse'
 		}
-		if (inrange(r(max),10000000,99999999) & (`lab_min'==. | `lab_max' <= 99999999)) | (`lab_max' <= 99999999)  {
+		if (inrange(r(max),10000000,99999999) & (`lab_min'==. | `lab_max' <= 99999999)) | (`lab_max' > 99999990 & `lab_max' <= 99999999)  {
 			replace `name' = 99999999 if `touse'
 		}
 end
