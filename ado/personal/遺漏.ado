@@ -21,33 +21,15 @@ end
 program define donum_miss
 args name touse
 	quietly sum `name' 
-		if inrange(r(max),0,9)  {
-			replace `name' = 9 if `touse'
-		}
-		if inrange(r(max),10,99)  {
-			replace `name' = 99 if `touse'
-		}
-		if inrange(r(max),100,999)  {
-			replace `name' = 999 if `touse'
-		}
-		if inrange(r(max),1000,9999)  {
-			replace `name' = 9999 if `touse'
-		}
-		if inrange(r(max),10000,99999)  {
-			replace `name' = 99999 if `touse'
-		}
-		if inrange(r(max),100000,999999)  {
-			replace `name' = 999999 if `touse'
-		}
-		if inrange(r(max),1000000,9999999)  {
-			replace `name' = 9999999 if `touse'
-		}
-		if inrange(r(max),10000000,99999999)  {
-			replace `name' = 9999999 if `touse'
-		}
+		replace `name' = -9 if `touse'
 end
 
 program define dostr_miss
 args name touse
-		replace `name' = "99" if `touse'
+		if (strmatch(`name', "*96") | strmatch(`name', "*97") | strmatch(`name', "*98") | strmatch(`name', "*99")) {
+			replace `name' = "99" if `touse'
+		}
+		else {
+			replace `name' = "" if `touse'
+		}
 end
