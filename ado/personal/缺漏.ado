@@ -62,7 +62,10 @@ end
 
 program define dostr_miss
 args name touse
-		if (strmatch(`name', "*96") | strmatch(`name', "*97") | strmatch(`name', "*98")) {
+	tempvar reg_test
+	quietly gen `reg_test' = 1 if regexm(`name',"[9][6-8]$")
+	quietly sum `reg_test'
+		if (r(max) >=1 & r(max) < .) {
 			replace `name' = "99" if `touse'
 		}
 		else {
