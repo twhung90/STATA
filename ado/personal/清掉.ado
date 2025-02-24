@@ -25,8 +25,18 @@ end
 
 program define donum_skip
 args name touse
-	cap elabel list (`name')
-	cap local val `r(values)'
+	capture quietly elabel list (`name')
+	if !_rc {
+		local lab_min = `r(min)'
+		local lab_max = `r(max)'
+		local val `r(values)'
+	}
+	if _rc {
+		local lab_min = .
+		local lab_max = .
+		local val `r(values)'
+	}
+	
 	quietly sum `name'
 		if inrange(r(max),0,99)  {
 		local p 96
