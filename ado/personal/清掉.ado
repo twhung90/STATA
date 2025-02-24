@@ -38,19 +38,19 @@ args name touse
 		cap local test: list p in val
 			replace `name' = 996 if `test' & `touse'
 		}
-		if inrange(r(max),1000,9999)  {
+		if (inrange(r(max),1000,9999) & (`lab_min'==. | `lab_max' <= 9999)) | (`lab_max' > 9990 & `lab_max' <= 9999)  {
 			replace `name' = 9996 if `touse'
 		}
-		if inrange(r(max),10000,99999)  {
+		if (inrange(r(max),10000,99999) & (`lab_min'==. | `lab_max' <= 99999)) | (`lab_max' > 99990 & `lab_max' <= 99999)  {
 			replace `name' = 99996 if `touse'
 		}
-		if inrange(r(max),100000,999999)  {
+		if (inrange(r(max),100000,999999) & (`lab_min'==. | `lab_max' <= 999999)) | (`lab_max' > 999990 & `lab_max' <= 999999)  {
 			replace `name' = 999996 if `touse'
 		}
-		if inrange(r(max),1000000,9999999)  {
+		if (inrange(r(max),1000000,9999999) & (`lab_min'==. | `lab_max' <= 9999999)) | (`lab_max' > 9999990 & `lab_max' <= 9999999)  {
 			replace `name' = 9999996 if `touse'
 		}
-		if inrange(r(max),10000000,99999999)  {
+		if (inrange(r(max),10000000,99999999) & (`lab_min'==. | `lab_max' <= 99999999)) | (`lab_max' > 99999990 & `lab_max' <= 99999999)  {
 			replace `name' = 99999996 if `touse'
 		}
 end
