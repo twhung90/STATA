@@ -1,11 +1,11 @@
 * Title: CAI編碼轉換器，轉成PSFDy資料編碼
 * Author: Tamao
-* Version: 1.0.3
-* Date: 2024.10.04
+* Version: 1.0.4
+* Date: 2025.10.24
 
 program define CAI_label_refine
 version 15
-syntax [anything] , range(varlist)
+syntax [anything] , range(varlist)    //使用varlist，故需要開啟dta檔後方能執行
 marksample touse, novar strok
 
 if "`anything'" !="" {
@@ -66,6 +66,7 @@ local valist "`r(varlist)'"
 		 }
 		 cap egen val_max = rowmax(var_val?*)
 		 cap egen val_min = rowmin(var_val?*)
+		 cap egen val_other = anymatch(var_val?*), value(94)    //找出標籤數值中包含的94其他
 		
 		 cap tostring val_max, replace
 		 cap gen var_mlens = length(val_max)    //包含特殊碼，便項的字元長度 
@@ -88,6 +89,7 @@ local valist "`r(varlist)'"
 			 replace var_val = -3 if inlist(var_val==93,95)    //保留碼轉為-3
 			
 			 cap gen var_vals = string(var_val)
+			 cap replace var_vals = ("0" + var_vals) if (var_val > 0 & var_val < 10) & val_other==1      //如果包含「其他」標籤，數值開頭亦加上0
 		 }
 		 if var_mlens==2 {
 			 replace var_val = -10 if var_val==96
